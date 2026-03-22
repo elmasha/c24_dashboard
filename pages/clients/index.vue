@@ -1,163 +1,281 @@
-<template light>
-  <v-container fluid class="pa-4">
+<template>
+  <v-container fluid class="admin-page pa-0">
+    <!-- Top bar -->
+    <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
+      <div class="d-flex align-center">
+        <v-menu offset-y v-if="showBurger">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon dark class="mr-3 topbar-icon" v-bind="attrs" v-on="on">
+              <v-icon>mdi-menu</v-icon>
+            </v-btn>
+          </template>
 
-    <v-row>
-                <v-col cols="12" md="12"></v-col>
-                <v-col cols="12" md="12">
-                    <div class="">
-                        <nuxt-link style="text-decoration: none; color: white;margin-left: 10px; margin-top: 40px;" icon to="/admin/dashboard">
-                            <v-icon large>mdi-arrow-left</v-icon>
-                        </nuxt-link>
-                    </div>
-                </v-col>
-            </v-row>
-    <div class="d-flex align-center mb-4">
-      <h1 class="text-h4 mb-0" style="margin: 20px;">Clients</h1>
+          <v-list dark class="menu-list">
+            <v-list-item
+              v-for="(item, index) in items_nav"
+              :key="index"
+              link
+              @click="move(item.to)"
+            >
+              <v-list-item-icon>
+                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <div>
+          <div class="page-badge">Admin Portal</div>
+          <h1 class="page-title">Client Management</h1>
+        </div>
+      </div>
+
       <v-spacer />
-      <v-btn small class="mr-2" @click="resetForm">
-        New Client
-      </v-btn>
-      <v-btn small @click="fetchClients" :loading="loading">
-        Refresh
-      </v-btn>
-    </div>
 
-    <v-alert
-      v-if="successMessage"
-      type="success"
-      dense
-      outlined
-      class="mb-4"
-    >
-      {{ successMessage }}
-    </v-alert>
+      <div class="d-flex align-center">
+        <v-btn icon dark class="topbar-icon mr-2" @click="fetchClients" :loading="loading">
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
+      </div>
+    </v-app-bar>
 
-    <v-alert
-      v-if="errorMessage"
-      type="error"
-      dense
-      outlined
-      class="mb-4"
-    >
-      {{ errorMessage }}
-    </v-alert>
-
-    <v-row>
-      <!-- Form -->
-      <v-col cols="12" lg="4">
-        <v-card outlined class="pa-4">
-          <div class="text-h6 mb-4">
-            {{ editingId ? "Edit Client" : "Create Client" }}
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar" v-show="!showBurger">
+        <div class="sidebar-card">
+          <div class="sidebar-brand">
+            <div class="sidebar-brand-badge">Charge24</div>
+            <div class="sidebar-brand-text">Admin Control</div>
           </div>
 
-          <v-form @submit.prevent="submitClient">
-            <v-text-field
-              v-model="form.client_name"
-              label="Client Name"
-              outlined
-              dense
-              required
-            />
+          <div class="sidebar-profile">
+            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+              <span class="avatar-text">AD</span>
+            </v-avatar>
 
-            <v-text-field
-              v-model="form.email"
-              label="Email"
-              outlined
-              dense
-            />
+            <div class="sidebar-user-name">Operations Team</div>
+            <div class="sidebar-user-subtitle">
+              Manage clients, campaigns and delivery
+            </div>
+          </div>
 
-            <v-text-field
-              v-model="form.firebase_uid"
-              label="Firebase UID"
-              outlined
-              dense
-              required
-            />
+          <v-list dark class="sidebar-list">
+            <v-list-item
+              v-for="item in items_nav"
+              :key="item.title"
+              link
+              class="sidebar-item"
+              @click="move(item.to)"
+            >
+              <v-list-item-icon>
+                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+              </v-list-item-icon>
 
-            <v-select
-              v-model="form.status"
-              :items="['active', 'inactive']"
-              label="Status"
-              outlined
-              dense
-            />
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
 
-            <div class="d-flex">
-              <v-btn
-                color="primary"
-                type="submit"
-                :loading="saving"
-                class="mr-2"
-              >
-                {{ editingId ? "Update" : "Create" }}
+          <div class="sidebar-footer">
+            <v-btn block outlined color="#C6FF00" class="logout-btn">
+              Logout
+            </v-btn>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="admin-main">
+        <!-- Hero -->
+        <v-card class="hero-panel pa-6 mb-5" outlined>
+          <div class="d-flex flex-wrap align-center">
+            <div class="hero-copy">
+              <div class="hero-kicker">Client Operations</div>
+              <div class="hero-heading">
+                Create, manage and maintain client accounts across the platform
+              </div>
+              <div class="hero-subtext">
+                Control client onboarding, status, email records and Firebase UID mapping from one place.
+              </div>
+            </div>
+
+            <v-spacer />
+
+            <div class="hero-actions mt-4 mt-md-0">
+              <v-btn class="mr-2 hero-btn-primary" color="#C6FF00" large @click="resetForm">
+                <span class="black--text font-weight-bold">New Client</span>
               </v-btn>
 
-              <v-btn text @click="resetForm">
-                Cancel
+              <v-btn outlined large class="hero-btn-outline" @click="fetchClients" :loading="loading">
+                Refresh
               </v-btn>
             </div>
-          </v-form>
+          </div>
         </v-card>
-      </v-col>
 
-      <!-- Table -->
-      <v-col cols="12" lg="8">
-        <v-card outlined class="pa-2">
-          <v-simple-table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Client Name</th>
-                <th>Email</th>
-                <th>Firebase UID</th>
-                <th>Status</th>
-                <th>Created At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+        <v-alert
+          v-if="successMessage"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
+          {{ successMessage }}
+        </v-alert>
 
-            <tbody>
-              <tr v-for="client in clients" :key="client.id">
-                <td>{{ client.id }}</td>
-                <td>{{ client.client_name }}</td>
-                <td>{{ client.email || "-" }}</td>
-                <td class="uid-cell">{{ client.firebase_uid || "-" }}</td>
-                <td>{{ client.status }}</td>
-                <td>{{ client.created_at }}</td>
-                <td>
-                  <div class="d-flex flex-wrap">
-                    <v-btn
-                      x-small
-                      text
-                      color="primary"
-                      class="mr-1 mb-1"
-                      @click="editClient(client)"
-                    >
-                      Edit
-                    </v-btn>
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
+          {{ errorMessage }}
+        </v-alert>
 
-                    <v-btn
-                      x-small
-                      text
-                      color="error"
-                      class="mb-1"
-                      :loading="deletingId === client.id"
-                      @click="deleteClient(client)"
-                    >
-                      Delete
-                    </v-btn>
+        <v-row>
+          <!-- Form -->
+          <v-col cols="12" lg="4">
+            <v-card class="panel-card pa-4" outlined>
+              <div class="panel-head mb-3">
+                <div>
+                  <div class="panel-kicker">Client Form</div>
+                  <div class="panel-title">
+                    {{ editingId ? "Edit Client" : "Create Client" }}
                   </div>
-                </td>
-              </tr>
+                </div>
+              </div>
 
-              <tr v-if="!clients.length">
-                <td colspan="7">No clients found.</td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-        </v-card>
-      </v-col>
-    </v-row>
+              <v-form @submit.prevent="submitClient">
+                <v-text-field
+                  v-model="form.client_name"
+                  label="Client Name"
+                  outlined
+                  dense
+                  dark
+                  required
+                />
+
+                <v-text-field
+                  v-model="form.email"
+                  label="Email"
+                  outlined
+                  dense
+                  dark
+                />
+
+                <v-text-field
+                  v-model="form.firebase_uid"
+                  label="Firebase UID"
+                  outlined
+                  dense
+                  dark
+                  required
+                />
+
+                <v-select
+                  v-model="form.status"
+                  :items="['active', 'inactive']"
+                  label="Status"
+                  outlined
+                  dense
+                  dark
+                />
+
+                <div class="d-flex">
+                  <v-btn
+                    color="#C6FF00"
+                    class="black--text font-weight-bold mr-2"
+                    type="submit"
+                    :loading="saving"
+                  >
+                    {{ editingId ? "Update" : "Create" }}
+                  </v-btn>
+
+                  <v-btn text @click="resetForm">
+                    Cancel
+                  </v-btn>
+                </div>
+              </v-form>
+            </v-card>
+          </v-col>
+
+          <!-- Table -->
+          <v-col cols="12" lg="8">
+            <v-card class="panel-card pa-4" outlined>
+              <div class="panel-head mb-3">
+                <div>
+                  <div class="panel-kicker">Client Directory</div>
+                  <div class="panel-title">All Clients</div>
+                </div>
+              </div>
+
+              <v-simple-table class="table-dark">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Client Name</th>
+                    <th>Email</th>
+                    <th>Firebase UID</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="client in clients" :key="client.id">
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.client_name }}</td>
+                    <td>{{ client.email || "-" }}</td>
+                    <td class="uid-cell">{{ client.firebase_uid || "-" }}</td>
+                    <td>
+                      <span
+                        class="status-pill"
+                        :class="client.status === 'active' ? 'status-active' : 'status-inactive'"
+                      >
+                        {{ client.status }}
+                      </span>
+                    </td>
+                    <td>{{ client.created_at }}</td>
+                    <td class="text-right">
+                      <div class="action-wrap">
+                        <v-btn
+                          x-small
+                          text
+                          color="#C6FF00"
+                          class="mr-1 mb-1"
+                          @click="editClient(client)"
+                        >
+                          Edit
+                        </v-btn>
+
+                        <v-btn
+                          x-small
+                          text
+                          color="#ff6b6b"
+                          class="mb-1"
+                          :loading="deletingId === client.id"
+                          @click="deleteClient(client)"
+                        >
+                          Delete
+                        </v-btn>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr v-if="!clients.length">
+                    <td colspan="7">No clients found.</td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-card>
+          </v-col>
+        </v-row>
+      </main>
+    </div>
   </v-container>
 </template>
 
@@ -174,6 +292,38 @@ export default {
       successMessage: "",
       errorMessage: "",
       clients: [],
+      showBurger: false,
+      windowSize: {
+        x: window.innerWidth,
+        y: window.innerHeight
+      },
+      items_nav: [
+        {
+          title: "Dashboard",
+          icon: "mdi-view-dashboard",
+          to: "admin/dashboard"
+        },
+        {
+          title: "Campaign",
+          icon: "mdi-bullhorn-outline",
+          to: "campaigns/all"
+        },
+        {
+          title: "Machines",
+          icon: "mdi-cellphone-sound",
+          to: "machines"
+        },
+        {
+          title: "Clients",
+          icon: "mdi-account-group-outline",
+          to: "clients"
+        },
+        {
+          title: "Traffic Config",
+          icon: "mdi-cogs",
+          to: "traffic-config"
+        }
+      ],
       form: {
         client_name: "",
         email: "",
@@ -184,10 +334,24 @@ export default {
   },
 
   mounted() {
+    this.onResize();
     this.fetchClients();
   },
 
   methods: {
+    move(val) {
+      this.$router.push(`/${val}`);
+    },
+
+    onResize() {
+      this.windowSize = {
+        x: window.innerWidth,
+        y: window.innerHeight
+      };
+      this.showBurger = this.windowSize.x < 950;
+      return this.windowSize;
+    },
+
     async fetchClients() {
       try {
         this.loading = true;
@@ -303,8 +467,281 @@ export default {
 </script>
 
 <style scoped>
+.admin-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
+    linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+  color: #fff;
+}
+
+.admin-topbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(198, 255, 0, 0.08);
+}
+
+.topbar-icon {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(198, 255, 0, 0.08);
+}
+
+.menu-list {
+  background: #111111 !important;
+  border: 1px solid rgba(198, 255, 0, 0.1);
+  border-radius: 14px;
+}
+
+.admin-layout {
+  display: flex;
+  min-height: calc(100vh - 72px);
+}
+
+.admin-sidebar {
+  width: 290px;
+  padding: 16px;
+}
+
+.sidebar-card {
+  height: 100%;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #101010, #070707);
+  border: 1px solid rgba(198, 255, 0, 0.12);
+  padding: 18px;
+}
+
+.sidebar-brand {
+  margin-bottom: 24px;
+}
+
+.sidebar-brand-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(198, 255, 0, 0.1);
+  border: 1px solid rgba(198, 255, 0, 0.22);
+  color: #c6ff00;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.sidebar-brand-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sidebar-profile {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar-avatar {
+  margin-bottom: 12px;
+}
+
+.avatar-text {
+  color: #000;
+  font-weight: 800;
+}
+
+.sidebar-user-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sidebar-user-subtitle {
+  color: #a8a8a8;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.sidebar-list {
+  background: transparent !important;
+}
+
+.sidebar-item {
+  border-radius: 12px;
+  margin-bottom: 6px;
+}
+
+.sidebar-item:hover {
+  background: rgba(198, 255, 0, 0.06);
+}
+
+.sidebar-footer {
+  margin-top: 24px;
+}
+
+.logout-btn {
+  border-color: rgba(198, 255, 0, 0.35) !important;
+  color: #c6ff00 !important;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 20px;
+}
+
+.page-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(198, 255, 0, 0.1);
+  border: 1px solid rgba(198, 255, 0, 0.2);
+  color: #c6ff00;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.page-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.hero-panel {
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+    linear-gradient(135deg, #111111, #080808) !important;
+  border: 1px solid rgba(198, 255, 0, 0.14) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+}
+
+.hero-copy {
+  max-width: 760px;
+}
+
+.hero-kicker {
+  color: #c6ff00;
+  font-size: 13px;
+  margin-bottom: 10px;
+  letter-spacing: 0.4px;
+}
+
+.hero-heading {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  max-width: 720px;
+}
+
+.hero-subtext {
+  color: #bcbcbc;
+  margin-top: 12px;
+  max-width: 760px;
+  line-height: 1.7;
+}
+
+.hero-btn-primary {
+  font-weight: 700;
+}
+
+.hero-btn-outline {
+  border-color: #c6ff00 !important;
+  color: #c6ff00 !important;
+}
+
+.dashboard-alert {
+  border-radius: 14px;
+}
+
+.panel-card {
+  border-radius: 22px;
+  background: linear-gradient(180deg, #111111, #090909) !important;
+  border: 1px solid rgba(198, 255, 0, 0.1) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-kicker {
+  color: #9ea59b;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.table-dark ::v-deep th {
+  color: #c6ff00 !important;
+  background: transparent !important;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
+}
+
+.table-dark ::v-deep td {
+  color: #d4d4d4 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.table-dark ::v-deep tr:hover {
+  background: rgba(198, 255, 0, 0.03);
+}
+
+.action-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.status-active {
+  background: rgba(198, 255, 0, 0.12);
+  color: #c6ff00;
+  border: 1px solid rgba(198, 255, 0, 0.18);
+}
+
+.status-inactive {
+  background: rgba(255, 255, 255, 0.06);
+  color: #d6d6d6;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .uid-cell {
   max-width: 220px;
   word-break: break-all;
+}
+
+@media (max-width: 960px) {
+  .admin-layout {
+    display: block;
+  }
+
+  .admin-main {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .hero-heading {
+    font-size: 22px;
+  }
 }
 </style>
