@@ -1,36 +1,94 @@
 <template>
-<v-card color="black" dark elevation="0" width="100%">
-    <div style="margin-top: 20px;"></div>
-    <div class="ma-2 pa-0">
-        <div class="">
+  <v-container fluid class="machines-page pa-0">
+    <div class="machines-shell">
+      <!-- Top -->
+      <div class="page-topbar">
+        <nuxt-link class="back-link" to="/client-dashboard">
+          <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+          Back to dashboard
+        </nuxt-link>
+      </div>
 
-            <v-row>
-                <v-col cols="12" md="12"></v-col>
-                <v-col cols="12" md="12">
-                    <div class="">
-                        <nuxt-link style="text-decoration: none; color: white;margin-left: 10px;" icon to="/client-dashboard">
-                            <v-icon large>mdi-arrow-left</v-icon>
-                        </nuxt-link>
-                    </div>
-                </v-col>
-                <v-col cols="12" md="12">
-                    <div class="">
-
-                        <div class="d-flex" style="margin: 14px;">
-                            <h2>Assigned & Top Performing Machines</h2>
-                        </div>
-                    </div>
-                </v-col>
-
-                <v-col cols="12" md="12">
-
-                    <MachinePerfomance title="" :rows="machinePerformance" />
-                </v-col>
-            </v-row>
-
+      <div class="machines-content">
+        <div v-if="loading" class="loading-state">
+          Loading machine performance...
         </div>
+
+        <div v-else>
+          <!-- Hero -->
+          <v-card class="hero-panel pa-6 mb-5" outlined>
+            <div class="d-flex flex-wrap align-center">
+              <div class="hero-copy">
+                <div class="hero-kicker" style="margin-left: 19px;">Machine Performance</div>
+                <div class="hero-title">Assigned & Top Performing Machines</div>
+                <div class="hero-subtitle">
+                  View the machines delivering your campaigns, their locations,
+                  performance levels, and which placements are generating the strongest results.
+                </div>
+              </div>
+
+              <v-spacer />
+
+              <div class="hero-actions mt-4 mt-md-0">
+                <v-btn
+                  color="#C6FF00"
+                  class="black--text font-weight-bold"
+                  @click="loadDashboard"
+                  :loading="loading"
+                >
+                  Refresh
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+
+          <v-alert
+            v-if="errorMessage"
+            type="error"
+            dense
+            outlined
+            class="mb-4 dashboard-alert"
+          >
+            {{ errorMessage }}
+          </v-alert>
+
+          <!-- Summary strip -->
+          <div class="summary-strip mb-5">
+            <div class="summary-card">
+              <div class="summary-label">Tracked Machines</div>
+              <div class="summary-value">{{ formatNumber(machinePerformance.length) }}</div>
+            </div>
+
+            <div class="summary-card" v-if="machinePerformance.length">
+              <div class="summary-label">Top Machine</div>
+              <div class="summary-value text-truncate">
+                {{ machinePerformance[0].machine_name || "-" }}
+              </div>
+            </div>
+
+            <div class="summary-card" v-if="machinePerformance.length">
+              <div class="summary-label">Top Location</div>
+              <div class="summary-value text-truncate">
+                {{ machinePerformance[0].location_name || "-" }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance table/component -->
+          <v-card class="table-card pa-4" outlined>
+            <div class="panel-head mb-3">
+              <div>
+                <div class="panel-kicker">Performance Table</div>
+                <div class="panel-title">Machine Breakdown</div>
+              </div>
+            </div>
+
+            <MachinePerfomance title="" :rows="machinePerformance" />
+          </v-card>
+        </div>
+      </div>
     </div>
-</v-card>
+  </v-container>
 </template>
 
 <script>
@@ -40,181 +98,236 @@ import numeral from "numeral";
 import MachinePerfomance from "../../components/machinePerfomance.vue";
 
 export default {
-    data() {
-        return {
-            grid: false,
-            numeral,
-            moment,
-            showBurger: false,
-            loading: true,
-            errorMessage: "",
-            overview: {
-                client: null,
-                campaigns: []
-            },
-            deviceBreakdown: [],
-            dailyGraph: {
-                impressions: [],
-                scans: []
-            },
-            socketRefreshTimer: null,
-            machinePerformance: [],
-        };
+  components: {
+    MachinePerfomance
+  },
+
+  data() {
+    return {
+      grid: false,
+      numeral,
+      moment,
+      showBurger: false,
+      loading: true,
+      errorMessage: "",
+      overview: {
+        client: null,
+        campaigns: []
+      },
+      deviceBreakdown: [],
+      dailyGraph: {
+        impressions: [],
+        scans: []
+      },
+      socketRefreshTimer: null,
+      machinePerformance: [],
+      windowSize: {
+        x: window.innerWidth,
+        y: window.innerHeight
+      }
+    };
+  },
+
+  async mounted() {
+    await this.onResize();
+    await this.loadDashboard();
+  },
+
+  methods: {
+    onResize() {
+      this.windowSize = {
+        x: window.innerWidth,
+        y: window.innerHeight
+      };
+      this.showBurger = this.windowSize.x < 950;
+      return this.windowSize;
     },
-    components: {
-        MachinePerfomance
-    },
 
-    async mounted() {
-        await this.onResize();
-        await this.loadDashboard();
-        //  this.setupSocketListeners();
-    },
+    async loadDashboard() {
+      this.loading = true;
+      this.errorMessage = "";
 
-    beforeDestroy() {
+      try {
+        const currentUser = this.$fire.auth.currentUser;
 
-    },
-
-    methods: {
-        onResize() {
-            this.windowSize = {
-                x: window.innerWidth,
-                y: window.innerHeight,
-            };
-            console.log("size", this.windowSize.x);
-            if (this.windowSize.x < 950) {
-                this.showBurger = true;
-            } else {
-                this.showBurger = false;
-            }
-            return this.windowSize;
-        },
-        async loadDashboard() {
-            this.loading = true;
-            this.errorMessage = "";
-
-            try {
-                const currentUser = this.$fire.auth.currentUser;
-
-                if (!currentUser) {
-                    this.errorMessage = "User not logged in";
-                    this.loading = false;
-                    return;
-                }
-
-                const uid = currentUser.uid;
-                const [machinePerfRes] = await Promise.all([
-
-                    api.post("/api/analytics/machine-performance", {
-                        uid
-                    })
-                ]);
-                this.machinePerformance = machinePerfRes.data || [];
-
-                console.log("Overview", this.machinePerformance)
-                // join client room after client data is loaded
-
-            } catch (error) {
-                console.error("loadDashboard error:", error);
-                this.errorMessage =
-                    error.response;
-            } finally {
-                this.loading = false;
-            }
-        },
-        formatNumber(value) {
-            return Number(value || 0).toLocaleString();
+        if (!currentUser) {
+          this.errorMessage = "User not logged in";
+          this.loading = false;
+          return;
         }
+
+        const uid = currentUser.uid;
+
+        const [machinePerfRes] = await Promise.all([
+          api.post("/api/analytics/machine-performance", {
+            uid
+          })
+        ]);
+
+        this.machinePerformance = machinePerfRes.data || [];
+      } catch (error) {
+        console.error("loadDashboard error:", error);
+        this.errorMessage =
+          error.response?.data?.message || "Failed to load machine performance";
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    formatNumber(value) {
+      return Number(value || 0).toLocaleString();
     }
+  }
 };
 </script>
 
 <style scoped>
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
+.machines-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(198, 255, 0, 0.06), transparent 22%),
+    linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
+  color: #fff;
 }
 
-.client-dashboard {
-    padding: 20px;
-    width: 100%;
+.machines-shell {
+  padding: 24px;
 }
 
-.loading {
-    padding: 20px 0;
+.page-topbar {
+  margin-bottom: 20px;
 }
 
-.welcome {
-    margin-bottom: 20px;
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #d8d8d8;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
+.back-link:hover {
+  color: #c6ff00;
 }
 
-.metric-card {
-    /* background: linear-gradient(to right,
-            #0c0b03da,
-            #c8ff0007,
-            #c8ff003b,
-            ); */
-    background: linear-gradient(to top right, rgba(0, 0, 0, 0.726), rgba(0, 0, 0, 0.678), #C6FF00);
-    border-radius: 18px;
+.machines-content {
+  width: 100%;
+}
+
+.loading-state {
+  padding: 20px 0;
+  color: #bdbdbd;
+}
+
+.hero-panel {
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+    linear-gradient(135deg, #111111, #080808) !important;
+  border: 1px solid rgba(198, 255, 0, 0.12) !important;
+}
+
+.hero-copy {
+  max-width: 760px;
+}
+
+.hero-kicker {
+  color: #c6ff00;
+  font-size: 13px;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.hero-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.hero-subtitle {
+  color: #bcbcbc;
+  line-height: 1.7;
+  margin-top: 12px;
+  max-width: 760px;
+}
+
+.dashboard-alert {
+  border-radius: 14px;
+}
+
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.summary-card {
+  border-radius: 20px;
+  padding: 18px;
+  background: linear-gradient(180deg, #111111, #090909);
+  border: 1px solid rgba(198, 255, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.summary-label {
+  color: #9d9d9d;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.6px;
+}
+
+.summary-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.table-card {
+  border-radius: 22px;
+  background: linear-gradient(180deg, #111111, #090909) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-kicker {
+  color: #99a38c;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.panel-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .machines-shell {
     padding: 16px;
-    color: #fff;
-}
+  }
 
-.metric-card h3 {
-    margin: 0 0 10px;
-    font-size: 14px;
-    color: #666;
-}
+  .hero-title {
+    font-size: 26px;
+  }
 
-.metric-card p {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.section {
-    margin-top: 30px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-}
-
-.table th,
-.table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.error {
-    color: red;
-    margin-top: 20px;
-}
-
-@media (max-width: 1200px) {
-    .metrics-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+  .summary-strip {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
