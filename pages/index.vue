@@ -114,35 +114,29 @@
     </section>
 
     <!-- Modules -->
-    <section class="section-block alt-section">
+    <!-- <section class="section-block alt-section">
       <v-container>
         <div class="section-head text-center">
           <h2>Key Delivery Areas</h2>
         </div>
 
         <v-row>
-          <v-col cols="12" sm="6" md="3">
-            <v-card outlined class="module-card pa-4 text-center">
-              <h4>Operational Control</h4>
-              <p>Manage clients, campaigns, machines, schedules, and assignments with clarity.</p>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" sm="6" md="3">
+        
+          <v-col cols="12" sm="6" md="4">
             <v-card outlined class="module-card pa-4 text-center">
               <h4>Client Visibility</h4>
               <p>Give clients direct access to performance, top machines, scans, and delivery metrics.</p>
             </v-card>
           </v-col>
 
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="12" sm="6" md="4">
             <v-card outlined class="module-card pa-4 text-center">
               <h4>Campaign Accountability</h4>
               <p>Track what was delivered, where it ran, and how each campaign performed over time.</p>
             </v-card>
           </v-col>
 
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="12" sm="6" md="4">
             <v-card outlined class="module-card pa-4 text-center">
               <h4>Growth Intelligence</h4>
               <p>Use delivery data and performance trends to improve planning, targeting, and reporting.</p>
@@ -150,7 +144,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </section>
+    </section> -->
 
     <!-- CTA -->
     <section class="section-block cta-section">

@@ -2,7 +2,7 @@
   <v-container fluid class="campaigns-page pa-0">
     <div class="campaigns-shell">
       <!-- Top -->
-      <div class="page-topbar">
+      <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px;">
         <nuxt-link class="back-link" to="/client-dashboard">
           <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
           Back to dashboard
@@ -31,7 +31,7 @@
               <v-spacer />
 
               <div class="hero-actions mt-4 mt-md-0">
-                <v-chip outlined color="#C6FF00" class="toggle-chip">
+                <v-chip outlined color="#C6FF00" class="toggle-chip" style="margin-right: 10px;">
                   <v-btn icon small @click="grid = false">
                     <v-icon color="#C6FF00">mdi-view-grid</v-icon>
                   </v-btn>
@@ -63,7 +63,7 @@
             >
               <div class="campaign-card-top">
                 <div class="campaign-left">
-                  <v-chip outlined small color="#C6FF00" class="status-chip">
+                  <v-chip outlined small color="#C6FF00" class="status-chip" style="margin-left: 8px;">
                     {{ campaign.status }}
                   </v-chip>
 
@@ -133,6 +133,7 @@
                   View campaign
                   <v-icon right color="black">mdi-chevron-right</v-icon>
                 </v-btn>
+                <v-spacer />
               </div>
             </v-card>
 

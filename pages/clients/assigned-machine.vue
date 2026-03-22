@@ -2,7 +2,7 @@
   <v-container fluid class="machines-page pa-0">
     <div class="machines-shell">
       <!-- Top -->
-      <div class="page-topbar">
+      <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px;">
         <nuxt-link class="back-link" to="/client-dashboard">
           <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
           Back to dashboard
@@ -29,7 +29,7 @@
 
               <v-spacer />
 
-              <div class="hero-actions mt-4 mt-md-0">
+              <div class="hero-actions mt-4 mt-md-0" style="margin-right: 18px;">
                 <v-btn
                   color="#C6FF00"
                   class="black--text font-weight-bold"

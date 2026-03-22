@@ -21,7 +21,7 @@
             </v-menu>
 
             <div v-if="overview.client">
-                <div class="page-badge">{{ overview.client.client_name  }} Portal</div>
+                <div class="page-badge" style="margin-top: 18px;">{{ overview.client.client_name  }} Portal</div>
 
             </div>
         </div>
@@ -105,7 +105,7 @@
 
                         <v-spacer />
 
-                        <div class="welcome-actions mt-4 mt-md-0">
+                        <div class="welcome-actions mt-4 mt-md-0" style="margin-right: 10px;">
                             <v-btn color="#C6FF00" class="black--text font-weight-bold mr-2" to="/clients/campaign">
                                 View Campaigns
                             </v-btn>
@@ -166,7 +166,7 @@
 
                     <v-row>
                         <v-col cols="12" lg="4">
-                            <v-card class="panel-card pa-4" outlined>
+                            <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker">Trend</div>
                                     <div class="panel-title">Daily Impressions</div>
@@ -176,7 +176,7 @@
                         </v-col>
 
                         <v-col cols="12" lg="4">
-                            <v-card class="panel-card pa-4" outlined>
+                            <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker">Trend</div>
                                     <div class="panel-title">Daily QR Scans</div>
@@ -186,7 +186,7 @@
                         </v-col>
 
                         <v-col cols="12" lg="4">
-                            <v-card class="panel-card pa-4" outlined>
+                            <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker">Breakdown</div>
                                     <div class="panel-title">Audience Devices</div>
@@ -271,13 +271,13 @@
                             </div>
 
                             <div class="campaign-card-footer">
-                                <v-chip outlined small color="#C6FF00">
+                                <v-chip outlined small color="#C6FF00" style="margin-left: 10px;">
                                     {{ campaign.status }}
                                 </v-chip>
 
                                 <v-spacer />
 
-                                <v-btn :to="`/view-campaign/${campaign.id}`" rounded small color="#C6FF00" class="black--text font-weight-bold">
+                                <v-btn :to="`/view-campaign/${campaign.id}`" rounded small color="#C6FF00" class="black--text font-weight-bold" style="margin-right: 10px;">
                                     View campaign
                                     <v-icon right color="black">mdi-chevron-right</v-icon>
                                 </v-btn>
@@ -311,8 +311,8 @@
                                         <td>{{ formatNumber(campaign.total_impressions) }}</td>
                                         <td>{{ formatNumber(campaign.total_scans) }}</td>
                                         <td>{{ campaign.conversion_rate }}%</td>
-                                        <td>{{ campaign.start_date }}</td>
-                                        <td>{{ campaign.end_date }}</td>
+                                        <td>{{ moment(campaign.start_date).format("MMM Do YY") }}</td>
+                                        <td>{{ moment(campaign.end_date).format("MMM Do YY") }}</td>
                                         <td>
                                             <nuxt-link :to="`/view-campaign/${campaign.id}`" class="campaign-link">
                                                 View {{ campaign.campaign_name.substring(0, 10) + "..." }}

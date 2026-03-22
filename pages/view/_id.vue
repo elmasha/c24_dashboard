@@ -27,7 +27,7 @@
           <v-spacer />
 
           <div class="hero-status-wrap mt-4 mt-md-0">
-            <v-chip outlined color="#C6FF00" class="status-chip">
+            <v-chip outlined color="#C6FF00" class="status-chip" style="margin-right: 10px;">
               {{ campaign.status }}
             </v-chip>
           </div>
