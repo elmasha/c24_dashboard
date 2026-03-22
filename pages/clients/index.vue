@@ -27,7 +27,7 @@
 
         <div>
           <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title">Client Management</h1>
+          <h1 class="page-title" style="font-size: 0.8rem;">Client Management</h1>
         </div>
       </div>
 
@@ -91,7 +91,7 @@
         <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
           <div class="d-flex flex-wrap align-center">
-            <div class="hero-copy">
+            <div class="hero-copy" style="margin-left: 10px;">
               <div class="hero-kicker">Client Operations</div>
               <div class="hero-heading">
                 Create, manage and maintain client accounts across the platform

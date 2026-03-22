@@ -90,7 +90,7 @@
                     <v-card class="hero-panel pa-6" outlined>
                         <div class="d-flex flex-wrap align-center">
                             <div class="hero-copy">
-                                <div class="hero-kicker">Operations Overview</div>
+                                <div class="hero-kicker" style="margin-left: 20px;">Operations Overview</div>
                                 <div class="hero-heading">
                                     Monitor delivery, traffic, client growth, and machine activity from one place
                                 </div>

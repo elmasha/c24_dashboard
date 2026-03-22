@@ -27,7 +27,7 @@
 
         <div>
           <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title">Campaign Management</h1>
+          <h1 class="page-title" style="font-size: 0.8rem;">Campaign Management</h1>
         </div>
       </div>
 
@@ -91,12 +91,12 @@
         <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
           <div class="d-flex flex-wrap align-center">
-            <div class="hero-copy">
-              <div class="hero-kicker">Campaign Operations</div>
+            <div class="hero-copy " style="margin-left: 10px;">
+              <div class="hero-kicker" style="margin-left: 0px;">Campaign Operations</div>
               <div class="hero-heading">
                 Create, update, assign and monitor campaigns across your network
               </div>
-              <div class="hero-subtext">
+              <div class="hero-subtext" style="margin-left: 0px;">
                 Manage campaign delivery, status, machine assignment, and visibility from one place.
               </div>
             </div>

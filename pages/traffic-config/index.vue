@@ -27,7 +27,7 @@
 
         <div>
           <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title">Traffic Configuration</h1>
+          <h1 class="page-title" style="font-size: 1rem;">Traffic Configuration</h1>
         </div>
       </div>
 
@@ -91,8 +91,8 @@
 
         <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
-          <div class="hero-copy">
-            <div class="hero-kicker">Delivery Engine Settings</div>
+          <div class="hero-copy" style="margin-left: 10px;">
+            <div class="hero-kicker" style="margin-left: 10px;">Delivery Engine Settings</div>
             <div class="hero-heading">
               Configure category profiles, day weights, and time-based traffic behavior
             </div>
