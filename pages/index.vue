@@ -19,13 +19,13 @@
               </p>
 
               <div class="hero-actions">
-                <nuxt-link to="/auth/admin.login">
+                <nuxt-link to="/admin/dashboard">
                   <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
                     Go to Admin Dashboard
                   </v-btn>
                 </nuxt-link>
 
-                <nuxt-link to="/auth/client.login">
+                <nuxt-link to="/client-dashboard">
                   <v-btn outlined large class="mb-2 hero-btn-outline">
                     Client Dashboard
                   </v-btn>
