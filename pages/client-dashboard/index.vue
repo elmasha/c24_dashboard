@@ -1,295 +1,339 @@
 <template>
-<v-card color="black" dark elevation="0">
-    <v-app-bar color="#000" dark height="50">
-        <v-menu top :close-on-click="closeOnClick">
-            <template v-slot:activator="{ on, attrs }">
-                <v-app-bar-nav-icon v-show="showBurger" dark v-bind="attrs" v-on="on"></v-app-bar-nav-icon>
+<v-container fluid class="client-page pa-0">
+    <!-- Top bar -->
+    <v-app-bar flat color="transparent" height="72" class="client-topbar px-4">
+        <div class="d-flex align-center">
+            <v-menu offset-y v-if="showBurger">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon dark class="mr-3 topbar-icon" v-bind="attrs" v-on="on">
+                        <v-icon>mdi-menu</v-icon>
+                    </v-btn>
+                </template>
 
-            </template>
+                <v-list dark class="menu-list">
+                    <v-list-item v-for="(item, index) in items_nav" :key="index" link @click="move(item.to)">
+                        <v-list-item-icon>
+                            <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
 
-            <v-list>
-                <v-list-item v-for="(item, index) in items_nav" :key="index">
-                    <v-list-item-icon>
-                        <v-icon @click="move(item.to)">{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title @click="move(item.to)">{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+            <div v-if="overview.client">
+                <div class="page-badge">{{ overview.client.client_name  }} Portal</div>
 
-        <v-toolbar-title></v-toolbar-title>
+            </div>
+        </div>
 
-        <v-spacer></v-spacer>
+        <v-spacer />
 
-        <v-btn icon>
-            <v-icon>mdi-magnify</v-icon>
-        </v-btn>
+        <div class="d-flex align-center">
+            <v-btn icon dark class="topbar-icon mr-2">
+                <v-icon>mdi-bell-outline</v-icon>
+            </v-btn>
 
-        <v-btn icon>
-            <v-icon>mdi-filter</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-            <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-
+            <v-btn icon dark class="topbar-icon" @click="loadDashboard" :loading="loading">
+                <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+        </div>
     </v-app-bar>
 
-    <div class="">
-        <div class="d-flex">
-            <div v-show="!showBurger">
-                <!-- Desktop drawer -->
-                <v-navigation-drawer floating elevation="0" style="border-radius: 12px; background-color: #2b4601;margin: 10px;" dark parmernent mini-variant="100">
+    <div class="client-layout">
+        <!-- Side navigation -->
+        <aside class="client-sidebar" v-show="!showBurger">
+            <div class="sidebar-card">
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-badge">Charge24 client dashboard</div>
+                    <div class="sidebar-brand-text"></div>
+                </div>
 
-                    <!-- <v-list-item class="px-1" v-if="overview.client">
-                            <v-list-item-avatar>
-                                <v-avatar color="green">
-                                    <b style="color: black;"> {{ overview.client.client_name.substring(0,2)}}</b>
-                                </v-avatar>
-                            </v-list-item-avatar>
-                        </v-list-item> -->
+                <div class="sidebar-profile" v-if="overview.client">
+                    <v-avatar size="52" color="#C6FF00" class="sidebar-avatar">
+                        <span class="avatar-text">
+                            {{ overview.client.client_name.substring(0, 2).toUpperCase() }}
+                        </span>
+                    </v-avatar>
 
-                    <v-list>
-                        <v-list-item v-for="item in items_nav" :key="item.title" link>
-                            <v-list-item-icon>
-                                <v-icon @click="move(item.to)">{{ item.icon }}</v-icon>
-                            </v-list-item-icon>
+                    <div class="sidebar-client-name">
+                        {{ overview.client.client_name }}
+                    </div>
+                    <div class="sidebar-client-subtitle" style="margin-left: 12px;">
+                        Performance overview
+                    </div>
+                </div>
 
-                            <v-list-item-content>
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list>
+                <v-list dark class="sidebar-list">
+                    <v-list-item v-for="item in items_nav" :key="item.title" link class="sidebar-item" @click="move(item.to)">
+                        <v-list-item-icon>
+                            <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
 
-                    <template v-slot:append>
-                        <div class="pa-2">
-                            <v-btn block>
-                                Logout
-                            </v-btn>
-                        </div>
-                    </template>
-                </v-navigation-drawer>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+
+                <div class="sidebar-footer">
+                    <v-btn block outlined color="#C6FF00" class="logout-btn">
+                        Logout
+                    </v-btn>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main dashboard -->
+        <main class="client-main" v-resize="onResize">
+            <div v-if="loading" class="loading-state">
+                Loading dashboard...
             </div>
 
-            <!-- Main dashboard -->
-            <div class="client-dashboard" v-resize="onResize">
+            <div v-else>
+                <!-- Welcome banner -->
+                <v-card class="welcome-banner pa-6 mb-5" outlined>
+                    <div class="d-flex flex-wrap align-center">
+                        <div class="welcome-copy">
+                            <div class="welcome-kicker" style="margin-left: 12px;">Campaign Reporting</div>
+                            <div class="welcome-title">
+                                See how your campaigns are performing across impressions, scans, and conversions
+                            </div>
+                            <div class="welcome-subtitle">
+                                Track delivery trends, audience device breakdown, and campaign results in one place.
+                            </div>
+                        </div>
 
-                <div v-if="loading" class="loading">Loading dashboard...</div>
+                        <v-spacer />
 
-                <div v-else>
-                    <div class="welcome" v-if="overview.client">
-                        <h2>{{ overview.client.client_name }} Dashboard</h2>
-                        <h2></h2>
-                        <v-btn icon @click="loadDashboard()"><v-icon>mdi-refresh</v-icon></v-btn>
+                        <div class="welcome-actions mt-4 mt-md-0">
+                            <v-btn color="#C6FF00" class="black--text font-weight-bold mr-2" to="/clients/campaign">
+                                View Campaigns
+                            </v-btn>
+                        </div>
                     </div>
+                </v-card>
 
-                    <!-- Top metrics -->
-                    <div class="metrics-grid">
-                        <div class="metric-card">
-                            <h3>Total Impressions</h3>
-                            <p>{{ formatNumber((overview.metrics && overview.metrics.total_impressions) || 0) }}</p>
-                        </div>
+                <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
+                    {{ errorMessage }}
+                </v-alert>
 
-                        <div class="metric-card">
-                            <h3>Total Scans</h3>
-                            <p>{{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}</p>
-                        </div>
-
-                        <div class="metric-card">
-                            <h3>Conversion Rate</h3>
-                            <p>{{ (overview.metrics && overview.metrics.overall_conversion_rate) || 0 }}%</p>
-                        </div>
-
-                        <div class="metric-card">
-                            <h3>Active Campaigns</h3>
-                            <p>{{ (overview.metrics && overview.metrics.active_campaigns) || 0 }}</p>
-                        </div>
-
-                        <div class="metric-card">
-                            <h3>Total Campaigns</h3>
-                            <p>{{ (overview.metrics && overview.metrics.total_campaigns) || 0 }}</p>
+                <!-- Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card metric-primary">
+                        <div class="metric-label">Total Impressions</div>
+                        <div class="metric-value">
+                            {{ formatNumber((overview.metrics && overview.metrics.total_impressions) || 0) }}
                         </div>
                     </div>
 
-                    <!-- Daily charts -->
-                    <div class="section">
-                        <h2></h2>
+                    <div class="metric-card">
+                        <div class="metric-label">Total Scans</div>
+                        <div class="metric-value">
+                            {{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}
+                        </div>
+                    </div>
 
-                        <v-row v-resize="onResize">
-                            <v-col cols="12" md="4">
-                                <v-card outlined class="pa-4" color="black" light>
-                                    <h3 class="mb-4 text-white" style="color: #808080;">Daily Impressions</h3>
-                                    <apexchart type="line" height="320" :options="impressionsChartOptions" :series="impressionsSeries" />
-                                </v-card>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <v-card outlined class="pa-4 text-white" color="black" light>
-                                    <h3 class="mb-4" style="color: #808080;">Daily Qr Scans</h3>
-                                    <apexchart type="bar" height="320" :options="scansChartOptions" :series="scansSeries" />
-                                </v-card>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <v-card outlined class="pa-4" color="black" light>
-                                        <DevicePieChart title="Campaign Device Breakdown" :rows="deviceBreakdown" />
-                                </v-card>
-                            </v-col>
+                    <div class="metric-card">
+                        <div class="metric-label">Conversion Rate</div>
+                        <div class="metric-value">
+                            {{ (overview.metrics && overview.metrics.overall_conversion_rate) || 0 }}%
+                        </div>
+                    </div>
 
-                        </v-row>
+                    <div class="metric-card">
+                        <div class="metric-label">Active Campaigns</div>
+                        <div class="metric-value">
+                            {{ (overview.metrics && overview.metrics.active_campaigns) || 0 }}
+                        </div>
+                    </div>
 
+                    <div class="metric-card">
+                        <div class="metric-label">Total Campaigns</div>
+                        <div class="metric-value">
+                            {{ (overview.metrics && overview.metrics.total_campaigns) || 0 }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="section-block">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-kicker">Performance Trends</div>
+                            <h2 class="section-title">Delivery & engagement</h2>
+                        </div>
                     </div>
 
                     <v-row>
-                        <v-col cols="12" md="12">
-                            <div class="">
-                                <h2>Campaign Performance</h2>
+                        <v-col cols="12" lg="4">
+                            <v-card class="panel-card pa-4" outlined>
+                                <div class="panel-title-wrap">
+                                    <div class="panel-kicker">Trend</div>
+                                    <div class="panel-title">Daily Impressions</div>
+                                </div>
+                                <apexchart type="line" height="320" :options="impressionsChartOptions" :series="impressionsSeries" />
+                            </v-card>
+                        </v-col>
 
-                                <div class="d-flex" style="margin-top: 20px;">
-                                    <v-chip outlined color="green">
-                                        <v-btn icon @click="grid=false">
-                                            <v-icon>mdi-view-grid</v-icon>
-                                        </v-btn>
-                                        <v-btn icon @click="grid=true">
-                                            <v-icon>mdi-format-list-bulleted-square</v-icon>
-                                        </v-btn>
+                        <v-col cols="12" lg="4">
+                            <v-card class="panel-card pa-4" outlined>
+                                <div class="panel-title-wrap">
+                                    <div class="panel-kicker">Trend</div>
+                                    <div class="panel-title">Daily QR Scans</div>
+                                </div>
+                                <apexchart type="bar" height="320" :options="scansChartOptions" :series="scansSeries" />
+                            </v-card>
+                        </v-col>
 
-                                    </v-chip>
+                        <v-col cols="12" lg="4">
+                            <v-card class="panel-card pa-4" outlined>
+                                <div class="panel-title-wrap">
+                                    <div class="panel-kicker">Breakdown</div>
+                                    <div class="panel-title">Audience Devices</div>
+                                </div>
+                                <DevicePieChart title="Campaign Device Breakdown" :rows="deviceBreakdown" />
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </div>
 
+                <!-- Campaign section header -->
+                <div class="section-block">
+                    <div class="section-head">
+                        <div>
+                            <div class="section-kicker">Campaign Performance</div>
+                            <h2 class="section-title">Your campaigns</h2>
+                        </div>
+
+                        <div class="view-toggle">
+                            <v-chip outlined color="#C6FF00" class="toggle-chip">
+                                <v-btn icon small @click="grid = false">
+                                    <v-icon color="#C6FF00">mdi-view-grid</v-icon>
+                                </v-btn>
+                                <v-btn icon small @click="grid = true">
+                                    <v-icon color="#C6FF00">mdi-format-list-bulleted-square</v-icon>
+                                </v-btn>
+                            </v-chip>
+                        </div>
+                    </div>
+
+                    <!-- Card view -->
+                    <div class="campaign-grid" v-show="!grid">
+                        <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
+                            <div class="campaign-card-top">
+                                <div class="campaign-avatar-wrap">
+                                    <v-avatar size="48" color="#C6FF00">
+                                        <span class="campaign-avatar-text">
+                                            {{ campaign.campaign_name.substring(0, 2).toUpperCase() }}
+                                        </span>
+                                    </v-avatar>
+                                </div>
+
+                                <v-spacer />
+
+                                <div class="campaign-progress-wrap">
+                                    <v-progress-circular max="100" width="5" size="78" color="#C6FF00" :value="campaign.conversion_rate">
+                                        <div class="progress-label">
+                                            <strong>{{ campaign.conversion_rate }}%</strong>
+                                            <span>CR</span>
+                                        </div>
+                                    </v-progress-circular>
                                 </div>
                             </div>
-                        </v-col>
-                        <v-col cols="12" md="12" v-show="!grid">
-                            <div class="">
-                                <div class="grid">
-                                    <div v-for="campaign in overview.campaigns" :key="campaign.id">
 
-                                        <v-card style="border-radius: 12px; color: white;" dark>
+                            <div class="campaign-card-body">
+                                <div class="campaign-name-label">Campaign</div>
+                                <div class="campaign-name">{{ campaign.campaign_name }}</div>
 
-                                            <div class="container">
+                                <div class="campaign-metrics-row">
+                                    <div class="campaign-mini-metric">
+                                        <span>Impressions</span>
+                                        <strong>{{ numeral(campaign.delivered_impressions).format("0,0") }}</strong>
+                                    </div>
 
-                                                <div class="d-flex">
-                                                    <div>
-
-                                                        <v-avatar size="40" color="green" style="margin: 10px;color: #000;">
-                                                            {{ campaign.campaign_name.substring(0,2).toLocaleString() }}
-                                                        </v-avatar>
-                                                    </div>
-
-                                                    <v-spacer />
-                                                    <div class="text-center">
-                                                        <!--  -->
-                                                        <v-progress-circular max="100" rounded width="2" size="77" color="green" :value="campaign.conversion_rate">
-
-                                                            {{ campaign.conversion_rate }} % <br>
-                                                            Cr
-                                                        </v-progress-circular>
-
-                                                    </div>
-
-                                                </div>
-                                                <div>
-                                                    <h4 style="font-size: 0.8rem; color:#808080;"> Campaign : <br>
-                                                        <b style="font-size: 1rem; color:#fff;"> {{campaign.campaign_name }}</b> <br>
-
-                                                    </h4>
-                                                </div>
-
-                                                <p></p>
-                                                <div class="d-flex">
-                                                    <div class="text-center">
-                                                        <h4 style="font-size: 0.9rem; color:#808080;"> Impression <br>
-                                                            <b style="font-size: 1rem; color:#fff;"> {{ numeral(campaign.delivered_impressions).format('0,0')  }}</b> <br>
-
-                                                        </h4>
-                                                    </div>
-                                                    <v-spacer />
-                                                    <div class="text-center">
-                                                        <p style="font-size: 0.9rem;font-weight:200;color: #1A1B2B;">Qr Scans <br> <b style="font-weight: 500;">{{ campaign.total_scans }}</b></p>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="d-flex text-center" style="font-size: 0.9rem; margin: 0px; padding: 10px;">
-                                                <div>
-                                                    Start date <br>
-                                                    <b>{{ moment(campaign.start_date).format("MMM Do YY") }}</b>
-                                                </div>
-                                                <v-spacer />
-                                                <div>
-                                                    End date <br>
-                                                    <b> {{ moment(campaign.end_date).format("MMM Do YY") }}</b>
-                                                </div>
-                                            </div>
-                                            <v-card-actions style="border-radius: 12px; margin: 9px; padding: 12px;">
-                                                <!-- <p>Status <br> <b style="color:green">{{ candidate.working_status }}</b></p> -->
-                                                <v-chip outlined>{{ campaign.status }}</v-chip>
-                                                <v-spacer></v-spacer>
-                                                <v-btn :to="`/view-campaign/${campaign.id}`" rounded small color="green" style="color: black;">
-                                                    View campaign
-                                                    <v-icon right>mdi-chevron-right</v-icon>
-                                                </v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-
+                                    <div class="campaign-mini-metric">
+                                        <span>QR Scans</span>
+                                        <strong>{{ campaign.total_scans }}</strong>
                                     </div>
                                 </div>
 
+                                <div class="campaign-dates-row">
+                                    <div class="campaign-date-box">
+                                        <span>Start</span>
+                                        <strong>{{ moment(campaign.start_date).format("MMM Do YY") }}</strong>
+                                    </div>
+
+                                    <div class="campaign-date-box">
+                                        <span>End</span>
+                                        <strong>{{ moment(campaign.end_date).format("MMM Do YY") }}</strong>
+                                    </div>
+                                </div>
                             </div>
-                        </v-col>
-                        <v-col cols="12" md="12" v-show="grid">
 
-                            <!-- Campaigns table -->
-                            <div class="section">
+                            <div class="campaign-card-footer">
+                                <v-chip outlined small color="#C6FF00">
+                                    {{ campaign.status }}
+                                </v-chip>
 
-                                <v-simple-table>
+                                <v-spacer />
 
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Campaign</th>
-                                            <th>Status</th>
-                                            <th>Impressions</th>
-                                            <th>Qr Scans</th>
-                                            <th>Conversion</th>
-                                            <th>Start</th>
-                                            <th>End</th>
-                                            <th>View campaign</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr v-for="campaign in overview.campaigns" :key="campaign.id">
-                                            <td>{{ campaign.id }}</td>
-                                            <td>{{ campaign.campaign_name }}</td>
-                                            <td>{{ campaign.status }}</td>
-                                            <td>{{ formatNumber(campaign.total_impressions) }}</td>
-                                            <td>{{ formatNumber(campaign.total_scans) }}</td>
-                                            <td>{{ campaign.conversion_rate }}%</td>
-                                            <td>{{ campaign.start_date }}</td>
-                                            <td>{{ campaign.end_date }}</td>
-                                            <td>
-                                                <nuxt-link :to="`/view-campaign/${campaign.id}`" style="text-decoration-line: none;color: #C6FF00;">
-                                                    View {{ campaign.campaign_name.substring(0,10).toLocaleString()+"..." }}
-                                                </nuxt-link>
-                                            </td>
-                                        </tr>
-
-                                        <tr v-if="!overview.campaigns.length">
-                                            <td colspan="11">No campaigns found.</td>
-                                        </tr>
-                                    </tbody>
-
-                                </v-simple-table>
+                                <v-btn :to="`/view-campaign/${campaign.id}`" rounded small color="#C6FF00" class="black--text font-weight-bold">
+                                    View campaign
+                                    <v-icon right color="black">mdi-chevron-right</v-icon>
+                                </v-btn>
                             </div>
-                        </v-col>
-                    </v-row>
+                        </v-card>
+                    </div>
 
+                    <!-- Table view -->
+                    <div v-show="grid">
+                        <v-card class="table-card pa-2" outlined>
+                            <v-simple-table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Campaign</th>
+                                        <th>Status</th>
+                                        <th>Impressions</th>
+                                        <th>QR Scans</th>
+                                        <th>Conversion</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr v-for="campaign in overview.campaigns" :key="campaign.id">
+                                        <td>{{ campaign.id }}</td>
+                                        <td>{{ campaign.campaign_name }}</td>
+                                        <td>{{ campaign.status }}</td>
+                                        <td>{{ formatNumber(campaign.total_impressions) }}</td>
+                                        <td>{{ formatNumber(campaign.total_scans) }}</td>
+                                        <td>{{ campaign.conversion_rate }}%</td>
+                                        <td>{{ campaign.start_date }}</td>
+                                        <td>{{ campaign.end_date }}</td>
+                                        <td>
+                                            <nuxt-link :to="`/view-campaign/${campaign.id}`" class="campaign-link">
+                                                View {{ campaign.campaign_name.substring(0, 10) + "..." }}
+                                            </nuxt-link>
+                                        </td>
+                                    </tr>
+
+                                    <tr v-if="!overview.campaigns.length">
+                                        <td colspan="9">No campaigns found.</td>
+                                    </tr>
+                                </tbody>
+                            </v-simple-table>
+                        </v-card>
+                    </div>
                 </div>
-
-                <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
             </div>
-        </div>
+
+            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        </main>
     </div>
-</v-card>
+</v-container>
 </template>
 
 <script>
@@ -299,6 +343,11 @@ import numeral from "numeral";
 import DevicePieChart from "../../components/charts/DevicePieChart.vue";
 
 export default {
+    middleware: 'auth',
+    components: {
+        DevicePieChart
+    },
+
     data() {
         return {
             grid: false,
@@ -308,25 +357,25 @@ export default {
             loading: true,
             errorMessage: "",
             items_nav: [{
-                    title: 'Dashboard',
-                    icon: 'mdi-view-dashboard',
-                    to: 'client-dashboard'
+                    title: "Dashboard",
+                    icon: "mdi-view-dashboard",
+                    to: "client-dashboard"
                 },
                 {
-                    title: 'Campaign',
-                    icon: 'mdi-bullhorn-outline',
-                    to: 'clients/campaign'
+                    title: "Campaign",
+                    icon: "mdi-bullhorn-outline",
+                    to: "clients/campaign"
                 },
                 {
-                    title: 'Machines',
-                    icon: 'mdi-cellphone-sound',
-                    to: 'clients/assigned-machine'
+                    title: "Machines",
+                    icon: "mdi-cellphone-sound",
+                    to: "clients/assigned-machine"
                 },
                 {
-                    title: 'Notification',
-                    icon: 'mdi-bell',
-                    to: 'clients/assigned-machine'
-                },
+                    title: "Notification",
+                    icon: "mdi-bell",
+                    to: "clients/assigned-machine"
+                }
             ],
             overview: {
                 client: null,
@@ -344,13 +393,14 @@ export default {
                 impressions: [],
                 scans: []
             },
-            socketRefreshTimer: null,
-            showBurger: false
+            showBurger: false,
+            windowSize: {
+                x: null,
+                y: null
+            }
         };
     },
-    components: {
-        DevicePieChart
-    },
+
     computed: {
         impressionsSeries() {
             return [{
@@ -375,7 +425,11 @@ export default {
                 chart: {
                     toolbar: {
                         show: false
-                    }
+                    },
+                    foreColor: "#bdbdbd"
+                },
+                theme: {
+                    mode: "dark"
                 },
                 stroke: {
                     curve: "smooth",
@@ -385,7 +439,9 @@ export default {
                     enabled: false
                 },
                 xaxis: {
-                    categories: (this.dailyGraph.impressions || []).map(row => this.moment(row.date).format("MMM Do YY")),
+                    categories: (this.dailyGraph.impressions || []).map(row =>
+                        this.moment(row.date).format("MMM Do YY")
+                    ),
                     title: {
                         text: "Date"
                     }
@@ -399,6 +455,7 @@ export default {
                     }
                 },
                 tooltip: {
+                    theme: "dark",
                     y: {
                         formatter: value => Number(value || 0).toLocaleString()
                     }
@@ -414,13 +471,19 @@ export default {
                 chart: {
                     toolbar: {
                         show: false
-                    }
+                    },
+                    foreColor: "#bdbdbd"
+                },
+                theme: {
+                    mode: "dark"
                 },
                 dataLabels: {
                     enabled: false
                 },
                 xaxis: {
-                    categories: (this.dailyGraph.scans || []).map(row => moment(row.date).format("MMM Do YY")),
+                    categories: (this.dailyGraph.scans || []).map(row =>
+                        moment(row.date).format("MMM Do YY")
+                    ),
                     title: {
                         text: "Date"
                     }
@@ -434,6 +497,7 @@ export default {
                     }
                 },
                 tooltip: {
+                    theme: "dark",
                     y: {
                         formatter: value => Number(value || 0).toLocaleString()
                     }
@@ -446,34 +510,25 @@ export default {
     },
 
     async mounted() {
-        // await this.onResize();
+        this.onResize();
         await this.loadDashboard();
-        //  this.setupSocketListeners();
-    },
-
-    beforeDestroy() {
-
     },
 
     methods: {
         move(val) {
-            this.$router.push(`/${val}`)
+            this.$router.push(`/${val}`);
         },
+
         onResize() {
             this.windowSize = {
                 x: window.innerWidth,
-                y: window.innerHeight,
+                y: window.innerHeight
             };
-            console.log("size", this.windowSize.x);
-            if (this.windowSize.x < 950) {
-                this.showBurger = true;
-                console.log(this.showBurger);
-            } else {
-                this.showBurger = false;
-                console.log(this.showBurger);
-            }
+
+            this.showBurger = this.windowSize.x < 950;
             return this.windowSize;
         },
+
         async loadDashboard() {
             this.loading = true;
             this.errorMessage = "";
@@ -517,19 +572,16 @@ export default {
                     impressions: [],
                     scans: []
                 };
+
                 this.deviceBreakdown = deviceRes.data || [];
-
-                console.log("Overview", this.overview)
-                // join client room after client data is loaded
-
             } catch (error) {
                 console.error("loadDashboard error:", error);
-                this.errorMessage =
-                    error.response;
+                this.errorMessage = error.response.data.message || "Failed to load dashboard";
             } finally {
                 this.loading = false;
             }
         },
+
         formatNumber(value) {
             return Number(value || 0).toLocaleString();
         }
@@ -538,77 +590,396 @@ export default {
 </script>
 
 <style scoped>
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
+.client-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(198, 255, 0, 0.06), transparent 22%),
+        linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
+    color: #fff;
 }
 
-.client-dashboard {
-    padding: 20px;
-    width: 100%;
+.client-topbar {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.loading {
-    padding: 20px 0;
+.topbar-icon {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(198, 255, 0, 0.08);
 }
 
-.welcome {
+.client-layout {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
+.client-sidebar {
+    width: 290px;
+    padding: 16px;
+}
+
+.sidebar-card {
+    height: 100%;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #101010, #070707);
+    border: 1px solid rgba(198, 255, 0, 0.12);
+    padding: 18px;
+}
+
+.sidebar-brand {
+    margin-bottom: 24px;
+}
+
+.sidebar-brand-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(198, 255, 0, 0.1);
+    border: 1px solid rgba(198, 255, 0, 0.22);
+    color: #c6ff00;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.sidebar-brand-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.sidebar-profile {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
     margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar-avatar {
+    margin-bottom: 12px;
+}
+
+.avatar-text {
+    color: #000;
+    font-weight: 800;
+}
+
+.sidebar-client-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.sidebar-client-subtitle {
+    color: #a8a8a8;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.sidebar-list {
+    background: transparent !important;
+}
+
+.sidebar-item {
+    border-radius: 12px;
+    margin-bottom: 6px;
+}
+
+.sidebar-item:hover {
+    background: rgba(198, 255, 0, 0.06);
+}
+
+.sidebar-footer {
+    margin-top: 24px;
+}
+
+.logout-btn {
+    border-color: rgba(198, 255, 0, 0.35) !important;
+    color: #c6ff00 !important;
+}
+
+.client-main {
+    flex: 1;
+    padding: 20px;
+}
+
+.page-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(198, 255, 0, 0.1);
+    border: 1px solid rgba(198, 255, 0, 0.22);
+    color: #c6ff00;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0;
+    color: #fff;
+}
+
+.loading-state {
+    padding: 30px 0;
+    color: #b8b8b8;
+}
+
+.welcome-banner {
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+        linear-gradient(135deg, #111111, #080808) !important;
+    border: 1px solid rgba(198, 255, 0, 0.12) !important;
+}
+
+.welcome-copy {
+    max-width: 760px;
+}
+
+.welcome-kicker {
+    color: #c6ff00;
+    font-size: 13px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.welcome-title {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #fff;
+}
+
+.welcome-subtitle {
+    color: #bcbcbc;
+    line-height: 1.7;
+    margin-top: 12px;
+}
+
+.dashboard-alert {
+    border-radius: 14px;
 }
 
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
+    gap: 16px;
     margin-bottom: 30px;
 }
 
 .metric-card {
-    /* background: linear-gradient(to right,
-            #0c0b03da,
-            #c8ff0007,
-            #c8ff003b,
-            ); */
-    background: linear-gradient(to top right, rgba(0, 0, 0, 0.726), rgba(0, 0, 0, 0.678), #C6FF00);
-    border-radius: 18px;
-    padding: 16px;
+    border-radius: 20px;
+    padding: 20px;
+    background: linear-gradient(180deg, #111111, #090909);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.metric-primary {
+    background: linear-gradient(135deg, rgba(198, 255, 0, 0.13), #0d0d0d 58%, #090909);
+    border: 1px solid rgba(198, 255, 0, 0.12);
+}
+
+.metric-label {
+    color: #a5a5a5;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: 800;
     color: #fff;
 }
 
-.metric-card h3 {
-    margin: 0 0 10px;
-    font-size: 14px;
-    color: #666;
+.section-block {
+    margin-top: 22px;
+    margin-bottom: 28px;
 }
 
-.metric-card p {
-    margin: 0;
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.section-kicker {
+    color: #99a38c;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+}
+
+.section-title {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
 }
 
-.section {
-    margin-top: 30px;
+.panel-card,
+.table-card {
+    border-radius: 22px;
+    background: linear-gradient(180deg, #111111, #090909) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
+.panel-title-wrap {
+    margin-bottom: 12px;
 }
 
-.table th,
-.table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
+.panel-kicker {
+    color: #9aa590;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
 }
 
-.charts-grid {
+.panel-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.view-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-chip {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.campaign-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 20px;
+}
+
+.campaign-card {
+    border-radius: 22px !important;
+    background: linear-gradient(180deg, #111111, #090909) !important;
+    border: 1px solid rgba(198, 255, 0, 0.08) !important;
+    padding: 18px;
+    color: #fff;
+}
+
+.campaign-card-top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.campaign-avatar-text {
+    color: #000;
+    font-weight: 800;
+}
+
+.progress-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+}
+
+.progress-label strong {
+    font-size: 14px;
+    color: #fff;
+}
+
+.progress-label span {
+    font-size: 11px;
+    color: #a9a9a9;
+}
+
+.campaign-card-body {
+    margin-bottom: 18px;
+}
+
+.campaign-name-label {
+    color: #8b8b8b;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.campaign-name {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.campaign-metrics-row,
+.campaign-dates-row {
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.campaign-mini-metric,
+.campaign-date-box {
+    flex: 1;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px;
+}
+
+.campaign-mini-metric span,
+.campaign-date-box span {
+    display: block;
+    color: #8f8f8f;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.campaign-mini-metric strong,
+.campaign-date-box strong {
+    color: #fff;
+    font-size: 15px;
+}
+
+.campaign-card-footer {
+    display: flex;
+    align-items: center;
+}
+
+.client-table ::v-deep th {
+    color: #c6ff00 !important;
+    background: transparent !important;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
+}
+
+.client-table ::v-deep td {
+    color: #d4d4d4 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.client-table ::v-deep tr:hover {
+    background: rgba(198, 255, 0, 0.03);
+}
+
+.campaign-link {
+    text-decoration: none;
+    color: #c6ff00;
+}
+
+.menu-list {
+    background: #111111 !important;
+    border: 1px solid rgba(198, 255, 0, 0.1);
+    border-radius: 14px;
 }
 
 .error {
@@ -620,8 +991,22 @@ export default {
     .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    .charts-grid {
+@media (max-width: 950px) {
+    .client-layout {
+        display: block;
+    }
+
+    .client-main {
+        padding: 16px;
+    }
+
+    .welcome-title {
+        font-size: 24px;
+    }
+
+    .metrics-grid {
         grid-template-columns: 1fr;
     }
 }

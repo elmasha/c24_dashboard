@@ -2,12 +2,12 @@ export default function ({ app, route, redirect }) {
   const user = app.$fire?.auth?.currentUser
 
   const protectedRoutes = [
-    '/employer',
-    '/selection',
+    '/admin/dashboard',
+    
   ]
 
   const protectedRoutes1 = [
-    '/bureau',
+    '/client-dashboard',
   ]
 
 //   const authRoutes = [
@@ -22,11 +22,11 @@ export default function ({ app, route, redirect }) {
 
   // Not logged in & trying to access protected routes
   if (protectedRoutes.includes(route.path) && !user) {
-    return redirect('/register/employer')
+    return redirect('/auth/admin.login')
   }
 
   if (protectedRoutes1.includes(route.path) && !user) {
-    return redirect('/register/bureau')
+    return redirect('/auth/client.login')
   }
 
   // Logged in & trying to access auth pages

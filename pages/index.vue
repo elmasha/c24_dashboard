@@ -1,417 +1,384 @@
 <template>
-<div style="background-color: #1A1B2B; color: #fff;" v-resize="onResize">
-    <v-app-bar elevation="0" color="black" dark :clipped-left="clipped" fixed app rounded>
-        <v-menu offset-y color="black" style="background-color: #1A1B2B;" dark>
-            <template v-slot:activator="{ on, attrs }">
+  <v-container fluid class="home-page pa-0">
+    <!-- Hero -->
+    <section class="hero-section">
+      <v-container>
+        <v-row align="center">
+          <v-col cols="12" md="6">
+            <div class="hero-content">
+              <div class="hero-badge">Charge24 Digital Advertising Platform</div>
 
-                <v-app-bar-nav-icon v-show="showBurger" light v-bind="attrs" v-on="on" color="white"></v-app-bar-nav-icon>
-            </template>
-            <v-list>
-                <!-- <v-list-item v-for="(item, index) in items" :key="item.title">
-                                                   <v-list-item-action @click="checkNav(item.title)">{{ item.title }}</v-list-item-action>
-                                                   <v-list-item-title></v-list-item-title>
-                                               </v-list-item> -->
+              <h1 class="hero-title">
+                Deliver Measurable Reach, Better Visibility, and Smarter Campaign Execution
+              </h1>
 
-                <v-list-item> <a id="link" @click.prevent="scrollToSection('home')" style="margin: 8px;">Home</a></v-list-item>
-                <v-list-item><a id="link" @click.prevent="scrollToSection('about')" style="margin: 8px;">About</a></v-list-item>
-                <v-list-item><a id="link" @click.prevent="scrollToSection('aim')" style="margin: 8px;">How it works</a></v-list-item>
-                <v-list-item> <a id="link" @click.prevent="scrollToSection('why_yayalink')" style="margin: 8px;">Why YayaLink</a></v-list-item>
+              <p class="hero-subtitle">
+                Charge24 helps brands and operators deliver verified impressions,
+                stronger audience visibility, machine-level performance tracking,
+                and clearer campaign reporting from one unified platform.
+              </p>
 
-            </v-list>
-        </v-menu>
-        <div class="d-flex">
-            <!-- <v-avatar color="black" size="28">
-                <v-img :src="logo"></v-img>
-            </v-avatar> -->
-            <v-toolbar-title style="margin-left: 0px; color: aqua; font-weight: 900;">YayaLink </v-toolbar-title>
-        </div>
+              <div class="hero-actions">
+                <nuxt-link to="/auth/admin.login">
+                  <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
+                    Go to Admin Dashboard
+                  </v-btn>
+                </nuxt-link>
 
-        <v-spacer></v-spacer>
-        <div v-show="!showBurger" id="nav_bar_links">
-            <a id="link" @click.prevent="scrollToSection('home')" style="margin: 8px;">Home</a>
-            <a id="link" @click.prevent="scrollToSection('about')" style="margin: 8px;">About</a>
-            <a id="link" @click.prevent="scrollToSection('aim')" style="margin: 8px;">How it works</a>
-            <a id="link" @click.prevent="scrollToSection('why_yayalink')" style="margin: 8px;">Why YayaLink</a>
-
-        </div>
-        <v-spacer></v-spacer>
-        <!-- <v-btn icon @click="$fire.auth.signOut()" v-if="show_auth">
-                                           <v-icon>mdi-logout</v-icon>
-                                       </v-btn> -->
-
-        <v-btn v-show="!auth_state" icon @click="logout()">
-            <v-icon>mdi-logout</v-icon>
-        </v-btn>
-    </v-app-bar>
-    <section id="home" class="parallax_about" style="margin-top: 0px;">
-        <div class="container" style="padding: 30px;">
-            <div class="text-center">
-
-                <div class="d-flex">
-                    <v-spacer />
-                    <div class="text-center">
-                        <v-carousel style="padding: 20px;" height="400" cycle :interval="4000" show-arrows-on-hover :continuous="false" :show-arrows="false" hide-delimiters>
-                            <v-carousel-item v-for="(item,i) in items" :key="i" reverse-transition="fade-transition" transition="fade-transition">
-
-                                <div class="container text-center">
-                                    <h1 style="color: aqua;margin-top: 80px;">{{ item.title }}</h1>
-                                </div>
-
-                            </v-carousel-item>
-                        </v-carousel>
-                    </div>
-                    <v-spacer />
-                </div>
-                <!-- 
-                        <p> Hire, replace or get emergency</p>
-                        <p>househelp — fast & trusted</p>
-                 -->
-                <v-btn outlined style="margin-left: 0px;" to="/selection" rounded color="white">Get Started <v-icon>mdi-arrow-top-right</v-icon>
-                </v-btn>
-
+                <nuxt-link to="/auth/client.login">
+                  <v-btn outlined large class="mb-2 hero-btn-outline">
+                    Client Dashboard
+                  </v-btn>
+                </nuxt-link>
+              </div>
             </div>
+          </v-col>
 
-        </div>
+          <v-col cols="12" md="6">
+            <v-card class="hero-card pa-6" outlined>
+              <div class="mock-header mb-4">
+                <div class="mock-dot"></div>
+                <div class="mock-dot"></div>
+                <div class="mock-dot"></div>
+              </div>
+
+              <div class="mock-metrics">
+                <div class="mock-metric">
+                  <span>Total Impressions</span>
+                  <strong>1,250,000</strong>
+                </div>
+                <div class="mock-metric">
+                  <span>Total Scans</span>
+                  <strong>12,840</strong>
+                </div>
+                <div class="mock-metric">
+                  <span>Conversion Rate</span>
+                  <strong>1.03%</strong>
+                </div>
+                <div class="mock-metric">
+                  <span>Active Campaigns</span>
+                  <strong>18</strong>
+                </div>
+              </div>
+
+              <div class="mock-chart mt-6"></div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </section>
 
-    <v-row>
-
-        <div class="parallax">
-            <section id="about">
-                <v-row class="" style="padding: 20px;">
-
-                    <v-col cols="12" sm="12" md="6" class="container" style="margin-top: 50px;">
-                        <div class="container">
-                            <div class="row">
-                                <div class="d-flex" style="margin-top: 50px;">
-                                    <div class="container text-bottom pa-8 align-center">
-                                        <h1 style="color: aqua;">Choose What You’re Looking For</h1>
-
-                                        <p>Whether you’re a house help searching for work, a bureau managing candidates, or an employer looking to hire.</p>
-                                    </div>
-                                    <v-icon v-show="!showBurger" x-large color="white">mdi-arrow-right</v-icon>
-                                </div>
-
-                            </div>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="6">
-                        <v-row class="">
-                            <v-col cols="12" sm="4" md="4">
-                                <div class="container text-center">
-                                    <v-card class="container text-center " max-width="400" style="border-radius: 14px;">
-                                        <v-img :src="can" contain height="100"></v-img>
-                                        <h3>I’m a House Help Job Seeker</h3>
-                                        <p>Create your profile, get verified, and connect with trusted employers and bureaus looking for reliable house helps.</p>
-                                        <br>
-                                        <v-btn fab to="/register/candidate" color="black">
-                                            <v-icon color="accent">mdi-arrow-right</v-icon>
-                                        </v-btn>
-                                    </v-card>
-                                </div>
-                            </v-col>
-                            <v-col cols="12" sm="4" md="4">
-                                <div class="container text-center">
-                                    <v-card class="container text-center" max-width="400" style="border-radius: 14px;">
-                                        <v-img :src="bu" contain height="100"></v-img>
-                                        <h3>Im a house help Bureau</h3>
-                                        <p>Manage candidates easily, connect with verified employers, and place house helps faster with confidence.</p>
-                                        <br>
-                                        <v-btn fab color="black" to="/register/bureau">
-                                            <v-icon color="accent">mdi-arrow-right</v-icon>
-                                        </v-btn>
-                                    </v-card>
-                                </div>
-                            </v-col>
-                            <v-col cols="12" sm="4" md="4">
-                                <div class="container text-center">
-                                    <v-card class="container text-center" max-width="400" style="border-radius: 14px;">
-                                        <v-img :src="emp" contain height="100"></v-img>
-                                        <h3>Im looking for a house help</h3>
-                                        <p>Browse verified house helps, choose based on experience and location, and hire instantly with flexible access plans.</p>
-                                        <br>
-                                        <v-btn fab color="black" to="/selection">
-                                            <v-icon color="accent">mdi-arrow-right</v-icon>
-                                        </v-btn>
-                                    </v-card>
-                                </div>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-
-                </v-row>
-            </section>
+    <!-- Value -->
+    <section class="section-block">
+      <v-container>
+        <div class="section-head text-center">
+          <h2>What the Platform Delivers</h2>
+          <p>
+            Built to deliver stronger campaign accountability, better machine oversight,
+            clearer audience reporting, and real performance visibility for both operators and clients.
+          </p>
         </div>
 
-        <div class="container">
-            <section id="aim">
-                <v-col cols="12" sm="12" md="12" class="container">
-                    <v-col cols="12" sm="12" md="12" class="container" style="margin-top: 50px;">
-                        <div class="d-flex" style="margin: 50px;">
-                            <v-spacer />
-                            <div class="container text-center">
-                                <h1 style="color: aqua;">How it Works.</h1>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card outlined class="feature-card pa-5">
+              <h3>Verified Campaign Delivery</h3>
+              <p>
+                Ensure campaigns are active on the right machines, within the right time windows,
+                with measurable delivery through impressions, proof of play, and tracking.
+              </p>
+            </v-card>
+          </v-col>
 
-                                <p> Browse verified profiles, get access through a simple payment, <br> and contact candidates directly. No middlemen, no delays just fast and reliable connections.</p>
-                            </div>
-                            <v-spacer />
-                        </div>
+          <v-col cols="12" md="4">
+            <v-card outlined class="feature-card pa-5">
+              <h3>Clear Operational Visibility</h3>
+              <p>
+                Get a live view of machines, locations, assignments, and performance so teams can
+                quickly understand what is running, where it is running, and how it is performing.
+              </p>
+            </v-card>
+          </v-col>
 
-                    </v-col>
-                    <v-row>
-                        <v-col cols="12" sm="12" md="6">
-                            <div class="text-start container" style="padding: 20px;">
-                                <v-img :src="laundry" contain height="350"></v-img>
-                            </div>
+          <v-col cols="12" md="4">
+            <v-card outlined class="feature-card pa-5">
+              <h3>Actionable Performance Insights</h3>
+              <p>
+                Turn delivery data into useful reporting through scans, device breakdown,
+                top-performing machines, daily trends, and campaign conversion visibility.
+              </p>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </section>
 
-                        </v-col>
-                        <v-col cols="12" sm="12" md="6">
-                            <div class="container">
-                                <v-row class="container">
-                                    <v-col cols="12" sm="12" md="6">
-                                        <div class="text-start container">
-                                            <div class="">
-                                                <v-icon large color="accent">mdi-search-web</v-icon>
-                                                <h2 style="font-size: 1.6rem; font-weight: 600;">Browes View verified candidates </h2>
-                                                <p>Explore a list of verified househelps with detailed profiles including experience, location, and expected salary. Every candidate is screened to help you make confident and informed hiring decisions.</p>
-                                                <v-btn outlined rounded to="/selection" color="accent">Learn more <v-icon>mdi-arrow-top-right</v-icon>
-                                                </v-btn>
-                                            </div>
-
-                                        </div>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="6">
-                                        <div class="text-start container">
-                                            <div class="">
-                                                <v-icon large color="accent">mdi-credit-card-outline</v-icon>
-                                                <h2 style="font-size: 1.6rem; font-weight: 600;">Pay for Access period</h2>
-                                                <p>Choose an access plan that works for you 3 days, 1 week, or 1 month. Once payment is completed, you can view full candidate details and contact them directly during your active period.</p>
-                                                <v-btn outlined rounded to="/selection" color="accent">Learn more <v-icon>mdi-arrow-top-right</v-icon>
-                                                </v-btn>
-
-                                            </div>
-                                        </div>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <div class="text-start container">
-                                            <div class="">
-                                                <v-icon large color="accent">mdi-phone</v-icon>
-                                                <h2 style="font-size: 1.6rem; font-weight: 600;">Higher candidate instantly </h2>
-                                                <p>Select a candidate you like and hire instantly with just one click.
-                                                    Their status updates automatically, ensuring availability is accurate and preventing double hiring.</p>
-                                                <v-btn outlined rounded to="/selection" color="accent">Learn more <v-icon>mdi-arrow-top-right</v-icon>
-                                                </v-btn>
-
-                                            </div>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                            </div>
-
-                        </v-col>
-
-                    </v-row>
-                </v-col>
-            </section>
+    <!-- Modules -->
+    <section class="section-block alt-section">
+      <v-container>
+        <div class="section-head text-center">
+          <h2>Key Delivery Areas</h2>
         </div>
 
-        <div class="container">
-            <section id="why_yayalink">
-                <v-col cols="12" sm="12" md="12">
-                    <div class="container">
-                        <div class="d-flex row">
+        <v-row>
+          <v-col cols="12" sm="6" md="3">
+            <v-card outlined class="module-card pa-4 text-center">
+              <h4>Operational Control</h4>
+              <p>Manage clients, campaigns, machines, schedules, and assignments with clarity.</p>
+            </v-card>
+          </v-col>
 
-                            <div class="container text-start pa-8">
-                                <h1 style="color: aqua;">Trust & Safety </h1>
+          <v-col cols="12" sm="6" md="3">
+            <v-card outlined class="module-card pa-4 text-center">
+              <h4>Client Visibility</h4>
+              <p>Give clients direct access to performance, top machines, scans, and delivery metrics.</p>
+            </v-card>
+          </v-col>
 
-                                <p><b>Your peace of mind matters to us.</b> <br> Every candidate and bureau on YayaLink goes through verification <br> to ensure safety and reliability. <br> We prioritize transparency, accountability, and trust in every connection made on the platform.</p>
-                            </div>
+          <v-col cols="12" sm="6" md="3">
+            <v-card outlined class="module-card pa-4 text-center">
+              <h4>Campaign Accountability</h4>
+              <p>Track what was delivered, where it ran, and how each campaign performed over time.</p>
+            </v-card>
+          </v-col>
 
-                            <div class="container text-end pa-8">
-                                <h1 style="color: aqua;">Pricing Preview </h1>
+          <v-col cols="12" sm="6" md="3">
+            <v-card outlined class="module-card pa-4 text-center">
+              <h4>Growth Intelligence</h4>
+              <p>Use delivery data and performance trends to improve planning, targeting, and reporting.</p>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </section>
 
-                                <p><b>Clear pricing with no hidden charges.</b> <br>Choose a plan that fits your needs whether you need access <br> for a few days, a week, or a full month. <br> Pay once and connect with candidates during your active period.</p>
-                            </div>
+    <!-- CTA -->
+    <section class="section-block cta-section">
+      <v-container>
+        <v-card class="cta-card pa-8 text-center" outlined>
+          <h2 class="mb-3">Ready to deliver more value from every screen?</h2>
+          <p class="mb-6">
+            Access campaign delivery, machine visibility, and performance insights from one platform built for measurable results.
+          </p>
 
-                            <div class="container text-start pa-8">
-                                <h1 style="color: aqua;">Coverage </h1>
+          <nuxt-link to="/campaigns">
+            <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
+              View Campaigns
+            </v-btn>
+          </nuxt-link>
 
-                                <p><b>Local help, wherever you are.
-                                    </b> <br> YayaLink is expanding across counties in Kenya, making it easier to find househelps <br> and employers within your area. <br> We focus on local connections for faster and better matches.</p>
-                            </div>
+          <nuxt-link to="/auth/client.login">
+            <v-btn outlined large class="mb-2 hero-btn-outline">
+              View Clients
+            </v-btn>
+          </nuxt-link>
+        </v-card>
+      </v-container>
+    </section>
 
-                        </div>
-                    </div>
-                </v-col>
-
-            </section>
-        </div>
-
-    </v-row>
-
-</div>
+    <!-- Footer -->
+    <footer class="footer-section">
+      <v-container class="d-flex justify-space-between align-center flex-wrap">
+        <div class="footer-brand">Charge24 Platform</div>
+        <div class="footer-copy">Built for measurable delivery and campaign visibility</div>
+      </v-container>
+    </footer>
+  </v-container>
 </template>
 
 <script>
-import bu from "@/assets/bu1.png";
-import emp from "@/assets/emp.png";
-import can from "@/assets/can.png";
-import laundry from "@/assets/laundry.svg"
-
-// Register the Vue component
-
 export default {
-    name: "Index",
-    data() {
-        return {
-            windowSize: {
-                x: window.innerHeight,
-                y: window.innerWidth,
-            },
-            laundry,
-            bu,
-            emp,
-            can,
-            items: [{
-                    title: "Lets Get Started With Yaya Nannies App.",
-                },
-                {
-                    title: "Your Domestic Manager called off?\nYou are 2 minutes away from Help.",
-                },
-                {
-                    title: "Need to change househelp?\nSearch one of your liking on the yaya app.",
-                },
-                {
-                    title: "Your househelp didnt show up?\nGet instant Help. ",
-                },
-            ],
-            showBurger: false,
-            uid: null,
-            auth_state: true,
-        };
-    },
-    methods: {
-        logout() {
-            this.$fire.auth.signOut();
-            window.location.reload(true);
-        },
-        scrollToSection1(id) {
-            if (id != null) {
-                this.$router.push(`/${id}`)
-            }
-        },
-        scrollToSection(id) {
-            const target = document.getElementById(id)
-            if (target.id != 'home') {
-                this.backToTop = true;
-            } else {
-                this.backToTop = false;
-            }
-
-            if (!target) return
-            const start = window.scrollY
-            const end = target.offsetTop
-            const distance = end - start
-            const duration = 800 // ms
-            let startTime = null
-
-            function easeInOutQuad(t) {
-                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-            }
-
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime
-                const timeElapsed = currentTime - startTime
-                const progress = Math.min(timeElapsed / duration, 1)
-                window.scrollTo(0, start + distance * easeInOutQuad(progress))
-                if (timeElapsed < duration) requestAnimationFrame(animation)
-            }
-            requestAnimationFrame(animation)
-        },
-        onResize() {
-            this.windowSize = {
-                x: window.innerWidth,
-                y: window.innerHeight,
-            };
-            console.log("size", this.windowSize.x);
-            if (this.windowSize.x < 950) {
-                this.showBurger = true;
-            } else {
-                this.showBurger = false;
-            }
-            return this.windowSize;
-        },
-        checkUser() {
-            if (this.$fire.auth.currentUser != null) {
-                this.uid = this.$fire.auth.currentUser.uid;
-
-            } else {
-                this.auth_state = false;
-            }
-        },
-
-    },
-    created() {
-        //this.setPin();
-    },
-
-    mounted() {
-        // this.checkUser();
-        // this.FetchProfile();
-        // this.FetchWallet();
-    },
+  name: "HomePage"
 };
 </script>
 
 <style scoped>
-/* *{
-        color:#202020;
-    } */
-
-.parallax_about {
-    /* Background image */
-    background-image: url('~/assets/he.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 80vh;
-
+.home-page {
+  background: #050505;
+  min-height: 100vh;
+  color: #ffffff;
 }
 
-.parallax_1 {
-    /* Background image */
-    background-image: url('~/assets/can.png');
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 100%;
-
+.hero-section {
+  padding: 80px 0 60px;
+  background: radial-gradient(circle at top right, rgba(198, 255, 0, 0.12), transparent 28%),
+    linear-gradient(135deg, #050505, #0b0b0b 50%, #101010);
 }
 
-.box {
-    background-color: rgb(255 255 255 / 30%);
-    backdrop-filter: blur(5px);
+.hero-content {
+  max-width: 620px;
 }
 
-/* .parallax {
-    background-image: url('~/assets/hr.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-
-} */
-
-#link {
-    color: #fff;
-    font-weight: 800;
-    transition: 0.3s;
+.hero-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(198, 255, 0, 0.1);
+  border: 1px solid rgba(198, 255, 0, 0.3);
+  color: #c6ff00;
+  font-size: 13px;
+  margin-bottom: 18px;
 }
 
-#link:hover {
-    background-color: #1A1B2B;
-    color: aqua;
-    font-weight: 800;
+.hero-title {
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 800;
+  margin-bottom: 18px;
+  color: #ffffff;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #cfcfcf;
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero-btn-primary {
+  font-weight: 700;
+}
+
+.hero-btn-outline {
+  border-color: #c6ff00 !important;
+  color: #c6ff00 !important;
+}
+
+.hero-card {
+  border-radius: 20px;
+  background: linear-gradient(180deg, #111111, #0a0a0a);
+  border: 1px solid rgba(198, 255, 0, 0.18) !important;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+.mock-header {
+  display: flex;
+  gap: 8px;
+}
+
+.mock-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3a3a3a;
+}
+
+.mock-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.mock-metric {
+  border: 1px solid rgba(198, 255, 0, 0.14);
+  border-radius: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mock-metric span {
+  display: block;
+  font-size: 13px;
+  color: #b5b5b5;
+  margin-bottom: 8px;
+}
+
+.mock-metric strong {
+  font-size: 22px;
+  color: #c6ff00;
+}
+
+.mock-chart {
+  height: 180px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(198, 255, 0, 0.22), rgba(198, 255, 0, 0.04));
+  border: 1px solid rgba(198, 255, 0, 0.14);
+}
+
+.section-block {
+  padding: 70px 0;
+  background: #050505;
+}
+
+.alt-section {
+  background: #0b0b0b;
+}
+
+.section-head {
+  max-width: 720px;
+  margin: 0 auto 36px;
+}
+
+.section-head h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.section-head p {
+  color: #b8b8b8;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.feature-card,
+.module-card,
+.cta-card {
+  border-radius: 18px;
+  height: 100%;
+  background: linear-gradient(180deg, #111111, #090909) !important;
+  border: 1px solid rgba(198, 255, 0, 0.12) !important;
+  color: #ffffff;
+}
+
+.feature-card h3,
+.module-card h4 {
+  margin-bottom: 12px;
+  color: #c6ff00;
+}
+
+.feature-card p,
+.module-card p,
+.cta-card p {
+  color: #c5c5c5;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+
+.cta-section {
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+
+.footer-section {
+  padding: 20px 0;
+  border-top: 1px solid rgba(198, 255, 0, 0.12);
+  background: #050505;
+}
+
+.footer-brand {
+  font-weight: 700;
+  color: #c6ff00;
+}
+
+.footer-copy {
+  color: #9f9f9f;
+  font-size: 14px;
+}
+
+@media (max-width: 960px) {
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .mock-metrics {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

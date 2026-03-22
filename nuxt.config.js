@@ -74,13 +74,13 @@ export default {
       '@nuxtjs/firebase',
       {
         config: {
-          apiKey: "AIzaSyA0emGzJyErokuL84Eb_Fy4YWRxdXBi6Jo",
-          authDomain: "tip-me-c7df5.firebaseapp.com",
-          projectId: "tip-me-c7df5",
-          storageBucket: "tip-me-c7df5.appspot.com",
-          messagingSenderId: "985382951160",
-          appId: "1:985382951160:web:aa6e72d419775a0f5f430d",
-          measurementId: "G-G3TS444N72"
+           apiKey: "AIzaSyDVUTX5BhQZBjvwMdCphgQoXfa9A3oS2iQ",
+          authDomain: "charge24-ke.firebaseapp.com",
+          projectId: "charge24-ke",
+          storageBucket: "charge24-ke.firebasestorage.app",
+          messagingSenderId: "820130856535",
+          appId: "1:820130856535:web:02a408b7b746d0d8ff2d12",
+          measurementId: "G-2FTT3W361H"
         },
         services: {
           auth: {
