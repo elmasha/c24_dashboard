@@ -337,7 +337,7 @@ export default {
                 {
                     title: "Traffic Config",
                     icon: "mdi-cogs",
-                    to: "traffic-config"
+                    to: "admin/dashboard"
                 }
             ],
             moment,
