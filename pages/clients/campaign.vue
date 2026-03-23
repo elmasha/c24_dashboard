@@ -52,7 +52,7 @@
                     <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
                         <div class="campaign-card-top">
                             <div class="campaign-left">
-                                <v-chip outlined small color="#C6FF00" class="status-chip" style="margin-left: 8px;">
+                                <v-chip outlined small color="#C6FF00" class="status-chip" style="margin-left: 6px;">
                                     {{ campaign.status }}
                                 </v-chip>
 

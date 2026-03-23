@@ -470,6 +470,10 @@ export default {
     },
 
     methods: {
+        logout() {
+            this.$fire.auth.signOut();
+            window.location.reload(true);
+        },
         move(val) {
             this.$router.push(`/${val}`);
         },
