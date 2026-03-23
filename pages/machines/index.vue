@@ -40,7 +40,7 @@
       </div>
     </v-app-bar>
 
-    <div class="admin-layout" v-resize="onResize()">
+    <div class="admin-layout" v-resize="onResize">
       <!-- Sidebar -->
       <aside class="admin-sidebar" v-show="!showBurger">
         <div class="sidebar-card">
