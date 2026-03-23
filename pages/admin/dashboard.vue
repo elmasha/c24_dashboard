@@ -75,7 +75,7 @@
                 </v-list>
 
                 <div class="sidebar-footer">
-                    <v-btn block outlined color="#C6FF00" class="logout-btn">
+                    <v-btn block outlined color="#C6FF00" class="logout-btn" @click="logout()">
                         Logout
                     </v-btn>
                 </div>
