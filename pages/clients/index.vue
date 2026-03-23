@@ -21,8 +21,7 @@
             </v-menu>
 
             <div>
-                <div class="page-badge">Admin Portal</div>
-                <h1 class="page-title" style="font-size: 0.8rem;">Client Management</h1>
+                <div class="page-badge" style="margin-top: 18px;">Admin Portal</div>
             </div>
         </div>
 

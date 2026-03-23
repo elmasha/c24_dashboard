@@ -21,7 +21,7 @@
             </v-menu>
 
             <div>
-                <div class="page-badge" style="font-size:0.6rem">Charge24 Portal</div>
+                <div class="page-badge" style="font-size:0.6rem; margin-top: 18px;">Charge24 Portal</div>
             </div>
         </div>
 
