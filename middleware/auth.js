@@ -3,6 +3,9 @@ export default function ({ app, route, redirect }) {
 
   const protectedRoutes = [
     '/admin/dashboard',
+    '/campaigns/all',
+    '/machines',
+    '/clients',
     
   ]
 
