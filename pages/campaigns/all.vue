@@ -178,7 +178,7 @@
                       Assign
                     </v-btn>
 
-                    <nuxt-link :to="`/view-campaign/${campaign.id}`" class="text-decoration-none">
+                    <nuxt-link :to="`/view/${campaign.id}`" class="text-decoration-none">
                       <v-btn x-small text class="mr-1 mb-1 action-view-btn">
                         View
                       </v-btn>

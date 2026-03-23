@@ -2,7 +2,7 @@
   <div class="campaign-detail-page">
     <!-- Top header -->
     <div class="detail-topbar">
-      <nuxt-link class="back-link" to="/clients/campaign">
+      <nuxt-link class="back-link" to="/campaigns/all">
         <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
         Back to campaigns
       </nuxt-link>
