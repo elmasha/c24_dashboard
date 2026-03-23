@@ -27,7 +27,7 @@
 
         <div>
           <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title">Create Campaign</h1>
+          <h1 class="page-title" style="font-size: 0.9rem;">Create Campaign</h1>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
           <div class="hero-copy">
-            <div class="hero-kicker">Campaign Setup</div>
+            <div class="hero-kicker" style="margin-left: 12px;">Campaign Setup</div>
             <div class="hero-heading">
               Create a new campaign for delivery across your machine network
             </div>
