@@ -383,7 +383,7 @@ export default {
 
         const canvas = await html2canvas(target, {
           backgroundColor: "#ffffff",
-          scale: 3
+          scale:10
         });
 
         const image = canvas.toDataURL("image/png");
