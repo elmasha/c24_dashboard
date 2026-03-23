@@ -83,7 +83,7 @@
         </aside>
 
         <!-- Main -->
-        <main class="admin-main">
+        <main class="admin-main"  v-resize="onResize">
             <!-- Hero -->
             <v-row class="mb-5">
                 <v-col cols="12">
@@ -358,8 +358,8 @@ export default {
             socketRefreshTimer: null,
             showBurger: false,
             windowSize: {
-                x: window.innerWidth,
-                y: window.innerHeight
+                x: null,
+                y: null
             }
         };
     },
