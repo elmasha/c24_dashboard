@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="admin-page pa-0">
+  <v-container fluid class="admin-page pa-0" >
     <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
       <div class="d-flex align-center">
@@ -26,7 +26,7 @@
         </v-menu>
 
         <div>
-          <div class="page-badge">Admin Portal</div>
+          <div class="page-badge" style="margin-top: 12px;">Admin Portal</div>
           <h1 class="page-title" style="font-size: 0.8rem;">Machine Management</h1>
         </div>
       </div>
@@ -40,7 +40,7 @@
       </div>
     </v-app-bar>
 
-    <div class="admin-layout">
+    <div class="admin-layout" v-resize="onResize()">
       <!-- Sidebar -->
       <aside class="admin-sidebar" v-show="!showBurger">
         <div class="sidebar-card">
@@ -110,7 +110,7 @@
                 </v-btn>
               </nuxt-link>
 
-              <v-btn outlined large class="hero-btn-outline" @click="fetchMachines">
+              <v-btn outlined large class="hero-btn-outline" @click="fetchMachines"  style="margin-right:12px">
                 Refresh
               </v-btn>
             </div>
@@ -252,8 +252,8 @@ export default {
       errorMessage: "",
       showBurger: false,
       windowSize: {
-        x: window.innerWidth,
-        y: window.innerHeight
+        x: null,
+        y: null
       },
       items_nav: [
         {
