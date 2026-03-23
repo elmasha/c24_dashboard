@@ -334,11 +334,11 @@ export default {
                     icon: "mdi-account-group-outline",
                     to: "clients"
                 },
-                {
-                    title: "Traffic Config",
-                    icon: "mdi-cogs",
-                    to: "admin/dashboard"
-                }
+                // {
+                //     title: "Traffic Config",
+                //     icon: "mdi-cogs",
+                //     to: "admin/dashboard"
+                // }
             ],
             moment,
             loading: false,
