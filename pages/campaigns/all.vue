@@ -99,7 +99,7 @@
                             </v-btn>
                         </nuxt-link>
 
-                        <v-btn outlined large class="hero-btn-outline" @click="fetchCampaigns" :loading="loading">
+                        <v-btn outlined large class="hero-btn-outline" @click="fetchCampaigns" :loading="loading"  style="margin-right: 12px;">
                             Refresh
                         </v-btn>
                     </div>
