@@ -25,11 +25,11 @@
                   </v-btn>
                 </nuxt-link>
 
-                <nuxt-link to="/client-dashboard">
+                <!-- <nuxt-link to="/client-dashboard">
                   <v-btn outlined large class="mb-2 hero-btn-outline">
                     Client Dashboard
                   </v-btn>
-                </nuxt-link>
+                </nuxt-link> -->
               </div>
             </div>
           </v-col>
@@ -69,7 +69,7 @@
     </section>
 
     <!-- Value -->
-    <section class="section-block">
+    <section class="section-block text-center" >
       <v-container>
         <div class="section-head text-center">
           <h2>What the Platform Delivers</h2>
@@ -155,17 +155,17 @@
             Access campaign delivery, machine visibility, and performance insights from one platform built for measurable results.
           </p>
 
-          <nuxt-link to="/campaigns">
+          <nuxt-link to="/admin/dashboard">
             <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
               View Campaigns
             </v-btn>
           </nuxt-link>
 
-          <nuxt-link to="/auth/client.login">
+          <!-- <nuxt-link to="/auth/client.login">
             <v-btn outlined large class="mb-2 hero-btn-outline">
               View Clients
             </v-btn>
-          </nuxt-link>
+          </nuxt-link> -->
         </v-card>
       </v-container>
     </section>
