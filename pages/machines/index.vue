@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="admin-page pa-0" >
+  <v-container fluid class="admin-page pa-0">
     <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
       <div class="d-flex align-center">
@@ -33,7 +33,7 @@
       <v-spacer />
 
       <div class="d-flex align-center">
-        <v-btn icon dark class="topbar-icon mr-2" @click="fetchMachines">
+        <v-btn icon dark class="topbar-icon mr-2" @click="refreshMachines">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </div>
@@ -109,7 +109,7 @@
                 </v-btn>
               </nuxt-link>
 
-              <v-btn outlined large class="hero-btn-outline" @click="fetchMachines"  style="margin-right:12px">
+              <v-btn outlined large class="hero-btn-outline" @click="refreshMachines" style="margin-right:12px">
                 Refresh
               </v-btn>
             </div>
@@ -126,10 +126,28 @@
 
         <!-- Machines table -->
         <v-card class="panel-card pa-4" outlined>
-          <div class="panel-head mb-3">
+          <div class="panel-head mb-3 search-head">
             <div>
               <div class="panel-kicker">Deployment Directory</div>
               <div class="panel-title">All Machines</div>
+            </div>
+
+            <div class="search-box-wrap">
+              <v-text-field
+                v-model="searchQuery"
+                dense
+                outlined
+                hide-details
+                clearable
+                prepend-inner-icon="mdi-magnify"
+                label="Search UID, name, location, category"
+                class="machine-search"
+                @keyup.enter="searchMachines"
+                @click:clear="clearSearch"
+              />
+              <v-btn color="#C6FF00" class="black--text font-weight-bold ml-2" @click="searchMachines">
+                Search
+              </v-btn>
             </div>
           </div>
 
@@ -228,7 +246,9 @@
               </tr>
 
               <tr v-if="!machines.length">
-                <td colspan="9">No machines found.</td>
+                <td colspan="9">
+                  {{ searchActive ? "No machines match your search." : "No machines found." }}
+                </td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -242,7 +262,7 @@
 import api from "@/services/api";
 
 export default {
-  middware:"auth",
+  middleware: "auth",
   data() {
     return {
       machines: [],
@@ -250,6 +270,8 @@ export default {
       successMessage: "",
       errorMessage: "",
       showBurger: false,
+      searchQuery: "",
+      searchActive: false,
       windowSize: {
         x: null,
         y: null
@@ -274,12 +296,7 @@ export default {
           title: "Clients",
           icon: "mdi-account-group-outline",
           to: "clients"
-        },
-        // {
-        //   title: "Traffic Config",
-        //   icon: "mdi-cogs",
-        //   to: "traffic-config"
-        // }
+        }
       ]
     };
   },
@@ -290,10 +307,11 @@ export default {
   },
 
   methods: {
-     logout() {
-            this.$fire.auth.signOut();
-            window.location.reload(true);
-        },
+    logout() {
+      this.$fire.auth.signOut();
+      window.location.reload(true);
+    },
+
     move(val) {
       this.$router.push(`/${val}`);
     },
@@ -312,10 +330,48 @@ export default {
         this.errorMessage = "";
         const { data } = await api.get("/api/machines");
         this.machines = data || [];
+        this.searchActive = false;
       } catch (error) {
         console.error("fetchMachines error:", error);
         this.errorMessage =
           error.response?.data?.message || "Failed to load machines";
+      }
+    },
+
+    async searchMachines() {
+      try {
+        this.errorMessage = "";
+
+        if (!this.searchQuery || !this.searchQuery.trim()) {
+          await this.fetchMachines();
+          return;
+        }
+
+        const { data } = await api.get("/api/machines/search", {
+          params: {
+            q: this.searchQuery.trim()
+          }
+        });
+
+        this.machines = data || [];
+        this.searchActive = true;
+      } catch (error) {
+        console.error("searchMachines error:", error);
+        this.errorMessage =
+          error.response?.data?.message || "Failed to search machines";
+      }
+    },
+
+    async clearSearch() {
+      this.searchQuery = "";
+      await this.fetchMachines();
+    },
+
+    async refreshMachines() {
+      if (this.searchQuery && this.searchQuery.trim()) {
+        await this.searchMachines();
+      } else {
+        await this.fetchMachines();
       }
     },
 
@@ -331,7 +387,7 @@ export default {
         });
 
         this.successMessage = `${data.machine_name || machine.machine_name} set to ${status} (manual mode)`;
-        await this.fetchMachines();
+        await this.refreshMachines();
       } catch (error) {
         console.error("setMachineStatus error:", error);
         this.errorMessage =
@@ -350,7 +406,7 @@ export default {
         const { data } = await api.put(`/api/machines/${machine.id}/auto-mode`);
 
         this.successMessage = `${data.machine_name || machine.machine_name} returned to auto mode`;
-        await this.fetchMachines();
+        await this.refreshMachines();
       } catch (error) {
         console.error("setMachineAuto error:", error);
         this.errorMessage =
@@ -374,7 +430,7 @@ export default {
         const { data } = await api.delete(`/api/machines/${machine.id}`);
 
         this.successMessage = data.message || "Machine deleted successfully";
-        await this.fetchMachines();
+        await this.refreshMachines();
       } catch (error) {
         console.error("deleteMachine error:", error);
         this.errorMessage =
@@ -519,13 +575,6 @@ export default {
   margin-bottom: 8px;
 }
 
-.page-title {
-  font-size: 30px;
-  font-weight: 800;
-  color: #fff;
-  margin: 0;
-}
-
 .hero-panel {
   border-radius: 24px;
   background:
@@ -585,6 +634,23 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.search-head {
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.search-box-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.machine-search {
+  min-width: 320px;
+  max-width: 420px;
 }
 
 .panel-kicker {
@@ -669,12 +735,17 @@ export default {
     padding: 16px;
   }
 
-  .page-title {
-    font-size: 24px;
-  }
-
   .hero-heading {
     font-size: 22px;
+  }
+
+  .machine-search {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .search-box-wrap {
+    width: 100%;
   }
 }
 </style>

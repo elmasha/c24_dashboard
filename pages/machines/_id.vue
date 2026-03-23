@@ -328,11 +328,11 @@ export default {
           icon: "mdi-account-group-outline",
           to: "clients"
         },
-        {
-          title: "Traffic Config",
-          icon: "mdi-cogs",
-          to: "traffic-config"
-        }
+        // {
+        //   title: "Traffic Config",
+        //   icon: "mdi-cogs",
+        //   to: "traffic-config"
+        // }
       ],
       form: {
         machine_uid: "",
