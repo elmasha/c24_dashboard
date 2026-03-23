@@ -340,6 +340,7 @@
 import api from "@/services/api";
 
 export default {
+  middleware:"auth",
     data() {
         return {
             loading: false,
