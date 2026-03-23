@@ -126,6 +126,14 @@
                         </div>
                     </div>
 
+
+                    <div class="metric-card">
+                        <div class="metric-label">Impressions Today</div>
+                        <div class="metric-value">
+                            {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
+                        </div>
+                    </div>
+                    
                     <div class="metric-card">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
@@ -578,6 +586,8 @@ export default {
                 };
 
                 this.deviceBreakdown = deviceRes.data || [];
+
+                console.log(this.overview)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage = error.response.data.message || "Failed to load dashboard";
