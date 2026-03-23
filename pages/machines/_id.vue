@@ -26,8 +26,7 @@
         </v-menu>
 
         <div>
-          <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title">Edit Machine</h1>
+          <div class="page-badge" style="margin-top: 18px;">Admin Portal</div>
         </div>
       </div>
 
