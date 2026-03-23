@@ -94,7 +94,7 @@ export default {
           this.form.password
         );
 
-        this.$router.push("/dashboard");
+        this.$router.push("/admin/dashboard");
       } catch (error) {
         console.error("loginAdmin error:", error);
         this.errorMessage =
