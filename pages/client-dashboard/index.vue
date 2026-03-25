@@ -130,14 +130,14 @@
                     <div class="metric-card">
                         <div class="metric-label">Impressions Today</div>
                         <div class="metric-value">
-                            {{ millify(overview.metrics && overview.metrics.impressions_today) || 0  }}
+                            {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
                         </div>
                     </div>
                     
                     <div class="metric-card">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
-                            {{ millify(overview.metrics && overview.metrics.total_scans) || 0 }}
+                            {{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}
                         </div>
                     </div>
 
