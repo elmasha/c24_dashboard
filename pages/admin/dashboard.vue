@@ -83,7 +83,7 @@
         </aside>
 
         <!-- Main -->
-        <main class="admin-main"  v-resize="onResize">
+        <main class="admin-main" v-resize="onResize">
             <!-- Hero -->
             <v-row class="mb-5">
                 <v-col cols="12">
@@ -128,7 +128,7 @@
                 <v-col cols="12" sm="6" md="4" lg="2">
                     <v-card class="metric-card metric-highlight" outlined>
                         <div class="metric-label">Impressions Today</div>
-                        <div class="metric-number">{{ formatNumber(metrics.impressions_today) }}</div>
+                        <div class="metric-number">{{ millify(metrics.impressions_today) }}</div>
                     </v-card>
                 </v-col>
 
@@ -142,7 +142,7 @@
                 <v-col cols="12" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Impressions This Month</div>
-                        <div class="metric-number">{{ formatNumber(metrics.impressions_month) }}</div>
+                        <div class="metric-number">{{  millify(metrics.impressions_month) }}</div>
                     </v-card>
                 </v-col>
 
@@ -305,6 +305,9 @@
 import api from "@/services/api";
 import moment from "moment";
 import DailyImpressionsChart from "../../components/charts/DailyImpressionsChart.vue";
+import {
+    millify
+} from "millify";
 
 export default {
     middleware: "auth",
@@ -314,6 +317,7 @@ export default {
 
     data() {
         return {
+            millify,
             items_nav: [{
                     title: "Dashboard",
                     icon: "mdi-view-dashboard",

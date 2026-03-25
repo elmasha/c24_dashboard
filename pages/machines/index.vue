@@ -143,6 +143,7 @@
                 label="Search UID, name, location, category"
                 class="machine-search"
                 @keyup.enter="searchMachines"
+                @change="searchMachines"
                 @click:clear="clearSearch"
               />
               <v-btn color="#C6FF00" class="black--text font-weight-bold ml-2" @click="searchMachines">
@@ -354,6 +355,7 @@ export default {
         });
 
         this.machines = data || [];
+        console.log(data);
         this.searchActive = true;
       } catch (error) {
         console.error("searchMachines error:", error);

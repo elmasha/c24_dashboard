@@ -122,7 +122,7 @@
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Impressions</div>
                         <div class="metric-value">
-                            {{ formatNumber((overview.metrics && overview.metrics.total_impressions) || 0) }}
+                            {{  millify(overview.metrics && overview.metrics.total_impressions) || 0 }}
                         </div>
                     </div>
 
@@ -130,14 +130,14 @@
                     <div class="metric-card">
                         <div class="metric-label">Impressions Today</div>
                         <div class="metric-value">
-                            {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
+                            {{ millify(overview.metrics && overview.metrics.impressions_today) || 0  }}
                         </div>
                     </div>
                     
                     <div class="metric-card">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
-                            {{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}
+                            {{ millify(overview.metrics && overview.metrics.total_scans) || 0 }}
                         </div>
                     </div>
 
@@ -349,6 +349,9 @@ import api from "@/services/api";
 import moment from "moment";
 import numeral from "numeral";
 import DevicePieChart from "../../components/charts/DevicePieChart.vue";
+import {
+    millify
+} from "millify";
 
 export default {
     middleware: 'auth',
@@ -358,6 +361,7 @@ export default {
 
     data() {
         return {
+            millify,
             grid: false,
             numeral,
             drawer: false,
