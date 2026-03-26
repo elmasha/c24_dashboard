@@ -36,6 +36,7 @@
 
         <!-- Summary cards -->
         <div class="summary-grid">
+           
             <div class="summary-card summary-highlight">
                 <div class="summary-label">Campaign Name</div>
                 <div class="summary-value">{{ campaign.campaign_name }}</div>

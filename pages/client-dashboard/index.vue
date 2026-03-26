@@ -119,13 +119,21 @@
 
                 <!-- Metrics -->
                 <div class="metrics-grid text-center">
+
+                    <!-- <v-row>
+                        <v-col cols="12" md="6"></v-col>
+                        <v-col cols="12" md="6"></v-col>
+                        <v-col cols="12" md="6"></v-col>
+                        <v-col cols="12" md="6"></v-col>
+                        <v-col cols="12" md="6"></v-col>
+                        
+                    </v-row> -->
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Impressions</div>
                         <div class="metric-value">
-                            {{  millify(overview.metrics && overview.metrics.total_impressions) || 0 }}
+                            {{ millify(overview.metrics && overview.metrics.total_impressions) || 0 }}
                         </div>
                     </div>
-
 
                     <div class="metric-card">
                         <div class="metric-label">Impressions Today</div>
@@ -133,7 +141,7 @@
                             {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
                         </div>
                     </div>
-                    
+
                     <div class="metric-card">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
