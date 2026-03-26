@@ -538,7 +538,6 @@ export default {
         logout() {
             this.$fire.auth.signOut();
             this.$router.push("/auth/admin.login");
-            window.location.reload(true);
         },
         move(val) {
             this.$router.push(`/${val}`);
