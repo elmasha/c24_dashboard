@@ -13,15 +13,16 @@ export default function ({ app, route, redirect }) {
     '/client-dashboard',
   ]
 
-//   const authRoutes = [
-//     '/employer',
-//     '/auth/account'
-//   ]
+  const authRoutes = [
+     '/admin/dashboard',
+    '/campaigns/all',
+    '/machines',
+    '/clients',
+  ]
 
-//   const authRoutes1 = [
-//     '/bureau',
-//     '/auth/account'
-//   ]
+  const authRoutes1 = [
+    '//client-dashboard',
+  ]
 
   // Not logged in & trying to access protected routes
   if (protectedRoutes.includes(route.path) && !user) {
@@ -32,12 +33,12 @@ export default function ({ app, route, redirect }) {
     return redirect('/auth/client.login')
   }
 
+ // Logged in & trying to access auth pages
+  if (authRoutes.includes(route.path) && user) {
+    return redirect('/auth/admin.login')
+  }
   // Logged in & trying to access auth pages
-//   if (authRoutes.includes(route.path) && user) {
-//     return redirect('/register/employer')
-//   }
-//   // Logged in & trying to access auth pages
-//   if (authRoutes1.includes(route.path) && user) {
-//     return redirect('/register/bureau')
-//   }
+  if (authRoutes1.includes(route.path) && user) {
+    return redirect('/auth/client.login')
+  }
 }
