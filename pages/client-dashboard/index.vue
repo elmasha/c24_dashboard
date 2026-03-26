@@ -537,7 +537,7 @@ export default {
     methods: {
         logout() {
             this.$fire.auth.signOut();
-            this.$router.push("/auth/admin.login");
+            this.$router.push("/auth/client.login");
         },
         move(val) {
             this.$router.push(`/${val}`);
@@ -562,7 +562,7 @@ export default {
 
                 if (!currentUser) {
                     this.errorMessage = "User not logged in";
-                     this.$router.push("/auth/admin.login");
+                     this.$router.push("/auth/client.login");
                     this.loading = false;
                     return;
                 }
