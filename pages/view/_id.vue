@@ -1,8 +1,8 @@
 <template>
 <div class="campaign-detail-page">
     <!-- Top header -->
-    <div class="detail-topbar">
-        <nuxt-link class="back-link" to="/campaigns/all">
+    <div class="detail-topbar" style="margin-top: 30px;">
+        <nuxt-link class="back-link" to="/clients/campaign">
             <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
             Back to campaigns
         </nuxt-link>

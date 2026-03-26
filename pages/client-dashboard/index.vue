@@ -118,7 +118,7 @@
                 </v-alert>
 
                 <!-- Metrics -->
-                <div class="metrics-grid">
+                <div class="metrics-grid text-center">
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Impressions</div>
                         <div class="metric-value">
@@ -167,7 +167,7 @@
                 <div class="section-block">
                     <div class="section-head">
                         <div>
-                            <div class="section-kicker">Performance Trends</div>
+                            <div class="section-kicker"></div>
                             <h2 class="section-title">Delivery & engagement</h2>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
                         <v-col cols="12" lg="4">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
-                                    <div class="panel-kicker">Trend</div>
+                                    <div class="panel-kicker"></div>
                                     <div class="panel-title">Daily Impressions</div>
                                 </div>
                                 <apexchart type="line" height="320" :options="impressionsChartOptions" :series="impressionsSeries" />
@@ -186,7 +186,7 @@
                         <v-col cols="12" lg="4">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
-                                    <div class="panel-kicker">Trend</div>
+                                    <div class="panel-kicker"></div>
                                     <div class="panel-title">Daily QR Scans</div>
                                 </div>
                                 <apexchart type="bar" height="320" :options="scansChartOptions" :series="scansSeries" />
@@ -196,7 +196,7 @@
                         <v-col cols="12" lg="4">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
-                                    <div class="panel-kicker">Breakdown</div>
+                                    <div class="panel-kicker"></div>
                                     <div class="panel-title">Audience Devices</div>
                                 </div>
                                 <DevicePieChart title="Campaign Device Breakdown" :rows="deviceBreakdown" />
@@ -209,7 +209,7 @@
                 <div class="section-block">
                     <div class="section-head">
                         <div>
-                            <div class="section-kicker">Campaign Performance</div>
+                            <div class="section-kicker"></div>
                             <h2 class="section-title">Your campaigns</h2>
                         </div>
 
@@ -529,6 +529,7 @@ export default {
     methods: {
         logout() {
             this.$fire.auth.signOut();
+            this.$router.push("/auth/admin.login");
             window.location.reload(true);
         },
         move(val) {
@@ -591,7 +592,7 @@ export default {
 
                 this.deviceBreakdown = deviceRes.data || [];
 
-                console.log(this.overview)
+                //console.log(this.overview)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage = error.response.data.message || "Failed to load dashboard";

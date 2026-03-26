@@ -1,8 +1,11 @@
 <template>
 <div class="chart-card">
-    <h3>{{ title }}</h3>
+    <v-card light elevation="0" color="black">
+        <h3>{{ title }}</h3>
 
     <apexchart type="line" height="350" :options="chartOptions" :series="series" />
+    </v-card>
+    
 </div>
 </template>
 
@@ -30,7 +33,7 @@ export default {
         series() {
             return [{
                 name: "Impressions",
-                data: this.rows.map((row) => Number(row.impressions || 0))
+                data: this.rows.map((row) => Number(row.impressions))
             }];
         },
 
@@ -62,7 +65,7 @@ export default {
                 },
                 tooltip: {
                     y: {
-                        formatter: (value) => Number(value || 0).toLocaleString()
+                        formatter: (value) => Number(value).toLocaleString()
                     }
                 },
                 noData: {

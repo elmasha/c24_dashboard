@@ -124,52 +124,54 @@
             </v-alert>
 
             <!-- Metric cards -->
-            <v-row>
+            <v-row class="text-center">
+                
+
                 <v-col cols="12" sm="6" md="4" lg="2">
-                    <v-card class="metric-card metric-highlight" outlined>
-                        <div class="metric-label">Impressions Today</div>
-                        <div class="metric-number">{{ millify(metrics.impressions_today) }}</div>
+                    <v-card class="metric-card  metric-highlight" outlined>
+                        <div class="metric-label">Impressions This Month</div>
+                        <div class="metric-number">{{  millify(metrics.impressions_month) }}</div>
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" sm="6" md="4" lg="2">
+                <v-col cols="6" sm="6" md="4" lg="2">
+                    <v-card class="metric-card" outlined>
+                        <div class="metric-label">Impressions Today</div>
+                        <div class="metric-number">{{ numeral(metrics.impressions_today).format("0,0") }}</div>
+                    </v-card>
+                </v-col>
+
+                <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Scans Today</div>
                         <div class="metric-number">{{ formatNumber(metrics.scans_today) }}</div>
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" sm="6" md="4" lg="2">
-                    <v-card class="metric-card" outlined>
-                        <div class="metric-label">Impressions This Month</div>
-                        <div class="metric-number">{{  millify(metrics.impressions_month) }}</div>
-                    </v-card>
-                </v-col>
+                
 
-                <v-col cols="12" sm="6" md="4" lg="2">
+                <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Scans This Month</div>
                         <div class="metric-number">{{ formatNumber(metrics.scans_month) }}</div>
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" sm="6" md="4" lg="2">
+                <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Conversion Rate</div>
                         <div class="metric-number">{{ metrics.conversion_rate || 0 }}%</div>
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" sm="6" md="4" lg="2">
+                <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Total Clients</div>
                         <div class="metric-number">{{ formatNumber(totalClients) }}</div>
                     </v-card>
                 </v-col>
-            </v-row>
 
-            <v-row class="mt-1 mb-3">
-                <v-col cols="12" sm="6" md="4" lg="3">
+                <v-col cols="6" sm="6" md="4" lg="3">
                     <v-card class="metric-card small-metric-card" outlined>
                         <div class="metric-label">Active Clients</div>
                         <div class="metric-number">{{ formatNumber(activeClients) }}</div>
@@ -177,26 +179,26 @@
                 </v-col>
             </v-row>
 
+           
+
             <!-- Charts row 1 -->
             <v-row>
-                <v-col cols="12" lg="8">
-                    <v-card class="panel-card pa-4 mb-4" outlined>
+                <v-col cols="12" lg="8" md="8">
+                    <v-card class="panel-card pa-4 mb-4" outlined dark>
                         <div class="panel-head">
                             <div>
-                                <div class="panel-kicker">Performance Trend</div>
-                                <div class="panel-title">Daily Impressions</div>
+                                <div class="panel-title" style="margin-bottom: 18px;">Daily Impressions</div>
                             </div>
                         </div>
 
-                        <daily-impressions-chart :rows="dailyImpressions" />
+                        <daily-impressions-chart title="Daily Impressions" :rows="dailyImpressions" />
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" lg="4">
+                <v-col cols="12" lg="4" md="5">
                     <v-card class="panel-card pa-4 mb-4" outlined>
                         <div class="panel-head">
                             <div>
-                                <div class="panel-kicker">Audience Analysis</div>
                                 <div class="panel-title">Device Breakdown</div>
                             </div>
                         </div>
@@ -208,11 +210,11 @@
 
             <!-- Charts row 2 -->
             <v-row>
-                <v-col cols="12" lg="8">
+                <v-col cols="12" lg="8" md="8">
                     <v-card class="panel-card pa-4" outlined>
                         <div class="panel-head">
                             <div>
-                                <div class="panel-kicker">Interaction Trend</div>
+                                <div class="panel-kicker"></div>
                                 <div class="panel-title">Daily Scans</div>
                             </div>
                         </div>
@@ -221,11 +223,11 @@
                     </v-card>
                 </v-col>
 
-                <v-col cols="12" lg="4">
+                <v-col cols="12" lg="4" md="4">
                     <v-card class="panel-card pa-4" outlined>
                         <div class="panel-head">
                             <div>
-                                <div class="panel-kicker">Machine Ranking</div>
+                                <div class="panel-kicker"></div>
                                 <div class="panel-title">Top Machines</div>
                             </div>
                         </div>
@@ -259,7 +261,7 @@
                     <v-card class="panel-card pa-4" outlined>
                         <div class="panel-head mb-3">
                             <div>
-                                <div class="panel-kicker">Client Overview</div>
+                                <div class="panel-kicker"></div>
                                 <div class="panel-title">Recent Clients</div>
                             </div>
 
@@ -308,6 +310,7 @@ import DailyImpressionsChart from "../../components/charts/DailyImpressionsChart
 import {
     millify
 } from "millify";
+import numeral from "numeral";
 
 export default {
     middleware: "auth",
@@ -317,6 +320,7 @@ export default {
 
     data() {
         return {
+            numeral,
             millify,
             items_nav: [{
                     title: "Dashboard",
@@ -525,6 +529,7 @@ export default {
                 this.deviceBreakdown = devicesRes.data || [];
                 this.topMachines = machinesRes.data || [];
                 this.clients = clientsRes.data || [];
+                console.log("daily imp", this.dailyImpressions)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage =

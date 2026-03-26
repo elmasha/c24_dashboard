@@ -25,11 +25,11 @@
                   </v-btn>
                 </nuxt-link>
 
-                <!-- <nuxt-link to="/client-dashboard">
+                <nuxt-link to="/client-dashboard">
                   <v-btn outlined large class="mb-2 hero-btn-outline">
                     Client Dashboard
                   </v-btn>
-                </nuxt-link> -->
+                </nuxt-link>
               </div>
             </div>
           </v-col>
@@ -161,11 +161,11 @@
             </v-btn>
           </nuxt-link>
 
-          <!-- <nuxt-link to="/auth/client.login">
+          <nuxt-link to="/auth/client.login">
             <v-btn outlined large class="mb-2 hero-btn-outline">
               View Clients
             </v-btn>
-          </nuxt-link> -->
+          </nuxt-link>
         </v-card>
       </v-container>
     </section>
