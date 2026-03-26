@@ -480,6 +480,7 @@ export default {
     methods: {
         logout() {
             this.$fire.auth.signOut();
+            this.$router.push("/auth/admin.login");
             window.location.reload(true);
         },
         move(val) {
@@ -529,7 +530,7 @@ export default {
                 this.deviceBreakdown = devicesRes.data || [];
                 this.topMachines = machinesRes.data || [];
                 this.clients = clientsRes.data || [];
-                console.log("daily imp", this.dailyImpressions)
+                // console.log("daily imp", this.dailyImpressions)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage =

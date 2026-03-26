@@ -285,7 +285,7 @@
 
                                 <v-spacer />
 
-                                <v-btn :to="`/view-campaign/${campaign.id}`" rounded small color="#C6FF00" class="black--text font-weight-bold" style="margin-right: 10px;">
+                                <v-btn :to="`/campaign-view/${campaign.id}`" rounded small color="#C6FF00" class="black--text font-weight-bold" style="margin-right: 10px;">
                                     View campaign
                                     <v-icon right color="black">mdi-chevron-right</v-icon>
                                 </v-btn>
@@ -322,7 +322,7 @@
                                         <td>{{ moment(campaign.start_date).format("MMM Do YY") }}</td>
                                         <td>{{ moment(campaign.end_date).format("MMM Do YY") }}</td>
                                         <td>
-                                            <nuxt-link :to="`/view-campaign/${campaign.id}`" class="campaign-link">
+                                            <nuxt-link :to="`/campaign-view/${campaign.id}`" class="campaign-link">
                                                 View {{ campaign.campaign_name.substring(0, 10) + "..." }}
                                             </nuxt-link>
                                         </td>
