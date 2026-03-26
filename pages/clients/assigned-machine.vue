@@ -152,6 +152,7 @@ export default {
 
         if (!currentUser) {
           this.errorMessage = "User not logged in";
+           this.$router.push("/auth/client.login");
           this.loading = false;
           return;
         }
