@@ -195,9 +195,7 @@
                                 <div class="machine-qr-box">
 
                                     <div class="machine-qr-actions">
-                                        <v-btn icon small class="qr-download-btn" @click="downloadQr(`machine-qr-${machine.machine_uid}`, `${campaign.campaign_name}-${machine.machine_uid}-qr`)">
-                                            <v-icon color="#C6FF00">mdi-download</v-icon>
-                                        </v-btn>
+                                       
                                         <v-btn icon small class="qr-download-btn" @click="(qr_dialog = true), ( machine_uid = machine.machine_uid), (qr_token = machine.qr_token)">
                                             <v-icon color="#C6FF00">mdi-eye</v-icon>
                                         </v-btn>
