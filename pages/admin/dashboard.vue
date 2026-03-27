@@ -102,7 +102,7 @@
                             <v-spacer />
 
                             <div class="hero-actions mt-4 mt-md-0" style="margin-right: 20px;">
-                                <nuxt-link to="/campaigns" class="text-decoration-none">
+                                <nuxt-link to="/campaigns/all" class="text-decoration-none">
                                     <v-btn class="mr-2 hero-btn-primary" color="#C6FF00" large>
                                         <span class="black--text font-weight-bold">Campaigns</span>
                                     </v-btn>

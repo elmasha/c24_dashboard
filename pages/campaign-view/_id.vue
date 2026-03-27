@@ -62,7 +62,7 @@
             </div>
 
             <div class="summary-card">
-                <div class="summary-label">Conversion Rate</div>
+                <div class="summary-label">Qr Conversion Rate</div>
                 <div class="summary-value">{{ campaign.conversion_rate }}%</div>
             </div>
 
