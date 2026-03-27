@@ -229,6 +229,9 @@
                 </div>
 
                 <!-- Campaign section header -->
+                <v-btn color="#C6FF00" class="black--text" @click="exportToCSV" >
+                    Export CSV
+                </v-btn>
                 <div class="section-block">
                     <div class="section-head">
                         <div>
@@ -556,6 +559,49 @@ export default {
     },
 
     methods: {
+        exportToCSV() {
+            const rows = this.overview.campaigns || [];
+
+            if (!rows.length) return;
+
+            const headers = [
+                "Campaign Name",
+                "Status",
+                "Total Impressions",
+                "Total Interactions",
+                "Total Scans",
+                "Qr Conversion Rate",
+                "Start Date",
+                "End Date"
+            ];
+
+            const csvRows = [
+                headers.join(","),
+                ...rows.map(row => [
+                    `"${row.campaign_name || ""}"`,
+                    `"${row.status || ""}"`,
+                    row.total_impressions || 0,
+                   Math.floor((row.total_impressions * 0.24)) || 0,
+                    row.total_scans || 0,
+                    row.conversion_rate || 0,
+                    `"${moment(row.start_date).format("MMM Do YY") || ""}"`,
+                    `"${moment(row.end_date).format("MMM Do YY") || ""}"`
+                ].join(","))
+            ];
+
+            const csvContent = csvRows.join("\n");
+            const blob = new Blob([csvContent], {
+                type: "text/csv;charset=utf-8;"
+            });
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "client-campaign-report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         logout() {
             this.$fire.auth.signOut();
             this.$router.push("/auth/client.login");

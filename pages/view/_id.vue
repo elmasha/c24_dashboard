@@ -32,7 +32,10 @@
                     </v-chip>
                 </div>
             </div>
-        </v-card>
+            <!-- <v-btn color="#C6FF00" class="black--text" @click="exportCampaignsCSV">
+                Export CSV
+            </v-btn> -->
+        </v-card> 
 
         <!-- Summary cards -->
         <div class="summary-grid">
@@ -50,7 +53,7 @@
                 <div class="summary-label">Total Impressions</div>
                 <div class="summary-value">{{ numeral(campaign.total_impressions).format("0,0") }}</div>
             </div>
-              <div class="summary-card">
+            <div class="summary-card">
                 <div class="summary-label">Total Interactions</div>
                 <div class="summary-value">{{ numeral(campaign.total_impressions *0.24).format("0,0") }}</div>
             </div>
@@ -194,7 +197,7 @@
                                 <div class="machine-qr-box">
 
                                     <div class="machine-qr-actions">
-                                        
+
                                         <v-btn icon small class="qr-download-btn" @click="(qr_dialog = true), ( machine_uid = machine.machine_uid), (qr_token = machine.qr_token)">
                                             <v-icon color="#C6FF00">mdi-eye</v-icon>
                                         </v-btn>
@@ -270,14 +273,14 @@
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
     <v-dialog v-model="qr_dialog">
-        <v-card color="black"  class="container" max-width="400">
-          <v-card-actions>
-            <v-spacer/>
-            <v-btn icon color="red" @click="qr_dialog = false">
-              <v-icon red>mdi-close</v-icon>
-            </v-btn>
-             <v-spacer/>
-          </v-card-actions>
+        <v-card color="black" class="container" max-width="400">
+            <v-card-actions>
+                <v-spacer />
+                <v-btn icon color="red" @click="qr_dialog = false">
+                    <v-icon red>mdi-close</v-icon>
+                </v-btn>
+                <v-spacer />
+            </v-card-actions>
             <div class="machine-qr-box" v-if="campaign && campaign.qr_token">
                 <div :id="`machine-qr-${machine_uid}`" class="qr-download-box">
                     <qr-code :text="getUrl2(campaign.qr_token, machine_uid)" size="240" />
@@ -334,6 +337,91 @@ export default {
     },
 
     methods: {
+        exportToCSV() {
+            const rows = this.overview.campaigns || [];
+
+            if (!rows.length) return;
+
+            const headers = [
+                "Campaign Name",
+                "Status",
+                "Total Impressions",
+                "Total Scans",
+                "Conversion Rate",
+                "Start Date",
+                "End Date"
+            ];
+
+            const csvRows = [
+                headers.join(","),
+                ...rows.map(row => [
+                    `"${row.campaign_name || ""}"`,
+                    `"${row.status || ""}"`,
+                    row.total_impressions || 0,
+                    Math.floor((row.total_impressions * 0.24)) || 0,
+                    row.total_scans || 0,
+                    row.conversion_rate || 0,
+                    `"${moment(row.start_date).format("MMM Do YY") || ""}"`,
+                    `"${moment(row.end_date).format("MMM Do YY") || ""}"`
+                ].join(","))
+            ];
+
+            const csvContent = csvRows.join("\n");
+            const blob = new Blob([csvContent], {
+                type: "text/csv;charset=utf-8;"
+            });
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "client-campaign-report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+        exportCampaignsCSV() {
+            const rows = this.campaign || [];
+
+            if (!rows.length) return;
+
+            const headers = [
+                "Campaign Name",
+                "Status",
+                "Total Impressions",
+                "Total Interactions",
+                "Total Scans",
+                "Conversion Rate",
+                "Start Date",
+                "End Date"
+            ];
+
+            const csvRows = [
+                headers.join(","),
+                ...rows.map(row => [
+                    `"${row.campaign_name || ""}"`,
+                    `"${row.status || ""}"`,
+                    row.total_impressions || 0,
+                    Math.floor((row.total_impressions * 0.24)) || 0,
+                    row.total_scans || 0,
+                    row.conversion_rate || 0,
+                    `"${moment(row.start_date).format("MMM Do YY") || ""}"`,
+                    `"${moment(row.end_date).format("MMM Do YY") || ""}"`
+                ].join(","))
+            ];
+
+            const csvContent = csvRows.join("\n");
+            const blob = new Blob([csvContent], {
+                type: "text/csv;charset=utf-8;"
+            });
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "campaign-report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
         getUrl2(val, val2) {
             return "https://adengine-production-f766.up.railway.app/scan/" + val + "?m=" + val2;
         },
