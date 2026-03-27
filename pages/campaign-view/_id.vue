@@ -35,8 +35,8 @@
         </v-card>
 
         <!-- Summary cards -->
+       <!-- Summary cards -->
         <div class="summary-grid">
-           
             <div class="summary-card summary-highlight">
                 <div class="summary-label">Campaign Name</div>
                 <div class="summary-value">{{ campaign.campaign_name }}</div>
@@ -50,6 +50,10 @@
             <div class="summary-card">
                 <div class="summary-label">Total Impressions</div>
                 <div class="summary-value">{{ numeral(campaign.total_impressions).format("0,0") }}</div>
+            </div>
+              <div class="summary-card">
+                <div class="summary-label">Total Interactions</div>
+                <div class="summary-value">{{ numeral(campaign.total_impressions *0.24).format("0,0") }}</div>
             </div>
 
             <div class="summary-card">

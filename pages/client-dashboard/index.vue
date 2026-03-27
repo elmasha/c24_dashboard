@@ -126,8 +126,23 @@
                         <v-col cols="12" md="6"></v-col>
                         <v-col cols="12" md="6"></v-col>
                         <v-col cols="12" md="6"></v-col>
-                        
+
                     </v-row> -->
+
+                    <div class="metric-card metric-primary">
+                        <div class="metric-label">Impressions Today</div>
+                        <div class="metric-value" style="color: #C6FF00;">
+                            {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
+                        </div>
+                    </div>
+
+                    <div class="metric-card metric-primary">
+                        <div class="metric-label">Interactions Today</div>
+                        <div class="metric-value" style="color: #C6FF00;">
+                            {{ numeral(overview.metrics && overview.metrics.impressions_today *0.24).format("0,0") || 0 }}
+                        </div>
+                    </div>
+
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Impressions</div>
                         <div class="metric-value">
@@ -135,10 +150,10 @@
                         </div>
                     </div>
 
-                    <div class="metric-card">
-                        <div class="metric-label">Impressions Today</div>
+                    <div class="metric-card metric-primary">
+                        <div class="metric-label">Total Interactions</div>
                         <div class="metric-value">
-                            {{ formatNumber((overview.metrics && overview.metrics.impressions_today) || 0) }}
+                            {{ millify(overview.metrics && overview.metrics.total_impressions *0.24) || 0 }}
                         </div>
                     </div>
 
@@ -268,9 +283,13 @@
                                     </div>
 
                                     <div class="campaign-mini-metric">
-                                        <span>QR Scans</span>
-                                        <strong>{{ campaign.total_scans }}</strong>
+                                        <span>Interactions</span>
+                                        <strong>{{ numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
                                     </div>
+                                    <!-- <div class="campaign-mini-metric">
+                                        <span>Scans</span>
+                                        <strong>{{ campaign.total_scans }}</strong>
+                                    </div> -->
                                 </div>
 
                                 <div class="campaign-dates-row">
@@ -311,6 +330,7 @@
                                         <th>Campaign</th>
                                         <th>Status</th>
                                         <th>Impressions</th>
+                                        <th>Interactions</th>
                                         <th>QR Scans</th>
                                         <th>Conversion</th>
                                         <th>Start</th>
@@ -325,6 +345,7 @@
                                         <td>{{ campaign.campaign_name }}</td>
                                         <td>{{ campaign.status }}</td>
                                         <td>{{ formatNumber(campaign.total_impressions) }}</td>
+                                        <td>{{ numeral(campaign.total_impressions * 0.24).format("0,0") }}</td>
                                         <td>{{ formatNumber(campaign.total_scans) }}</td>
                                         <td>{{ campaign.conversion_rate }}%</td>
                                         <td>{{ moment(campaign.start_date).format("MMM Do YY") }}</td>
@@ -562,7 +583,7 @@ export default {
 
                 if (!currentUser) {
                     this.errorMessage = "User not logged in";
-                     this.$router.push("/auth/client.login");
+                    this.$router.push("/auth/client.login");
                     this.loading = false;
                     return;
                 }
@@ -768,13 +789,13 @@ export default {
 
 .welcome-kicker {
     color: #c6ff00;
-    font-size: 13px;
+    font-size: 25px;
     margin-bottom: 10px;
     letter-spacing: 0.5px;
 }
 
 .welcome-title {
-    font-size: 30px;
+    font-size: 18px;
     font-weight: 800;
     line-height: 1.2;
     color: #fff;

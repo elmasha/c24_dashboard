@@ -141,6 +141,14 @@
                     </v-card>
                 </v-col>
 
+                 <v-col cols="6" sm="6" md="4" lg="2">
+                    <v-card class="metric-card" outlined>
+                        <div class="metric-label">Total Interactions</div>
+                        <div class="metric-number">{{ numeral(metrics.impressions_today * 0.24).format("0,0") }}</div>
+                    </v-card>
+                </v-col>
+
+
                 <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
                         <div class="metric-label">Scans Today</div>

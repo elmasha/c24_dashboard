@@ -18,7 +18,7 @@
                 <th>Status</th>
                 <th class="text-right">Impressions</th>
                 <th class="text-right">Scans</th>
-                <th class="text-right">Conversion</th>
+                <th class="text-right">Interactions</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                 </td>
                 <td class="text-right">{{ formatNumber(row.impressions) }}</td>
                 <td class="text-right">{{ formatNumber(row.scans) }}</td>
-                <td class="text-right">{{ row.conversion_rate }}%</td>
+                <td class="text-right">{{ numeral(row.impressions *0.24).format("0,0") }}</td>
             </tr>
 
             <tr v-if="!rows.length">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import numeral from 'numeral';
 export default {
     props: {
         title: {
@@ -60,7 +61,9 @@ export default {
             default: () => []
         }
     },
-
+      data() {
+        return {numeral}
+    },
     methods: {
         formatNumber(value) {
             return Number(value || 0).toLocaleString();

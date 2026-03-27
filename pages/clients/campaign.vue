@@ -85,9 +85,13 @@
                                     <strong>{{ numeral(campaign.delivered_impressions).format("0,0") }}</strong>
                                 </div>
 
+                                <!-- <div class="campaign-mini-metric">
+                                    <span>Interactions</span>
+                                    <strong>{{ numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
+                                </div> -->
                                 <div class="stat-box">
-                                    <span>QR Scans</span>
-                                    <strong>{{ campaign.total_scans }}</strong>
+                                    <span>Interactions</span>
+                                    <strong>{{  numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
                                 </div>
                             </div>
 
@@ -129,6 +133,7 @@
                                     <th>Campaign</th>
                                     <th>Status</th>
                                     <th>Impressions</th>
+                                    <th>Interactions</th>
                                     <th>QR Scans</th>
                                     <th>Conversion</th>
                                     <th>Start</th>
@@ -147,6 +152,7 @@
                                         </span>
                                     </td>
                                     <td>{{ formatNumber(campaign.total_impressions) }}</td>
+                                    <td>{{ numeral(campaign.total_impressions * 0.24).format("0,0") }}</td>
                                     <td>{{ formatNumber(campaign.total_scans) }}</td>
                                     <td>{{ campaign.conversion_rate }}%</td>
                                     <td>{{ moment(campaign.start_date).format("MMM Do YY") }}</td>
@@ -249,7 +255,7 @@ export default {
 
                 if (!currentUser) {
                     this.errorMessage = "User not logged in";
-                     this.$router.push("/auth/client.login");
+                    this.$router.push("/auth/client.login");
                     this.loading = false;
                     return;
                 }

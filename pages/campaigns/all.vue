@@ -98,7 +98,7 @@
                             </v-btn>
                         </nuxt-link>
 
-                        <v-btn outlined large class="hero-btn-outline" @click="fetchCampaigns" :loading="loading"  style="margin-right: 12px;">
+                        <v-btn outlined large class="hero-btn-outline" @click="fetchCampaigns" :loading="loading" style="margin-right: 12px;">
                             Refresh
                         </v-btn>
                     </div>
@@ -131,6 +131,7 @@
                             <th>Status</th>
                             <th>Target</th>
                             <th>Delivered</th>
+                            <th>Interactions</th>
                             <th>Machines</th>
                             <th>Start</th>
                             <th>End</th>
@@ -150,6 +151,7 @@
                             </td>
                             <td>{{ formatNumber(campaign.target_impressions) }}</td>
                             <td>{{ formatNumber(campaign.delivered_impressions) }}</td>
+                            <td>{{ numeral(campaign.delivered_impressions * 0.24).format("0,0") }}</td>
                             <td>{{ formatNumber(campaign.machine_count || 0) }}</td>
                             <td>{{ campaign.start_date }}</td>
                             <td>{{ campaign.end_date }}</td>
@@ -337,11 +339,14 @@
 
 <script>
 import api from "@/services/api";
+import numeral from "numeral";
+
 
 export default {
-  middleware:"auth",
+    middleware: "auth",
     data() {
         return {
+            numeral,
             loading: false,
             deletingId: null,
             campaigns: [],

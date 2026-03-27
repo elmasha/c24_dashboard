@@ -21,10 +21,10 @@ export default function ({ app, route, redirect }) {
   ]
 
   const authRoutes1 = [
-    '//client-dashboard',
+    '/client-dashboard',
   ]
 
-  // Not logged in & trying to access protected routes
+  //Not logged in & trying to access protected routes
   if (protectedRoutes.includes(route.path) && !user) {
     return redirect('/auth/admin.login')
   }
@@ -34,11 +34,11 @@ export default function ({ app, route, redirect }) {
   }
 
  // Logged in & trying to access auth pages
-  if (authRoutes.includes(route.path) && user) {
-    return redirect('/auth/admin.login')
-  }
-  // Logged in & trying to access auth pages
-  if (authRoutes1.includes(route.path) && user) {
-    return redirect('/auth/client.login')
-  }
+  // if (authRoutes.includes(route.path) && user) {
+  //   return redirect('/auth/admin.login')
+  // }
+  // // Logged in & trying to access auth pages
+  // if (authRoutes1.includes(route.path) && user) {
+  //   return redirect('/auth/client.login')
+  // }
 }
