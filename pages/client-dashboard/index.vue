@@ -157,14 +157,14 @@
                         </div>
                     </div>
 
-                    <div class="metric-card">
+                    <div class="metric-card" v-show="overview.client && overview.client.qr">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
                             {{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}
                         </div>
                     </div>
 
-                    <div class="metric-card">
+                    <div class="metric-card" v-show="overview.client && overview.client.qr">
                         <div class="metric-label">Conversion Rate</div>
                         <div class="metric-value">
                             {{ (overview.metrics && overview.metrics.overall_conversion_rate) || 0 }}%
@@ -178,7 +178,7 @@
                         </div>
                     </div>
 
-                    <div class="metric-card">
+                    <div class="metric-card" v-show="false">
                         <div class="metric-label">Total Campaigns</div>
                         <div class="metric-value">
                             {{ (overview.metrics && overview.metrics.total_campaigns) || 0 }}
@@ -196,7 +196,7 @@
                     </div>
 
                     <v-row>
-                        <v-col cols="12" lg="4">
+                        <v-col cols="12" lg="12" md="12">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker"></div>
@@ -206,7 +206,7 @@
                             </v-card>
                         </v-col>
 
-                        <v-col cols="12" lg="4">
+                        <v-col cols="12" lg="4" md="6" v-show="overview.client && overview.client.qr">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker"></div>
@@ -216,7 +216,7 @@
                             </v-card>
                         </v-col>
 
-                        <v-col cols="12" lg="4">
+                        <v-col cols="12" lg="4" md="6" v-show="overview.client && overview.client.qr">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker"></div>
@@ -667,7 +667,7 @@ export default {
 
                 this.deviceBreakdown = deviceRes.data || [];
 
-                //console.log(this.overview)
+                console.log(this.overview.client)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage = error.response.data.message || "Failed to load dashboard";

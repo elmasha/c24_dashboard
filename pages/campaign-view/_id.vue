@@ -32,10 +32,12 @@
                     </v-chip>
                 </div>
             </div>
+            <!-- <v-btn color="#C6FF00" class="black--text" @click="exportCampaignsCSV">
+                Export CSV
+            </v-btn> -->
         </v-card>
 
         <!-- Summary cards -->
-       <!-- Summary cards -->
         <div class="summary-grid">
             <div class="summary-card summary-highlight">
                 <div class="summary-label">Campaign Name</div>
@@ -51,7 +53,7 @@
                 <div class="summary-label">Total Impressions</div>
                 <div class="summary-value">{{ numeral(campaign.total_impressions).format("0,0") }}</div>
             </div>
-              <div class="summary-card">
+            <div class="summary-card">
                 <div class="summary-label">Total Interactions</div>
                 <div class="summary-value">{{ numeral(campaign.total_impressions *0.24).format("0,0") }}</div>
             </div>
@@ -61,12 +63,12 @@
                 <div class="summary-value">{{ campaign.total_scans }}</div>
             </div>
 
-            <div class="summary-card">
-                <div class="summary-label">Qr Conversion Rate</div>
+            <div class="summary-card" v-show="campaign && campaign.show_qr">
+                <div class="summary-label">Conversion Rate</div>
                 <div class="summary-value">{{ campaign.conversion_rate }}%</div>
             </div>
 
-            <div class="summary-card qr-summary-card">
+            <div class="summary-card qr-summary-card" v-show="campaign && campaign.show_qr">
                 <div class="summary-label">Campaign QR</div>
                 <div class="qr-wrap">
                     <div :id="`campaign-qr-${campaign.id}`" class="qr-download-box">
@@ -107,9 +109,22 @@
                         </div>
                     </div>
                 </v-card>
+
             </v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="8">
+                <v-card class="panel-card pa-4" outlined>
+                    <div class="panel-kicker">Trend</div>
+                    <div class="panel-title">Daily Impressions</div>
+                    <apexchart type="line" height="320" :options="impressionsChartOptions" :series="impressionsSeries" />
+                </v-card>
+            </v-col>
+        </v-row>
+
+        <!-- Charts -->
+        <v-row class="mt-2">
+
+            <v-col cols="12" md="6">
                 <v-card class="panel-card pa-5" outlined>
                     <div class="panel-kicker">Creative Preview</div>
                     <div class="panel-title">Campaign Media</div>
@@ -123,7 +138,7 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
                 <v-card class="panel-card pa-5" outlined>
                     <div class="panel-kicker">Playback Preview</div>
                     <div class="panel-title">Media on Screen</div>
@@ -136,19 +151,8 @@
                     </div>
                 </v-card>
             </v-col>
-        </v-row>
 
-        <!-- Charts -->
-        <v-row class="mt-2">
-            <v-col cols="12" md="4">
-                <v-card class="panel-card pa-4" outlined>
-                    <div class="panel-kicker">Trend</div>
-                    <div class="panel-title">Daily Impressions</div>
-                    <apexchart type="line" height="320" :options="impressionsChartOptions" :series="impressionsSeries" />
-                </v-card>
-            </v-col>
-
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
                 <v-card class="panel-card pa-4" outlined>
                     <div class="panel-kicker">Trend</div>
                     <div class="panel-title">Daily Scans</div>
@@ -156,7 +160,7 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
                 <v-card class="panel-card pa-4" outlined>
                     <div class="panel-kicker">Breakdown</div>
                     <div class="panel-title">Device Breakdown</div>
@@ -182,7 +186,7 @@
                             <th>UID</th>
                             <th>Location</th>
                             <th>Category</th>
-                            <th>QR Code</th>
+                            <th v-show="campaign && campaign.show_qr">QR Code</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -191,11 +195,11 @@
                             <td>{{ machine.machine_uid }}</td>
                             <td>{{ machine.location_name }}</td>
                             <td>{{ machine.location_category }}</td>
-                            <td>
+                            <td v-show="campaign && campaign.show_qr">
                                 <div class="machine-qr-box">
 
                                     <div class="machine-qr-actions">
-                                       
+
                                         <v-btn icon small class="qr-download-btn" @click="(qr_dialog = true), ( machine_uid = machine.machine_uid), (qr_token = machine.qr_token)">
                                             <v-icon color="#C6FF00">mdi-eye</v-icon>
                                         </v-btn>
@@ -215,7 +219,7 @@
         </div>
 
         <!-- Daily data tables -->
-        <v-row class="mt-4">
+        <v-row class="mt-4" v-show="campaign && campaign.show_qr">
             <v-col cols="12" md="6">
                 <v-card class="table-card pa-3" outlined>
                     <div class="panel-kicker">History</div>
@@ -271,14 +275,14 @@
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
     <v-dialog v-model="qr_dialog">
-        <v-card color="black"  class="container" max-width="400">
-          <v-card-actions>
-            <v-spacer/>
-            <v-btn icon color="red" @click="qr_dialog = false">
-              <v-icon red>mdi-close</v-icon>
-            </v-btn>
-             <v-spacer/>
-          </v-card-actions>
+        <v-card color="black" class="container" max-width="400">
+            <v-card-actions>
+                <v-spacer />
+                <v-btn icon color="red" @click="qr_dialog = false">
+                    <v-icon red>mdi-close</v-icon>
+                </v-btn>
+                <v-spacer />
+            </v-card-actions>
             <div class="machine-qr-box" v-if="campaign && campaign.qr_token">
                 <div :id="`machine-qr-${machine_uid}`" class="qr-download-box">
                     <qr-code :text="getUrl2(campaign.qr_token, machine_uid)" size="240" />

@@ -132,6 +132,7 @@
                             <v-text-field v-model="form.firebase_uid" label="Firebase UID" outlined dense dark required />
 
                             <v-select v-model="form.status" :items="['active', 'inactive']" label="Status" outlined dense dark />
+                             <v-select v-model="form.qr" :items="['true', 'false']" label="Qr Code" outlined dense dark />
 
                             <div class="d-flex">
                                 <v-btn color="#C6FF00" class="black--text font-weight-bold mr-2" type="submit" :loading="saving">
@@ -163,6 +164,7 @@
                                     <th>Client Name</th>
                                     <th>Email</th>
                                     <th>Firebase UID</th>
+                                    <th>Qr code</th>
                                     <th>Status</th>
                                     <th>Created At</th>
                                     <th class="text-right">Actions</th>
@@ -175,6 +177,11 @@
                                     <td>{{ client.client_name }}</td>
                                     <td>{{ client.email || "-" }}</td>
                                     <td class="uid-cell">{{ client.firebase_uid || "-" }}</td>
+                                    <td>
+                                        <span class="status-pill" :class="client.show_qr === 'true' ? 'status-active' : 'status-inactive'">
+                                            {{ client.show_qr === 'true' ? 'enabled' : 'disabled' }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <span class="status-pill" :class="client.status === 'active' ? 'status-active' : 'status-inactive'">
                                             {{ client.status }}
@@ -256,7 +263,8 @@ export default {
                 client_name: "",
                 email: "",
                 firebase_uid: "",
-                status: "active"
+                status: "active",
+                qr: "false"
             }
         };
     },
@@ -294,6 +302,7 @@ export default {
                     data
                 } = await api.get("/api/clients");
                 this.clients = data || [];
+                console.log("Fetched clients:", this.clients);
             } catch (error) {
                 console.error("fetchClients error:", error);
                 this.errorMessage =
