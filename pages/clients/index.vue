@@ -365,7 +365,8 @@ export default {
                 client_name: client.client_name || "",
                 email: client.email || "",
                 firebase_uid: client.firebase_uid || "",
-                status: client.status || "active"
+                status: client.status || "active",
+                show_qr: client.show_qr || "false",
             };
             window.scrollTo({
                 top: 0,
