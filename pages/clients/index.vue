@@ -264,7 +264,7 @@ export default {
                 email: "",
                 firebase_uid: "",
                 status: "active",
-                qr: "false"
+                qr: 0
             }
         };
     },
@@ -366,7 +366,7 @@ export default {
                 email: client.email || "",
                 firebase_uid: client.firebase_uid || "",
                 status: client.status || "active",
-                show_qr: client.show_qr || "false",
+                qr: client.show_qr || 0,
             };
             window.scrollTo({
                 top: 0,
