@@ -58,7 +58,7 @@
                 <div class="summary-value">{{ numeral(campaign.total_impressions *0.24).format("0,0") }}</div>
             </div>
 
-            <div class="summary-card">
+            <div class="summary-card" v-show="campaign && campaign.show_qr">
                 <div class="summary-label">Total Scans</div>
                 <div class="summary-value">{{ campaign.total_scans }}</div>
             </div>

@@ -55,7 +55,7 @@
           <!-- Summary strip -->
           <div class="summary-strip mb-5">
             <div class="summary-card">
-              <div class="summary-label">Assigned Location</div>
+              <div class="summary-label">Location</div>
               <div class="summary-value">{{ formatNumber(machinePerformance.length) }}</div>
             </div>
 
