@@ -18,13 +18,31 @@
                 <!-- Hero -->
                 <v-card class="hero-panel pa-6 mb-5" outlined>
                     <div class="d-flex flex-wrap align-center">
-                        <div class="hero-copy">
-                            <div class="hero-kicker" style="margin-left: 17px;">Campaign Library</div>
-                            <div class="hero-title">My Campaigns</div>
-                            <div class="hero-subtitle" v-if="overview.client">
-                                View all active and completed campaigns for
-                                <strong>{{ overview.client.client_name }}</strong>, including impressions,
-                                scans, conversion rate, and campaign duration.
+                        <div class="hero-copy-wrap d-flex align-center">
+                            <v-avatar
+                                v-if="overview.client"
+                                size="58"
+                                :color="overview.client.image_url ? 'transparent' : '#C6FF00'"
+                                class="hero-client-avatar mr-4"
+                            >
+                                <template v-if="overview.client.image_url">
+                                    <v-img :src="overview.client.image_url" cover />
+                                </template>
+                                <template v-else>
+                                    <span class="hero-client-avatar-text">
+                                        {{ (overview.client.client_name || '').substring(0, 2).toUpperCase() }}
+                                    </span>
+                                </template>
+                            </v-avatar>
+
+                            <div class="hero-copy">
+                                <div class="hero-kicker" style="margin-left: 17px;">Campaign Library</div>
+                                <div class="hero-title">My Campaigns</div>
+                                <div class="hero-subtitle" v-if="overview.client">
+                                    View all active and completed campaigns for
+                                    <strong>{{ overview.client.client_name }}</strong>, including impressions,
+                                    scans, conversion rate, and campaign duration.
+                                </div>
                             </div>
                         </div>
 
@@ -50,16 +68,34 @@
                 <!-- Card view -->
                 <div class="campaign-grid" v-show="!grid">
                     <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
+                        <div v-if="campaign.image_url" class="campaign-cover-wrap">
+                            <v-img
+                                :src="campaign.image_url"
+                                height="180"
+                                cover
+                                class="campaign-cover"
+                            />
+                        </div>
+
                         <div class="campaign-card-top">
                             <div class="campaign-left">
                                 <v-chip outlined small color="#C6FF00" class="status-chip" style="margin-left: 6px;">
                                     {{ campaign.status }}
                                 </v-chip>
 
-                                <v-avatar size="46" color="#C6FF00" class="campaign-avatar">
-                                    <span class="campaign-avatar-text">
-                                        {{ campaign.campaign_name.substring(0, 2).toUpperCase() }}
-                                    </span>
+                                <v-avatar
+                                    size="46"
+                                    :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                                    class="campaign-avatar"
+                                >
+                                    <template v-if="campaign.image_url">
+                                        <v-img :src="campaign.image_url" cover />
+                                    </template>
+                                    <template v-else>
+                                        <span class="campaign-avatar-text">
+                                            {{ (campaign.campaign_name || '').substring(0, 2).toUpperCase() }}
+                                        </span>
+                                    </template>
                                 </v-avatar>
                             </div>
 
@@ -82,16 +118,12 @@
                             <div class="campaign-stats">
                                 <div class="stat-box">
                                     <span>Impressions</span>
-                                    <strong>{{ numeral(campaign.delivered_impressions).format("0,0") }}</strong>
+                                    <strong>{{ numeral(campaign.delivered_impressions || campaign.total_impressions).format("0,0") }}</strong>
                                 </div>
 
-                                <!-- <div class="campaign-mini-metric">
-                                    <span>Interactions</span>
-                                    <strong>{{ numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
-                                </div> -->
                                 <div class="stat-box">
                                     <span>Interactions</span>
-                                    <strong>{{  numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
+                                    <strong>{{ numeral((campaign.delivered_impressions || campaign.total_impressions) * 0.24).format("0,0") }}</strong>
                                 </div>
                             </div>
 
@@ -130,6 +162,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Image</th>
                                     <th>Campaign</th>
                                     <th>Status</th>
                                     <th>Impressions</th>
@@ -145,6 +178,21 @@
                             <tbody>
                                 <tr v-for="campaign in overview.campaigns" :key="campaign.id">
                                     <td>{{ campaign.id }}</td>
+                                    <td>
+                                        <v-avatar
+                                            size="36"
+                                            :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                                        >
+                                            <template v-if="campaign.image_url">
+                                                <v-img :src="campaign.image_url" cover />
+                                            </template>
+                                            <template v-else>
+                                                <span class="table-avatar-text">
+                                                    {{ (campaign.campaign_name || '').substring(0, 2).toUpperCase() }}
+                                                </span>
+                                            </template>
+                                        </v-avatar>
+                                    </td>
                                     <td>{{ campaign.campaign_name }}</td>
                                     <td>
                                         <span class="status-pill" :class="campaign.status === 'active' ? 'status-active' : 'status-default'">
@@ -170,7 +218,7 @@
                                 </tr>
 
                                 <tr v-if="!overview.campaigns.length">
-                                    <td colspan="9">No campaigns found.</td>
+                                    <td colspan="11">No campaigns found.</td>
                                 </tr>
                             </tbody>
                         </v-simple-table>
@@ -275,7 +323,7 @@ export default {
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to load campaigns";
+                    error.response?.data?.message || "Failed to load campaigns";
             } finally {
                 this.loading = false;
             }
@@ -334,6 +382,22 @@ export default {
     border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }
 
+.hero-copy-wrap {
+    max-width: 760px;
+}
+
+.hero-client-avatar {
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 0, 0.18);
+    flex-shrink: 0;
+}
+
+.hero-client-avatar-text {
+    color: #000;
+    font-weight: 800;
+    font-size: 16px;
+}
+
 .hero-copy {
     max-width: 760px;
 }
@@ -380,6 +444,15 @@ export default {
     padding: 18px;
     color: #fff;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.campaign-cover-wrap {
+    margin: -18px -18px 16px -18px;
+}
+
+.campaign-cover {
+    border-radius: 22px 22px 0 0;
 }
 
 .campaign-card-top {
@@ -400,10 +473,18 @@ export default {
 
 .campaign-avatar {
     margin-top: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 0, 0.12);
 }
 
 .campaign-avatar-text {
     color: #000;
+    font-weight: 800;
+}
+
+.table-avatar-text {
+    color: #000;
+    font-size: 11px;
     font-weight: 800;
 }
 
@@ -556,6 +637,10 @@ export default {
     .campaign-stats,
     .campaign-dates {
         flex-direction: column;
+    }
+
+    .hero-copy-wrap {
+        align-items: flex-start;
     }
 }
 </style>

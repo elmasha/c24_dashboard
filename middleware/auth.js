@@ -25,13 +25,13 @@ export default function ({ app, route, redirect }) {
   ]
 
   //Not logged in & trying to access protected routes
-  if (protectedRoutes.includes(route.path) && !user) {
-    return redirect('/auth/admin.login')
-  }
+  // if (protectedRoutes.includes(route.path) && !user) {
+  //   return redirect('/auth/admin.login')
+  // }
 
-  if (protectedRoutes1.includes(route.path) && !user) {
-    return redirect('/auth/client.login')
-  }
+  // if (protectedRoutes1.includes(route.path) && !user) {
+  //   return redirect('/auth/client.login')
+  // }
 
  // Logged in & trying to access auth pages
   // if (authRoutes.includes(route.path) && user) {

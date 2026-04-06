@@ -127,16 +127,25 @@
             <v-row class="text-center">
                 
 
+                  <v-col cols="12" sm="6" md="4" lg="2">
+                    <v-card class="metric-card  metric-highlight" outlined>
+                        <div class="metric-label">Total Impressions</div>
+                        <div class="metric-number">{{  millify(metrics.total_impressions) }}</div>
+                        <div><p style="color: gray;font-size: 0.8rem;">{{ numeral(metrics.total_impressions).format("0,0") }}</p></div>
+                    </v-card>
+                </v-col>
+
                 <v-col cols="12" sm="6" md="4" lg="2">
                     <v-card class="metric-card  metric-highlight" outlined>
-                        <div class="metric-label">Impressions This Month</div>
+                        <div class="metric-label">Monthly Impressions</div>
                         <div class="metric-number">{{  millify(metrics.impressions_month) }}</div>
+                        <div><p style="color: gray;font-size: 0.8rem;">{{ numeral(metrics.impressions_month).format("0,0") }}</p></div>
                     </v-card>
                 </v-col>
 
                 <v-col cols="6" sm="6" md="4" lg="2">
                     <v-card class="metric-card" outlined>
-                        <div class="metric-label">Impressions Today</div>
+                        <div class="metric-label">Daily Impressions</div>
                         <div class="metric-number">{{ numeral(metrics.impressions_today).format("0,0") }}</div>
                     </v-card>
                 </v-col>
@@ -350,6 +359,11 @@ export default {
                     icon: "mdi-account-group-outline",
                     to: "clients"
                 },
+                {
+                    title: "Notifications",
+                    icon: "mdi-bell-outline",
+                    to: "admin/notification"
+                },
                 // {
                 //     title: "Traffic Config",
                 //     icon: "mdi-cogs",
@@ -364,7 +378,8 @@ export default {
                 scans_today: 0,
                 impressions_month: 0,
                 scans_month: 0,
-                conversion_rate: 0
+                conversion_rate: 0,
+                total_impressions: 0
             },
             dailyImpressions: [],
             dailyScans: [],
@@ -538,7 +553,7 @@ export default {
                 this.deviceBreakdown = devicesRes.data || [];
                 this.topMachines = machinesRes.data || [];
                 this.clients = clientsRes.data || [];
-                // console.log("daily imp", this.dailyImpressions)
+                 console.log("daily imp", this.metrics)
             } catch (error) {
                 console.error("loadDashboard error:", error);
                 this.errorMessage =

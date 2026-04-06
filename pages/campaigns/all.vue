@@ -1,6 +1,5 @@
 <template>
 <v-container fluid class="admin-page pa-0">
-    <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
         <div class="d-flex align-center">
             <v-menu offset-y v-if="showBurger">
@@ -35,7 +34,6 @@
     </v-app-bar>
 
     <div class="admin-layout">
-        <!-- Sidebar -->
         <aside class="admin-sidebar" v-show="!showBurger">
             <div class="sidebar-card">
                 <div class="sidebar-brand">
@@ -74,12 +72,10 @@
             </div>
         </aside>
 
-        <!-- Main -->
         <main class="admin-main">
-            <!-- Hero -->
             <v-card class="hero-panel pa-6 mb-5" outlined>
                 <div class="d-flex flex-wrap align-center">
-                    <div class="hero-copy " style="margin-left: 10px;">
+                    <div class="hero-copy" style="margin-left: 10px;">
                         <div class="hero-kicker" style="margin-left: 0px;">Campaign Operations</div>
                         <div class="hero-heading">
                             Create, update, assign and monitor campaigns across your network
@@ -113,7 +109,6 @@
                 {{ errorMessage }}
             </v-alert>
 
-            <!-- Campaigns Table -->
             <v-card class="panel-card pa-4" outlined>
                 <div class="panel-head mb-3">
                     <div>
@@ -126,9 +121,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Client</th>
                             <th>Campaign</th>
                             <th>Status</th>
+                            <th>QR</th>
                             <th>Target</th>
                             <th>Delivered</th>
                             <th>Interactions</th>
@@ -142,6 +139,18 @@
                     <tbody>
                         <tr v-for="campaign in campaigns" :key="campaign.id">
                             <td>{{ campaign.id }}</td>
+                            <td>
+                                <v-avatar size="38" :color="campaign.image_url ? 'transparent' : '#C6FF00'">
+                                    <template v-if="campaign.image_url">
+                                        <v-img :src="campaign.image_url" cover />
+                                    </template>
+                                    <template v-else>
+                                        <span class="table-avatar-text">
+                                            {{ (campaign.campaign_name || '').substring(0, 2).toUpperCase() }}
+                                        </span>
+                                    </template>
+                                </v-avatar>
+                            </td>
                             <td>{{ campaign.linked_client_name || campaign.client_name }}</td>
                             <td>{{ campaign.campaign_name }}</td>
                             <td>
@@ -149,9 +158,14 @@
                                     {{ campaign.status }}
                                 </span>
                             </td>
+                            <td>
+                                <span class="status-pill" :class="Number(campaign.show_qr) === 1 ? 'status-active' : 'status-inactive'">
+                                    {{ Number(campaign.show_qr) === 1 ? 'enabled' : 'disabled' }}
+                                </span>
+                            </td>
                             <td>{{ formatNumber(campaign.target_impressions) }}</td>
                             <td>{{ formatNumber(campaign.delivered_impressions) }}</td>
-                            <td>{{ numeral(campaign.delivered_impressions * 0.24).format("0,0") }}</td>
+                            <td>{{ numeral((campaign.delivered_impressions || 0) * 0.24).format("0,0") }}</td>
                             <td>{{ formatNumber(campaign.machine_count || 0) }}</td>
                             <td>{{ campaign.start_date }}</td>
                             <td>{{ campaign.end_date }}</td>
@@ -179,7 +193,7 @@
                         </tr>
 
                         <tr v-if="!campaigns.length">
-                            <td colspan="10">No campaigns found.</td>
+                            <td colspan="13">No campaigns found.</td>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -187,8 +201,7 @@
         </main>
     </div>
 
-    <!-- Edit Campaign Dialog -->
-    <v-dialog v-model="editDialog" max-width="900">
+    <v-dialog v-model="editDialog" max-width="960">
         <v-card class="dialog-card">
             <v-card-title class="d-flex align-center">
                 <span class="text-h6">
@@ -217,35 +230,151 @@
                 <v-form v-else>
                     <v-row>
                         <v-col cols="12" md="6">
-                            <v-select v-model="editForm.client_id" :items="clients" item-text="client_name" item-value="id" label="Client" outlined dense dark @change="onEditClientChange" />
+                            <div class="campaign-image-section">
+                                <div class="image-label">Campaign Image</div>
+
+                                <div class="campaign-image-wrap">
+                                    <div v-if="editForm.image_url" class="campaign-image-preview">
+                                        <v-img :src="editForm.image_url" cover height="140" width="140" />
+                                    </div>
+
+                                    <div v-else class="campaign-image-upload text-center">
+                                        
+                                        <dropzone
+                                            id="edit-campaign-dropzone"
+                                            ref="editCampaignDropzone"
+                                            class="campaign-dropzone"
+                                            @vdropzone-success="handleCampaignImageSuccess"
+                                            :options="campaignImageOptions"
+                                            @vdropzone-complete="afterEditCampaignImageComplete"
+                                        >
+                                        <br>
+                                        <br>
+                                        <h4 style="color:black">Drop image or Click to Upload</h4>
+                                    <v-icon color="black">mdi-cloud-upload</v-icon></dropzone>
+                                    </div>
+                                </div>
+
+                                <div v-if="editForm.image_url" style="margin-top: 10px;">
+                                    <v-btn x-small text color="#C6FF00" @click="clearEditCampaignImage">
+                                        Remove image
+                                    </v-btn>
+                                </div>
+                            </div>
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <v-text-field v-model="editForm.campaign_name" label="Campaign Name" outlined dense dark />
+                            <v-select
+                                v-model="editForm.client_id"
+                                :items="clients"
+                                item-text="client_name"
+                                item-value="id"
+                                label="Client"
+                                outlined
+                                dense
+                                dark
+                                @change="onEditClientChange"
+                            />
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <v-text-field v-model="editForm.media_url" label="Media URL" outlined dense dark />
+                            <v-text-field
+                                v-model="editForm.campaign_name"
+                                label="Campaign Name"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
 
                         <v-col cols="12" md="6">
-                            <v-text-field v-model="editForm.landing_url" label="Landing URL" outlined dense dark />
+                            <v-text-field
+                                v-model="editForm.media_url"
+                                label="Media URL"
+                                outlined
+                                dense
+                                dark
+                            />
+                        </v-col>
+
+                        <v-col cols="12" md="6">
+                            <v-text-field
+                                v-model="editForm.image_url"
+                                label="Image URL"
+                                outlined
+                                dense
+                                dark
+                            />
+                        </v-col>
+
+                        <v-col cols="12" md="6">
+                            <v-text-field
+                                v-model="editForm.landing_url"
+                                label="Landing URL"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field v-model.number="editForm.target_impressions" label="Target Impressions" type="number" outlined dense dark />
+                            <v-text-field
+                                v-model.number="editForm.target_impressions"
+                                label="Target Impressions"
+                                type="number"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field v-model="editForm.start_date" label="Start Date" type="datetime-local" outlined dense dark />
+                            <v-text-field
+                                v-model="editForm.start_date"
+                                label="Start Date"
+                                type="datetime-local"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-text-field v-model="editForm.end_date" label="End Date" type="datetime-local" outlined dense dark />
+                            <v-text-field
+                                v-model="editForm.end_date"
+                                label="End Date"
+                                type="datetime-local"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
 
                         <v-col cols="12" md="4">
-                            <v-select v-model="editForm.status" :items="['active', 'paused', 'ended']" label="Status" outlined dense dark />
+                            <v-select
+                                v-model="editForm.status"
+                                :items="['active', 'paused', 'ended']"
+                                label="Status"
+                                outlined
+                                dense
+                                dark
+                            />
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-select
+                                v-model="editForm.show_qr"
+                                :items="[
+                                    { text: 'Enabled', value: '1' },
+                                    { text: 'Disabled', value: '0' }
+                                ]"
+                                item-text="text"
+                                item-value="value"
+                                label="QR Visibility"
+                                outlined
+                                dense
+                                dark
+                            />
                         </v-col>
                     </v-row>
                 </v-form>
@@ -261,7 +390,6 @@
         </v-card>
     </v-dialog>
 
-    <!-- Assign Machines Dialog -->
     <v-dialog v-model="assignDialog" max-width="950">
         <v-card class="dialog-card">
             <v-card-title class="d-flex align-center">
@@ -280,7 +408,8 @@
             </v-card-title>
 
             <v-card-subtitle v-if="selectedCampaign">
-                Currently assigned: {{ formatNumber(selectedCampaign.machine_count || 0) }}
+                Currently assigned: {{ formatNumber(selectedCampaign.machine_count || 0) }}<br>
+                Available online machines only.
             </v-card-subtitle>
 
             <v-card-text>
@@ -314,11 +443,11 @@
                                 <td>{{ machine.machine_uid }}</td>
                                 <td>{{ machine.location_name }}</td>
                                 <td>{{ machine.location_category }}</td>
-                                <td>{{ machine.status }}</td>
+                                <td > <b style="color: green;">{{ machine.status }}</b> </td>
                             </tr>
 
                             <tr v-if="!machines.length">
-                                <td colspan="6">No machines found.</td>
+                                <td colspan="6">No online machines found.</td>
                             </tr>
                         </tbody>
                     </v-simple-table>
@@ -340,10 +469,15 @@
 <script>
 import api from "@/services/api";
 import numeral from "numeral";
-
+import Dropzone from "nuxt-dropzone";
+import "nuxt-dropzone/dropzone.css";
+import { v1 as uuidv1 } from "uuid";
 
 export default {
     middleware: "auth",
+    components: {
+        Dropzone
+    },
     data() {
         return {
             numeral,
@@ -355,10 +489,11 @@ export default {
             errorMessage: "",
             showBurger: false,
             windowSize: {
-                x: window.innerWidth,
-                y: window.innerHeight
+                x: null,
+                y: null
             },
-            items_nav: [{
+            items_nav: [
+                {
                     title: "Dashboard",
                     icon: "mdi-view-dashboard",
                     to: "admin/dashboard"
@@ -377,13 +512,14 @@ export default {
                     title: "Clients",
                     icon: "mdi-account-group-outline",
                     to: "clients"
-                },
-                // {
-                //     title: "Traffic Config",
-                //     icon: "mdi-cogs",
-                //     to: "traffic-config"
-                // }
+                }
             ],
+
+            campaignImageOptions: {
+                url: "http://httpbin.org/anything",
+                maxFiles: 1,
+                acceptedFiles: "image/*"
+            },
 
             editDialog: false,
             editLoading: false,
@@ -395,11 +531,13 @@ export default {
                 client_name: "",
                 campaign_name: "",
                 media_url: "",
+                image_url: "",
                 landing_url: "",
                 target_impressions: 0,
                 start_date: "",
                 end_date: "",
-                status: "active"
+                status: "active",
+                show_qr: "0"
             },
 
             assignDialog: false,
@@ -424,6 +562,7 @@ export default {
             this.$fire.auth.signOut();
             window.location.reload(true);
         },
+
         move(val) {
             this.$router.push(`/${val}`);
         },
@@ -437,19 +576,54 @@ export default {
             return this.windowSize;
         },
 
+        handleCampaignImageSuccess(file, response) {
+            console.log("Campaign image uploaded", response);
+        },
+
+        clearEditCampaignDropzone() {
+            if (this.$refs.editCampaignDropzone && this.$refs.editCampaignDropzone.dropzone) {
+                this.$refs.editCampaignDropzone.dropzone.removeAllFiles();
+            }
+        },
+
+        async afterEditCampaignImageComplete(uploadedFile) {
+            const storageRef = this.$fire.storage.ref();
+            const imageName = uuidv1();
+
+            try {
+                const metadata = {
+                    contentType: uploadedFile.type || "image/png"
+                };
+
+                const imageRef = storageRef.child(`campaigns/${imageName}.png`);
+                await imageRef.put(uploadedFile, metadata);
+                const downloadURL = await imageRef.getDownloadURL();
+
+                this.editForm.image_url = downloadURL;
+            } catch (error) {
+                console.error(error);
+                this.editErrorMessage = "Failed to upload campaign image";
+            }
+        },
+
+        clearEditCampaignImage() {
+            this.editForm.image_url = "";
+            this.$nextTick(() => {
+                this.clearEditCampaignDropzone();
+            });
+        },
+
         async fetchCampaigns() {
             try {
                 this.loading = true;
                 this.errorMessage = "";
 
-                const {
-                    data
-                } = await api.get("/api/campaigns");
+                const { data } = await api.get("/api/campaigns");
                 this.campaigns = data || [];
             } catch (error) {
                 console.error("fetchCampaigns error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to load campaigns";
+                    error.response?.data?.message || "Failed to load campaigns";
             } finally {
                 this.loading = false;
             }
@@ -457,9 +631,7 @@ export default {
 
         async fetchClients() {
             try {
-                const {
-                    data
-                } = await api.get("/api/clients");
+                const { data } = await api.get("/api/clients");
                 this.clients = data || [];
             } catch (error) {
                 console.error("fetchClients error:", error);
@@ -477,16 +649,14 @@ export default {
                 this.successMessage = "";
                 this.errorMessage = "";
 
-                const {
-                    data
-                } = await api.delete(`/api/campaigns/${campaign.id}`);
+                const { data } = await api.delete(`/api/campaigns/${campaign.id}`);
                 this.successMessage = data.message || "Campaign deleted successfully";
 
                 await this.fetchCampaigns();
             } catch (error) {
                 console.error("deleteCampaign error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to delete campaign";
+                    error.response?.data?.message || "Failed to delete campaign";
             } finally {
                 this.deletingId = null;
             }
@@ -500,25 +670,29 @@ export default {
                 this.editErrorMessage = "";
                 this.editCampaignId = campaign.id;
 
-                const {
-                    data
-                } = await api.get(`/api/campaigns/${campaign.id}`);
+                const { data } = await api.get(`/api/campaigns/${campaign.id}`);
 
                 this.editForm = {
                     client_id: data.client_id || "",
                     client_name: data.linked_client_name || data.client_name || "",
                     campaign_name: data.campaign_name || "",
                     media_url: data.media_url || "",
+                    image_url: data.image_url || "",
                     landing_url: data.landing_url || "",
                     target_impressions: Number(data.target_impressions || 0),
                     start_date: this.toInputDateTime(data.start_date),
                     end_date: this.toInputDateTime(data.end_date),
-                    status: data.status || "active"
+                    status: data.status || "active",
+                    show_qr: String(Number(data.show_qr || 0))
                 };
+
+                this.$nextTick(() => {
+                    this.clearEditCampaignDropzone();
+                });
             } catch (error) {
                 console.error("openEditDialog error:", error);
                 this.editErrorMessage =
-                    error.response.data.message || "Failed to load campaign";
+                    error.response?.data?.message || "Failed to load campaign";
             } finally {
                 this.editLoading = false;
             }
@@ -535,12 +709,17 @@ export default {
                 client_name: "",
                 campaign_name: "",
                 media_url: "",
+                image_url: "",
                 landing_url: "",
                 target_impressions: 0,
                 start_date: "",
                 end_date: "",
-                status: "active"
+                status: "active",
+                show_qr: "0"
             };
+            this.$nextTick(() => {
+                this.clearEditCampaignDropzone();
+            });
         },
 
         onEditClientChange() {
@@ -559,13 +738,12 @@ export default {
 
                 const payload = {
                     ...this.editForm,
+                    show_qr: Number(this.editForm.show_qr),
                     start_date: this.formatDateTime(this.editForm.start_date),
                     end_date: this.formatDateTime(this.editForm.end_date)
                 };
 
-                const {
-                    data
-                } = await api.put(
+                const { data } = await api.put(
                     `/api/campaigns/${this.editCampaignId}`,
                     payload
                 );
@@ -578,21 +756,19 @@ export default {
             } catch (error) {
                 console.error("saveCampaignEdit error:", error);
                 this.editErrorMessage =
-                    error.response.data.message || "Failed to update campaign";
+                    error.response?.data?.message || "Failed to update campaign";
             } finally {
                 this.editSaving = false;
             }
         },
 
-        async openAssignDialog(campaign) {
+         async openAssignDialog(campaign) {
             try {
                 this.assignDialog = true;
                 this.assignLoading = true;
                 this.assignSaving = false;
                 this.assignErrorMessage = "";
-                this.selectedCampaign = {
-                    ...campaign
-                };
+                this.selectedCampaign = { ...campaign };
                 this.selectedMachineIds = [];
                 this.originalMachineIds = [];
 
@@ -601,7 +777,10 @@ export default {
                     api.get(`/api/campaign-machines/${campaign.id}/machines`)
                 ]);
 
-                this.machines = machinesRes.data || [];
+                const allMachines = machinesRes.data || [];
+                this.machines = allMachines.filter(
+                    machine => String(machine.status).toLowerCase() === "online"
+                );
 
                 const assignedMachineIds = (assignedRes.data || []).map(row =>
                     Number(row.machine_id || row.id)
@@ -612,12 +791,11 @@ export default {
             } catch (error) {
                 console.error("openAssignDialog error:", error);
                 this.assignErrorMessage =
-                    error.response.data.message || "Failed to load machine assignments";
+                    error.response?.data?.message || "Failed to load machine assignments";
             } finally {
                 this.assignLoading = false;
             }
         },
-
         closeAssignDialog() {
             this.assignDialog = false;
             this.assignLoading = false;
@@ -674,7 +852,7 @@ export default {
             } catch (error) {
                 console.error("saveAssignments error:", error);
                 this.assignErrorMessage =
-                    error.response.data.message || "Failed to save assignments";
+                    error.response?.data?.message || "Failed to save assignments";
             } finally {
                 this.assignSaving = false;
             }
@@ -829,13 +1007,6 @@ export default {
     margin-bottom: 8px;
 }
 
-.page-title {
-    font-size: 30px;
-    font-weight: 800;
-    color: #fff;
-    margin: 0;
-}
-
 .hero-panel {
     border-radius: 24px;
     background:
@@ -970,6 +1141,51 @@ export default {
     color: #bdbdbd;
 }
 
+.table-avatar-text {
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.campaign-image-section {
+    margin-bottom: 12px;
+}
+
+.image-label {
+    color: #d8d8d8;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.campaign-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.campaign-image-preview {
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(198, 255, 0, 0.18);
+}
+
+.campaign-image-upload {
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.campaign-dropzone {
+    width: 140px;
+    height: 140px;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
 @media (max-width: 960px) {
     .admin-layout {
         display: block;
@@ -977,10 +1193,6 @@ export default {
 
     .admin-main {
         padding: 16px;
-    }
-
-    .page-title {
-        font-size: 24px;
     }
 
     .hero-heading {

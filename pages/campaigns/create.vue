@@ -113,7 +113,7 @@
         <v-card class="panel-card pa-5" outlined>
           <div class="panel-head mb-4">
             <div>
-              <div class="panel-kicker">Campaign Form</div>
+              <div class="panel-kicker"></div>
               <div class="panel-title">New Campaign Details</div>
             </div>
           </div>
@@ -121,19 +121,36 @@
           <v-form @submit.prevent="createCampaign">
             <v-row>
               <v-col cols="12" md="6">
-                <v-select
+                <div style="margin: 10px;">
+                  <p>Campaign image</p>
+                  <v-avatar color="green" size="140">
+                    <dropzone id="foo" ref="el" style="border-radius: 360px" @vdropzone-success="handleSuccess" :options="options"  @vdropzone-complete="afterComplete"></dropzone>
+                  </v-avatar>
+                </div>
+
+                <div>
+                  <label for="">Select Client</label>
+                   <v-select
                   v-model="form.client_id"
                   :items="clients"
                   item-text="client_name"
                   item-value="id"
-                  label="Client"
+                  label="Select Client"
                   outlined
                   dense
                   dark
                   required
                   @change="onClientChange"
                 />
+                </div>
               </v-col>
+              <v-col cols="12" md="6">
+
+
+               
+              </v-col>
+
+              
 
               <v-col cols="12" md="6">
                 <v-text-field
@@ -236,18 +253,26 @@
 
 <script>
 import api from "@/services/api";
+import Dropzone from "nuxt-dropzone";
+import "nuxt-dropzone/dropzone.css";
 
 export default {
+  components: {
+    Dropzone,
+  },
   data() {
     return {
+      options: {
+        url: "http://httpbin.org/anything",
+      },
       saving: false,
       successMessage: "",
       errorMessage: "",
       clients: [],
       showBurger: false,
       windowSize: {
-        x: window.innerWidth,
-        y: window.innerHeight
+        x: null,
+        y: null
       },
       items_nav: [
         {
@@ -296,6 +321,38 @@ export default {
   },
 
   methods: {
+    handleSuccess(file, response) {
+            // Handle success event here
+            console.log("File uploaded successfully!", response);
+            this.snackbar = true;
+            this.snackbarText = "File uploaded";
+        },
+        clearDropzone() {
+            this.$refs.el.dropzone.removeAllFiles();
+        },
+        async afterComplete(upload2) {
+            const storageRef = this.$fire.storage.ref();
+            var imageNameP = uuid.v1();
+            try {
+                //save image
+                let file = upload2;
+                var metadata = {
+                    contentType: "image/png",
+                };
+                var imageRef = storageRef.child(`posts/${imageNameP}.png`);
+                await imageRef.put(file, metadata);
+                var downloadURLP = await imageRef.getDownloadURL();
+
+                this.imageUrl = downloadURLP;
+                console.log("image url", downloadURLP);
+                this.snackbar = true;
+                this.snackbarText = "Image Uploaded";
+            } catch (error) {
+                this.snackbar2 = true;
+                this.snackbarText2 = error;
+                console.log(error);
+            }
+        },
     move(val) {
       this.$router.push(`/${val}`);
     },

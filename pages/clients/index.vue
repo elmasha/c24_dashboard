@@ -125,17 +125,84 @@
                         </div>
 
                         <v-form @submit.prevent="submitClient">
-                            <v-text-field v-model="form.client_name" label="Client Name" outlined dense dark required />
+                            <div style="margin: 10px 0 18px;">
+                                <p>Client image</p>
 
-                            <v-text-field v-model="form.email" label="Email" outlined dense dark />
+                                <div class="client-image-wrap">
+                                    <div v-if="form.image_url" class="client-image-preview">
+                                        <v-img :src="form.image_url" cover height="140" width="140" />
+                                    </div>
 
-                            <v-text-field v-model="form.firebase_uid" label="Firebase UID" outlined dense dark required />
+                                    <div v-else class="client-image-upload">
+                                        <dropzone
+                                            id="foo"
+                                            ref="el"
+                                            style="border-radius: 360px; width: 140px; height: 140px; overflow: hidden;"
+                                            @vdropzone-success="handleSuccess"
+                                            :options="options"
+                                            @vdropzone-complete="afterComplete"
+                                        ></dropzone>
+                                    </div>
+                                </div>
 
-                            <v-select v-model="form.status" :items="['active', 'inactive']" label="Status" outlined dense dark />
-                             <v-select v-model="form.qr" :items="['true', 'false']" label="Qr Code" outlined dense dark />
+                                <div v-if="form.image_url" style="margin-top: 10px;">
+                                    <v-btn x-small text color="#C6FF00" @click="clearClientImage">
+                                        Remove image
+                                    </v-btn>
+                                </div>
+                            </div>
+
+                            <v-text-field
+                                v-model="form.client_name"
+                                label="Client Name"
+                                outlined
+                                dense
+                                dark
+                                required
+                            />
+
+                            <v-text-field
+                                v-model="form.email"
+                                label="Email"
+                                outlined
+                                dense
+                                dark
+                            />
+
+                            <v-text-field
+                                v-model="form.firebase_uid"
+                                label="Firebase UID"
+                                outlined
+                                dense
+                                dark
+                                required
+                            />
+
+                            <v-select
+                                v-model="form.status"
+                                :items="['active', 'inactive']"
+                                label="Status"
+                                outlined
+                                dense
+                                dark
+                            />
+
+                            <v-select
+                                v-model="form.qr"
+                                :items="['true', 'false']"
+                                label="Qr Code"
+                                outlined
+                                dense
+                                dark
+                            />
 
                             <div class="d-flex">
-                                <v-btn color="#C6FF00" class="black--text font-weight-bold mr-2" type="submit" :loading="saving">
+                                <v-btn
+                                    color="#C6FF00"
+                                    class="black--text font-weight-bold mr-2"
+                                    type="submit"
+                                    :loading="saving"
+                                >
                                     {{ editingId ? "Update" : "Create" }}
                                 </v-btn>
 
@@ -161,6 +228,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Image</th>
                                     <th>Client Name</th>
                                     <th>Email</th>
                                     <th>Firebase UID</th>
@@ -174,27 +242,61 @@
                             <tbody>
                                 <tr v-for="client in clients" :key="client.id">
                                     <td>{{ client.id }}</td>
+                                    <td>
+                                        <v-avatar
+                                            size="36"
+                                            :color="client.image_url ? 'transparent' : '#C6FF00'"
+                                        >
+                                            <template v-if="client.image_url">
+                                                <v-img :src="client.image_url" cover />
+                                            </template>
+                                            <template v-else>
+                                                <span class="table-avatar-text">
+                                                    {{ (client.client_name || '').substring(0, 2).toUpperCase() }}
+                                                </span>
+                                            </template>
+                                        </v-avatar>
+                                    </td>
                                     <td>{{ client.client_name }}</td>
                                     <td>{{ client.email || "-" }}</td>
                                     <td class="uid-cell">{{ client.firebase_uid || "-" }}</td>
                                     <td>
-                                        <span class="status-pill" :class="client.show_qr === 'true' ? 'status-active' : 'status-inactive'">
-                                            {{ client.show_qr === 'true' ? 'enabled' : 'disabled' }}
+                                        <span
+                                            class="status-pill"
+                                            :class="String(client.show_qr) === 'true' || Number(client.show_qr) === 1 ? 'status-active' : 'status-inactive'"
+                                        >
+                                            {{ String(client.show_qr) === 'true' || Number(client.show_qr) === 1 ? 'enabled' : 'disabled' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="status-pill" :class="client.status === 'active' ? 'status-active' : 'status-inactive'">
+                                        <span
+                                            class="status-pill"
+                                            :class="client.status === 'active' ? 'status-active' : 'status-inactive'"
+                                        >
                                             {{ client.status }}
                                         </span>
                                     </td>
                                     <td>{{ client.created_at }}</td>
                                     <td class="text-right">
                                         <div class="action-wrap">
-                                            <v-btn x-small text color="#C6FF00" class="mr-1 mb-1" @click="editClient(client)">
+                                            <v-btn
+                                                x-small
+                                                text
+                                                color="#C6FF00"
+                                                class="mr-1 mb-1"
+                                                @click="editClient(client)"
+                                            >
                                                 Edit
                                             </v-btn>
 
-                                            <v-btn x-small text color="#ff6b6b" class="mb-1" :loading="deletingId === client.id" @click="deleteClient(client)">
+                                            <v-btn
+                                                x-small
+                                                text
+                                                color="#ff6b6b"
+                                                class="mb-1"
+                                                :loading="deletingId === client.id"
+                                                @click="deleteClient(client)"
+                                            >
                                                 Delete
                                             </v-btn>
                                         </div>
@@ -202,7 +304,7 @@
                                 </tr>
 
                                 <tr v-if="!clients.length">
-                                    <td colspan="7">No clients found.</td>
+                                    <td colspan="9">No clients found.</td>
                                 </tr>
                             </tbody>
                         </v-simple-table>
@@ -216,11 +318,22 @@
 
 <script>
 import api from "@/services/api";
+import Dropzone from "nuxt-dropzone";
+import "nuxt-dropzone/dropzone.css";
+import { v1 as uuidv1 } from "uuid";
 
 export default {
-  middleware:"auth",
+    // middleware: "auth",
+    components: {
+        Dropzone,
+    },
     data() {
         return {
+            options: {
+                url: "http://httpbin.org/anything",
+                maxFiles: 1,
+                acceptedFiles: "image/*",
+            },
             loading: false,
             saving: false,
             deletingId: null,
@@ -230,10 +343,11 @@ export default {
             clients: [],
             showBurger: false,
             windowSize: {
-                x: window.innerWidth,
-                y: window.innerHeight
+                x: null,
+                y: null
             },
-            items_nav: [{
+            items_nav: [
+                {
                     title: "Dashboard",
                     icon: "mdi-view-dashboard",
                     to: "admin/dashboard"
@@ -253,18 +367,14 @@ export default {
                     icon: "mdi-account-group-outline",
                     to: "clients"
                 },
-                // {
-                //     title: "Traffic Config",
-                //     icon: "mdi-cogs",
-                //     to: "traffic-config"
-                // }
             ],
             form: {
                 client_name: "",
                 email: "",
                 firebase_uid: "",
                 status: "active",
-                qr: 0
+                qr: "false",
+                image_url: ""
             }
         };
     },
@@ -275,11 +385,50 @@ export default {
     },
 
     methods: {
+        handleSuccess(file, response) {
+            console.log("File uploaded successfully!", response);
+        },
+
+        clearDropzone() {
+            if (this.$refs.el && this.$refs.el.dropzone) {
+                this.$refs.el.dropzone.removeAllFiles();
+            }
+        },
+
+        async afterComplete(upload2) {
+            const storageRef = this.$fire.storage.ref();
+            const imageNameP = uuidv1();
+
+            try {
+                const file = upload2;
+                const metadata = {
+                    contentType: file.type || "image/png",
+                };
+
+                const imageRef = storageRef.child(`clients/${imageNameP}.png`);
+                await imageRef.put(file, metadata);
+                const downloadURLP = await imageRef.getDownloadURL();
+
+                this.form.image_url = downloadURLP;
+                console.log("image url", downloadURLP);
+            } catch (error) {
+                console.log(error);
+                this.errorMessage = "Failed to upload image";
+            }
+        },
+
+        clearClientImage() {
+            this.form.image_url = "";
+            this.$nextTick(() => {
+                this.clearDropzone();
+            });
+        },
+
         logout() {
             this.$fire.auth.signOut();
-            // this.$router.push("/auth/admin.login");
             window.location.reload(true);
         },
+
         move(val) {
             this.$router.push(`/${val}`);
         },
@@ -298,15 +447,13 @@ export default {
                 this.loading = true;
                 this.errorMessage = "";
 
-                const {
-                    data
-                } = await api.get("/api/clients");
+                const { data } = await api.get("/api/clients");
                 this.clients = data || [];
                 console.log("Fetched clients:", this.clients);
             } catch (error) {
                 console.error("fetchClients error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to load clients";
+                    error.response?.data?.message || "Failed to load clients";
             } finally {
                 this.loading = false;
             }
@@ -323,27 +470,32 @@ export default {
                     return;
                 }
 
+                const payload = {
+                    client_name: this.form.client_name,
+                    email: this.form.email,
+                    firebase_uid: this.form.firebase_uid,
+                    status: this.form.status,
+                    show_qr: this.form.qr === "true" ? 1 : 0,
+                    image_url: this.form.image_url
+                };
+
                 if (this.editingId) {
-                    const {
-                        data
-                    } = await api.put(
+                    const { data } = await api.put(
                         `/api/clients/${this.editingId}`,
-                        this.form
+                        payload
                     );
 
                     this.successMessage =
-                        data.client_name ?
-                        `${data.client_name} updated successfully` :
-                        "Client updated successfully";
+                        data.client_name
+                            ? `${data.client_name} updated successfully`
+                            : "Client updated successfully";
                 } else {
-                    const {
-                        data
-                    } = await api.post("/api/clients", this.form);
+                    const { data } = await api.post("/api/clients", payload);
 
                     this.successMessage =
-                        data.client_name ?
-                        `${data.client_name} created successfully` :
-                        "Client created successfully";
+                        data.client_name
+                            ? `${data.client_name} created successfully`
+                            : "Client created successfully";
                 }
 
                 this.resetForm();
@@ -351,7 +503,7 @@ export default {
             } catch (error) {
                 console.error("submitClient error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to save client";
+                    error.response?.data?.message || "Failed to save client";
             } finally {
                 this.saving = false;
             }
@@ -366,7 +518,11 @@ export default {
                 email: client.email || "",
                 firebase_uid: client.firebase_uid || "",
                 status: client.status || "active",
-                qr: client.show_qr || 0,
+                qr:
+                    String(client.show_qr) === "true" || Number(client.show_qr) === 1
+                        ? "true"
+                        : "false",
+                image_url: client.image_url || ""
             };
             window.scrollTo({
                 top: 0,
@@ -385,9 +541,7 @@ export default {
                 this.successMessage = "";
                 this.errorMessage = "";
 
-                const {
-                    data
-                } = await api.delete(`/api/clients/${client.id}`);
+                const { data } = await api.delete(`/api/clients/${client.id}`);
 
                 this.successMessage =
                     data.message || "Client deleted successfully";
@@ -400,7 +554,7 @@ export default {
             } catch (error) {
                 console.error("deleteClient error:", error);
                 this.errorMessage =
-                    error.response.data.message || "Failed to delete client";
+                    error.response?.data?.message || "Failed to delete client";
             } finally {
                 this.deletingId = null;
             }
@@ -412,9 +566,12 @@ export default {
                 client_name: "",
                 email: "",
                 firebase_uid: "",
-                status: "active"
+                status: "active",
+                qr: "false",
+                image_url: ""
             };
             this.errorMessage = "";
+            this.clearDropzone();
         }
     }
 };
@@ -679,6 +836,33 @@ export default {
 .uid-cell {
     max-width: 220px;
     word-break: break-all;
+}
+
+.client-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.client-image-preview {
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid rgba(198, 255, 0, 0.18);
+}
+
+.client-image-upload {
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.table-avatar-text {
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
 }
 
 @media (max-width: 960px) {

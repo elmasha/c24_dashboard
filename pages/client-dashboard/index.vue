@@ -21,8 +21,9 @@
             </v-menu>
 
             <div v-if="overview.client">
-                <div class="page-badge" style="margin-top: 18px;">{{ overview.client.client_name  }} Portal</div>
-
+                <div class="page-badge" style="margin-top: 18px;">
+                    {{ overview.client.client_name }} Portal
+                </div>
             </div>
         </div>
 
@@ -49,10 +50,19 @@
                 </div>
 
                 <div class="sidebar-profile" v-if="overview.client">
-                    <v-avatar size="52" color="#C6FF00" class="sidebar-avatar">
-                        <span class="avatar-text">
-                            {{ overview.client.client_name.substring(0, 2).toUpperCase() }}
-                        </span>
+                    <v-avatar
+                        size="52"
+                        :color="overview.client.image_url ? 'transparent' : '#C6FF00'"
+                        class="sidebar-avatar client-logo-avatar"
+                    >
+                        <template v-if="overview.client.image_url">
+                            <v-img :src="overview.client.image_url" cover />
+                        </template>
+                        <template v-else>
+                            <span class="avatar-text">
+                                {{ (overview.client.client_name || '').substring(0, 2).toUpperCase() }}
+                            </span>
+                        </template>
                     </v-avatar>
 
                     <div class="sidebar-client-name">
@@ -119,16 +129,6 @@
 
                 <!-- Metrics -->
                 <div class="metrics-grid text-center">
-
-                    <!-- <v-row>
-                        <v-col cols="12" md="6"></v-col>
-                        <v-col cols="12" md="6"></v-col>
-                        <v-col cols="12" md="6"></v-col>
-                        <v-col cols="12" md="6"></v-col>
-                        <v-col cols="12" md="6"></v-col>
-
-                    </v-row> -->
-
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Impressions Today</div>
                         <div class="metric-value" style="color: #C6FF00;">
@@ -139,32 +139,32 @@
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Interactions Today</div>
                         <div class="metric-value" style="color: #C6FF00;">
-                            {{ numeral(overview.metrics && overview.metrics.impressions_today *0.24).format("0,0") || 0 }}
+                            {{ numeral((overview.metrics && overview.metrics.impressions_today * 0.24) || 0).format("0,0") }}
                         </div>
                     </div>
 
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Impressions</div>
                         <div class="metric-value">
-                            {{ millify(overview.metrics && overview.metrics.total_impressions) || 0 }}
+                            {{ millify((overview.metrics && overview.metrics.total_impressions) || 0) }}
                         </div>
                     </div>
 
                     <div class="metric-card metric-primary">
                         <div class="metric-label">Total Interactions</div>
                         <div class="metric-value">
-                            {{ millify(overview.metrics && overview.metrics.total_impressions *0.24) || 0 }}
+                            {{ millify((overview.metrics && overview.metrics.total_impressions * 0.24) || 0) }}
                         </div>
                     </div>
 
-                    <div class="metric-card" v-show="overview.client && overview.client.qr">
+                    <div class="metric-card" v-show="showQrEnabled">
                         <div class="metric-label">Total Scans</div>
                         <div class="metric-value">
                             {{ formatNumber((overview.metrics && overview.metrics.total_scans) || 0) }}
                         </div>
                     </div>
 
-                    <div class="metric-card" v-show="overview.client && overview.client.qr">
+                    <div class="metric-card" v-show="showQrEnabled">
                         <div class="metric-label">Conversion Rate</div>
                         <div class="metric-value">
                             {{ (overview.metrics && overview.metrics.overall_conversion_rate) || 0 }}%
@@ -206,7 +206,7 @@
                             </v-card>
                         </v-col>
 
-                        <v-col cols="12" lg="4" md="6" v-show="overview.client && overview.client.qr">
+                        <v-col cols="12" lg="4" md="6" v-show="showQrEnabled">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker"></div>
@@ -216,7 +216,7 @@
                             </v-card>
                         </v-col>
 
-                        <v-col cols="12" lg="4" md="6" v-show="overview.client && overview.client.qr">
+                        <v-col cols="12" lg="4" md="6" v-show="showQrEnabled">
                             <v-card class="panel-card pa-4" outlined color="black">
                                 <div class="panel-title-wrap">
                                     <div class="panel-kicker"></div>
@@ -228,10 +228,11 @@
                     </v-row>
                 </div>
 
-                <!-- Campaign section header -->
-                <v-btn color="#C6FF00" class="black--text" @click="exportToCSV" >
+                <v-btn color="#C6FF00" class="black--text" @click="exportToCSV">
                     Export CSV
                 </v-btn>
+
+                <!-- Campaign section -->
                 <div class="section-block">
                     <div class="section-head">
                         <div>
@@ -254,12 +255,25 @@
                     <!-- Card view -->
                     <div class="campaign-grid" v-show="!grid">
                         <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
+                            <div v-if="campaign.image_url" class="campaign-image-wrap">
+                                <v-img :src="campaign.image_url" height="170" cover class="campaign-image" />
+                            </div>
+
                             <div class="campaign-card-top">
                                 <div class="campaign-avatar-wrap">
-                                    <v-avatar size="48" color="#C6FF00">
-                                        <span class="campaign-avatar-text">
-                                            {{ campaign.campaign_name.substring(0, 2).toUpperCase() }}
-                                        </span>
+                                    <v-avatar
+                                        size="48"
+                                        :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                                        class="campaign-image-avatar"
+                                    >
+                                        <template v-if="campaign.image_url">
+                                            <v-img :src="campaign.image_url" cover />
+                                        </template>
+                                        <template v-else>
+                                            <span class="campaign-avatar-text">
+                                                {{ (campaign.campaign_name || '').substring(0, 2).toUpperCase() }}
+                                            </span>
+                                        </template>
                                     </v-avatar>
                                 </div>
 
@@ -282,17 +296,13 @@
                                 <div class="campaign-metrics-row">
                                     <div class="campaign-mini-metric">
                                         <span>Impressions</span>
-                                        <strong>{{ numeral(campaign.delivered_impressions).format("0,0") }}</strong>
+                                        <strong>{{ numeral(campaign.delivered_impressions || campaign.total_impressions).format("0,0") }}</strong>
                                     </div>
 
                                     <div class="campaign-mini-metric">
                                         <span>Interactions</span>
-                                        <strong>{{ numeral(campaign.delivered_impressions*0.24).format("0,0") }}</strong>
+                                        <strong>{{ numeral((campaign.delivered_impressions || campaign.total_impressions) * 0.24).format("0,0") }}</strong>
                                     </div>
-                                    <!-- <div class="campaign-mini-metric">
-                                        <span>Scans</span>
-                                        <strong>{{ campaign.total_scans }}</strong>
-                                    </div> -->
                                 </div>
 
                                 <div class="campaign-dates-row">
@@ -330,6 +340,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Image</th>
                                         <th>Campaign</th>
                                         <th>Status</th>
                                         <th>Impressions</th>
@@ -345,6 +356,21 @@
                                 <tbody>
                                     <tr v-for="campaign in overview.campaigns" :key="campaign.id">
                                         <td>{{ campaign.id }}</td>
+                                        <td>
+                                            <v-avatar
+                                                size="36"
+                                                :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                                            >
+                                                <template v-if="campaign.image_url">
+                                                    <v-img :src="campaign.image_url" cover />
+                                                </template>
+                                                <template v-else>
+                                                    <span class="table-avatar-text">
+                                                        {{ (campaign.campaign_name || '').substring(0, 2).toUpperCase() }}
+                                                    </span>
+                                                </template>
+                                            </v-avatar>
+                                        </td>
                                         <td>{{ campaign.campaign_name }}</td>
                                         <td>{{ campaign.status }}</td>
                                         <td>{{ formatNumber(campaign.total_impressions) }}</td>
@@ -361,7 +387,7 @@
                                     </tr>
 
                                     <tr v-if="!overview.campaigns.length">
-                                        <td colspan="9">No campaigns found.</td>
+                                        <td colspan="11">No campaigns found.</td>
                                     </tr>
                                 </tbody>
                             </v-simple-table>
@@ -381,12 +407,10 @@ import api from "@/services/api";
 import moment from "moment";
 import numeral from "numeral";
 import DevicePieChart from "../../components/charts/DevicePieChart.vue";
-import {
-    millify
-} from "millify";
+import { millify } from "millify";
 
 export default {
-    middleware: 'auth',
+    middleware: "auth",
     components: {
         DevicePieChart
     },
@@ -400,7 +424,8 @@ export default {
             moment,
             loading: true,
             errorMessage: "",
-            items_nav: [{
+            items_nav: [
+                {
                     title: "Dashboard",
                     icon: "mdi-view-dashboard",
                     to: "client-dashboard"
@@ -416,9 +441,9 @@ export default {
                     to: "clients/assigned-machine"
                 },
                 {
-                    title: "Notification",
+                    title: "Notifications",
                     icon: "mdi-bell",
-                    to: "clients/assigned-machine"
+                    to: "client-dashboard/notification"
                 }
             ],
             overview: {
@@ -428,7 +453,8 @@ export default {
                     total_scans: 0,
                     overall_conversion_rate: 0,
                     active_campaigns: 0,
-                    total_campaigns: 0
+                    total_campaigns: 0,
+                    impressions_today: 0
                 },
                 campaigns: []
             },
@@ -446,6 +472,14 @@ export default {
     },
 
     computed: {
+        showQrEnabled() {
+            if (!this.overview.client) return false;
+            return String(this.overview.client.qr) === "true" ||
+                String(this.overview.client.show_qr) === "true" ||
+                Number(this.overview.client.qr) === 1 ||
+                Number(this.overview.client.show_qr) === 1;
+        },
+
         impressionsSeries() {
             return [{
                 name: "Impressions",
@@ -581,7 +615,7 @@ export default {
                     `"${row.campaign_name || ""}"`,
                     `"${row.status || ""}"`,
                     row.total_impressions || 0,
-                   Math.floor((row.total_impressions * 0.24)) || 0,
+                    Math.floor((row.total_impressions * 0.24)) || 0,
                     row.total_scans || 0,
                     row.conversion_rate || 0,
                     `"${moment(row.start_date).format("MMM Do YY") || ""}"`,
@@ -602,10 +636,12 @@ export default {
             link.click();
             document.body.removeChild(link);
         },
+
         logout() {
             this.$fire.auth.signOut();
             this.$router.push("/auth/client.login");
         },
+
         move(val) {
             this.$router.push(`/${val}`);
         },
@@ -629,7 +665,7 @@ export default {
 
                 if (!currentUser) {
                     this.errorMessage = "User not logged in";
-                    this.$router.push("/auth/client.login");
+                   /// this.$router.push("/auth/client.login");
                     this.loading = false;
                     return;
                 }
@@ -637,15 +673,9 @@ export default {
                 const uid = currentUser.uid;
 
                 const [overviewRes, dailyGraphRes, deviceRes] = await Promise.all([
-                    api.post("/api/client-dashboard/overview", {
-                        uid
-                    }),
-                    api.post("/api/client-dashboard/daily-graph", {
-                        uid
-                    }),
-                    api.post("/api/client-dashboard/device-breakdown", {
-                        uid
-                    })
+                    api.post("/api/client-dashboard/overview", { uid }),
+                    api.post("/api/client-dashboard/daily-graph", { uid }),
+                    api.post("/api/client-dashboard/device-breakdown", { uid })
                 ]);
 
                 this.overview = overviewRes.data || {
@@ -655,7 +685,8 @@ export default {
                         total_scans: 0,
                         overall_conversion_rate: 0,
                         active_campaigns: 0,
-                        total_campaigns: 0
+                        total_campaigns: 0,
+                        impressions_today: 0
                     },
                     campaigns: []
                 };
@@ -666,11 +697,14 @@ export default {
                 };
 
                 this.deviceBreakdown = deviceRes.data || [];
-
-                console.log(this.overview.client)
+                console.log("Loaded dashboard data:", {
+                    overview: this.overview,
+                    dailyGraph: this.dailyGraph,
+                    deviceBreakdown: this.deviceBreakdown
+                });
             } catch (error) {
                 console.error("loadDashboard error:", error);
-                this.errorMessage = error.response.data.message || "Failed to load dashboard";
+                this.errorMessage = error.response?.data?.message || "Failed to load dashboard";
             } finally {
                 this.loading = false;
             }
@@ -752,6 +786,11 @@ export default {
 
 .sidebar-avatar {
     margin-bottom: 12px;
+}
+
+.client-logo-avatar {
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 0, 0.18);
 }
 
 .avatar-text {
@@ -966,6 +1005,15 @@ export default {
     border: 1px solid rgba(198, 255, 0, 0.08) !important;
     padding: 18px;
     color: #fff;
+    overflow: hidden;
+}
+
+.campaign-image-wrap {
+    margin: -18px -18px 16px -18px;
+}
+
+.campaign-image {
+    border-radius: 22px 22px 0 0;
 }
 
 .campaign-card-top {
@@ -974,8 +1022,19 @@ export default {
     margin-bottom: 16px;
 }
 
+.campaign-image-avatar {
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 0, 0.18);
+}
+
 .campaign-avatar-text {
     color: #000;
+    font-weight: 800;
+}
+
+.table-avatar-text {
+    color: #000;
+    font-size: 11px;
     font-weight: 800;
 }
 
