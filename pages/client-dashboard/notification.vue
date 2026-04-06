@@ -76,9 +76,9 @@
                 <div class="d-flex flex-wrap align-center">
                     <div class="hero-copy" style="margin-left: 10px;">
                         <div class="hero-kicker">Notifications Center</div>
-                        <div class="hero-heading">
+                        <!-- <div class="hero-heading">
                             Stay updated on your campaigns
-                        </div>
+                        </div> -->
                         <div class="hero-subtext">
                             See creation alerts, assignments, and campaign status changes in one place.
                         </div>
@@ -90,14 +90,14 @@
                         <v-btn
                             class="mr-2 hero-btn-primary"
                             color="#C6FF00"
-                            large
+                            small
                             :loading="markingAll"
                             @click="markAllRead"
                         >
                             <span class="black--text font-weight-bold">Mark all as read</span>
                         </v-btn>
 
-                        <v-btn outlined large class="hero-btn-outline" @click="fetchNotifications" :loading="loading">
+                        <v-btn outlined small class="hero-btn-outline" @click="fetchNotifications" :loading="loading">
                             Refresh
                         </v-btn>
                     </div>
@@ -116,7 +116,7 @@
                 <div class="panel-head mb-3">
                     <div>
                         <div class="panel-kicker"></div>
-                        <div class="panel-title">Notifications</div>
+                        <div class="panel-title">All Notifications</div>
                     </div>
 
                     <div class="notification-count">
@@ -491,7 +491,7 @@ export default {
 }
 .hero-kicker {
     color: #c6ff00;
-    font-size: 13px;
+    font-size: 22px;
     margin-bottom: 10px;
 }
 .hero-heading {
@@ -526,10 +526,11 @@ export default {
     color: #9ea59b;
     font-size: 12px;
     text-transform: uppercase;
+    margin-left: 25px;
     margin-bottom: 4px;
 }
 .panel-title {
-    font-size: 20px;
+    font-size: 12px;
     font-weight: 700;
     color: #fff;
 }
