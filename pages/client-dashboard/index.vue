@@ -35,6 +35,15 @@
                 <v-icon>mdi-bell-outline</v-icon>
                 
                 {{ unreadCount > 0 ? unreadCount : '' }}
+                <!-- From Uiverse.io by risabbir --> 
+<div class="warp-loader" v-if="unreadCount > 0">
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="ring"></div>
+  <div class="core-glow"></div>
+</div>
+
             </v-btn>
             
             </div>
@@ -264,7 +273,7 @@
                     <!-- Card view -->
                     <div class="campaign-grid" v-show="!grid">
                         <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
-                            <div v-if="campaign.image_url" class="campaign-image-wrap">
+                            <div v-if="campaign.image_url" class="campaign-image-wrap" v-show="false">
                                 <v-img :src="campaign.image_url" height="170" cover class="campaign-image" />
                             </div>
 
@@ -275,7 +284,7 @@
                                         :color="campaign.image_url ? 'transparent' : '#C6FF00'"
                                         class="campaign-image-avatar"
                                     >
-                                        <template v-if="campaign.image_url">
+                                        <template v-if="campaign.image_url" >
                                             <v-img :src="campaign.image_url" cover />
                                         </template>
                                         <template v-else>
@@ -787,6 +796,90 @@ export default {
 </script>
 
 <style scoped>
+/* From Uiverse.io by risabbir */ 
+.warp-loader {
+    border-radius: 70px;
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.15) 30%,
+    transparent 70%
+  );
+  animation: pulse 2.2s ease-out infinite;
+  opacity: 0;
+  box-shadow:
+    0 0 12px #00d1ff66,
+    0 0 24px #00d1ff33;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+}
+
+.ring:nth-child(1) {
+  animation-delay: 0s;
+}
+.ring:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.ring:nth-child(3) {
+  animation-delay: 0.8s;
+}
+.ring:nth-child(4) {
+  animation-delay: 1.2s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0;
+  }
+}
+
+.core-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px; /* Reduced size for the core glow */
+  height: 4px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #00e5ff, #0099cc);
+  box-shadow:
+    0 0 25px #00e5ff,
+    0 0 60px #00e5ff88,
+    0 0 100px #00e5ff33;
+  animation: corePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+
 .client-page {
     min-height: 100vh;
     background:

@@ -78,7 +78,7 @@
             <v-card class="hero-panel pa-6 mb-5" outlined>
                 <div class="d-flex flex-wrap align-center">
                     <div class="hero-copy" style="margin-left: 10px;">
-                        <div class="hero-kicker">Notifications Center</div>
+                        <div class="hero-kicker">Notifications</div>
                         <div class="hero-heading">
                             Track important admin alerts and updates
                         </div>

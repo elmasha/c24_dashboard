@@ -68,11 +68,13 @@
                 <!-- Card view -->
                 <div class="campaign-grid" v-show="!grid">
                     <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
-                        <div v-if="campaign.image_url" class="campaign-cover-wrap">
+                        <div v-if="campaign.image_url" class="campaign-cover-wrap" v-show="false">
                             <v-img
+
                                 :src="campaign.image_url"
-                                height="180"
-                                cover
+                                height="100"
+                                width="100%"
+                                contain
                                 class="campaign-cover"
                             />
                         </div>
