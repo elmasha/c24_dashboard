@@ -52,7 +52,7 @@
             <v-btn icon dark class="topbar-icon" @click="loadDashboard" :loading="loading">
                 <v-icon>mdi-refresh</v-icon>
             </v-btn>
-            <v-btn  v-show="showBurger" icon dark class="topbar-icon ml-2" @click="logout" >
+            <v-btn  v-show="showBurger" icon dark class="topbar-icon ml-1" @click="logout" >
                 <v-icon>mdi-logout</v-icon>
             </v-btn>
         </div>
