@@ -2,7 +2,7 @@
   <v-container fluid class="machines-page pa-0">
     <div class="machines-shell">
       <!-- Top -->
-      <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px;">
+      <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px">
         <nuxt-link class="back-link" to="/client-dashboard">
           <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
           Back to dashboard
@@ -11,7 +11,7 @@
 
       <div class="machines-content">
         <div v-if="loading" class="loading-state">
-          Loading machine performance...
+          Loading locations and performance...
         </div>
 
         <div v-else>
@@ -19,17 +19,20 @@
           <v-card class="hero-panel pa-6 mb-5" outlined>
             <div class="d-flex flex-wrap align-center">
               <div class="hero-copy">
-                <div class="hero-kicker" style="margin-left: 19px;">Machine Performance</div>
-                <div class="hero-title">Assigned & Top Performing Machines</div>
+                <div class="hero-kicker" style="margin-left: 19px">
+                  Location Performance
+                </div>
+                <div class="hero-title">Assigned & Top Performing Locations</div>
                 <div class="hero-subtitle">
-                  View the machines delivering your campaigns, their locations,
-                  performance levels, and which placements are generating the strongest results.
+                  View the locations delivering your campaigns, their performance,
+                  levels, and which placements are generating the
+                  strongest results.
                 </div>
               </div>
 
               <v-spacer />
 
-              <div class="hero-actions mt-4 mt-md-0" style="margin-right: 18px;">
+              <div class="hero-actions mt-4 mt-md-0" style="margin-right: 18px">
                 <v-btn
                   color="#C6FF00"
                   class="black--text font-weight-bold"
@@ -56,7 +59,9 @@
           <div class="summary-strip mb-5">
             <div class="summary-card">
               <div class="summary-label">Locations</div>
-              <div class="summary-value">{{ formatNumber(machinePerformance.length) }}</div>
+              <div class="summary-value">
+                {{ formatNumber(machinePerformance.length) }}
+              </div>
             </div>
 
             <div class="summary-card" v-if="machinePerformance.length">
@@ -99,7 +104,7 @@ import MachinePerfomance from "../../components/machinePerfomance.vue";
 
 export default {
   components: {
-    MachinePerfomance
+    MachinePerfomance,
   },
 
   data() {
@@ -112,19 +117,19 @@ export default {
       errorMessage: "",
       overview: {
         client: null,
-        campaigns: []
+        campaigns: [],
       },
       deviceBreakdown: [],
       dailyGraph: {
         impressions: [],
-        scans: []
+        scans: [],
       },
       socketRefreshTimer: null,
       machinePerformance: [],
       windowSize: {
         x: window.innerWidth,
-        y: window.innerHeight
-      }
+        y: window.innerHeight,
+      },
     };
   },
 
@@ -137,7 +142,7 @@ export default {
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       };
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
@@ -152,7 +157,7 @@ export default {
 
         if (!currentUser) {
           this.errorMessage = "User not logged in";
-           this.$router.push("/auth/client.login");
+          this.$router.push("/auth/client.login");
           this.loading = false;
           return;
         }
@@ -161,8 +166,8 @@ export default {
 
         const [machinePerfRes] = await Promise.all([
           api.post("/api/analytics/machine-performance", {
-            uid
-          })
+            uid,
+          }),
         ]);
 
         this.machinePerformance = machinePerfRes.data || [];
@@ -177,16 +182,19 @@ export default {
 
     formatNumber(value) {
       return Number(value || 0).toLocaleString();
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .machines-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(198, 255, 0, 0.06), transparent 22%),
+  background: radial-gradient(
+      circle at top left,
+      rgba(198, 255, 0, 0.06),
+      transparent 22%
+    ),
     linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
   color: #fff;
 }
@@ -222,8 +230,11 @@ export default {
 
 .hero-panel {
   border-radius: 26px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }

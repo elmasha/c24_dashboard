@@ -453,7 +453,7 @@ export default {
                     to: "clients/campaign"
                 },
                 {
-                    title: "Machines",
+                    title: "Locations",
                     icon: "mdi-cellphone-sound",
                     to: "clients/assigned-machine"
                 },
