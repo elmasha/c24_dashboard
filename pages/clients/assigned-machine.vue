@@ -83,8 +83,8 @@
           <v-card class="table-card pa-4" outlined>
             <div class="panel-head mb-3">
               <div>
-                <div class="panel-kicker">Performance Table</div>
-                <div class="panel-title">Machine Breakdown</div>
+                <div class="panel-kicker"></div>
+                <div class="panel-title">Location Breakdown</div>
               </div>
             </div>
 
@@ -127,8 +127,8 @@ export default {
       socketRefreshTimer: null,
       machinePerformance: [],
       windowSize: {
-        x: window.innerWidth,
-        y: window.innerHeight,
+        x: null,
+        y: null,
       },
     };
   },
