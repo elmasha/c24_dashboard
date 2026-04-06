@@ -127,7 +127,7 @@
                                 See how your campaigns are performing across impressions, scans, and conversions
                             </div> -->
                             <div class="welcome-subtitle">
-                                Track delivery trends, audience device breakdown, and campaign results in one place.
+                                See how your campaigns are performing across impressions, scans, and conversions
                             </div>
                         </div>
 
