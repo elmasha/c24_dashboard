@@ -30,12 +30,21 @@
         <v-spacer />
 
         <div class="d-flex align-center">
-            <v-btn icon dark class="topbar-icon mr-2">
+            <div class="d-flex">
+                    <v-btn icon dark class="topbar-icon mr-2">
                 <v-icon>mdi-bell-outline</v-icon>
+                
+                {{ unreadCount > 0 ? unreadCount : '' }}
             </v-btn>
+            
+            </div>
+            
 
             <v-btn icon dark class="topbar-icon" @click="loadDashboard" :loading="loading">
                 <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+            <v-btn  v-show="showBurger" icon dark class="topbar-icon ml-2" @click="logout" >
+                <v-icon>mdi-logout</v-icon>
             </v-btn>
         </div>
     </v-app-bar>
@@ -467,11 +476,15 @@ export default {
             windowSize: {
                 x: null,
                 y: null
-            }
+            },
+            notifications: [],
         };
     },
 
     computed: {
+        unreadCount() {
+            return (this.notifications || []).filter(n => Number(n.is_read) === 0).length;
+        },
         showQrEnabled() {
             if (!this.overview.client) return false;
             return String(this.overview.client.qr) === "true" ||
@@ -590,9 +603,65 @@ export default {
     async mounted() {
         this.onResize();
         await this.loadDashboard();
+        await this.resolveClient();
+
+    if (this.clientId) {
+        await this.fetchNotifications();
+    }
     },
 
     methods: {
+        async resolveClient() {
+            try {
+                const currentUser = this.$fire.auth.currentUser;
+
+                if (!currentUser) {
+                    this.$router.push("/auth/client.login");
+                    return;
+                }
+
+                const { data } = await api.post("/api/client-dashboard/overview", {
+                    uid: currentUser.uid
+                });
+
+                if (data && data.client) {
+                    this.clientId = data.client.id;
+                    this.clientName = data.client.client_name || "Client";
+                }
+
+                console.log("Resolved client:", this.clientId, this.clientName);
+
+            } catch (error) {
+                console.error("resolveClient error:", error);
+            }
+        },
+
+        async fetchNotifications() {
+            try {
+                if (!this.clientId) {
+                    this.errorMessage = "Client not resolved";
+                    return;
+                }
+
+                this.loading = true;
+                this.errorMessage = "";
+
+                const { data } = await api.get("/api/notifications/get", {
+                    params: {
+                        user_type: "client",
+                        user_id: this.clientId
+                    }
+                });
+
+                this.notifications = data || [];
+            } catch (error) {
+                console.error("fetchNotifications error:", error);
+                this.errorMessage =
+                    error.response?.data?.message || "Failed to load notifications";
+            } finally {
+                this.loading = false;
+            }
+        },
         exportToCSV() {
             const rows = this.overview.campaigns || [];
 
