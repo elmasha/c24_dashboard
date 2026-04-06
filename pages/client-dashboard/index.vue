@@ -131,7 +131,6 @@
                             </div>
                         </div>
 
-                        <v-spacer />
 
                         <div class="welcome-actions mt-4 mt-md-0" style="margin-right: 10px;">
                             <v-btn color="#C6FF00" class="black--text font-weight-bold mr-2" to="/clients/campaign">
