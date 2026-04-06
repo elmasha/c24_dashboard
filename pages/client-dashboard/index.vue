@@ -5,7 +5,7 @@
         <div class="d-flex align-center">
             <v-menu offset-y v-if="showBurger">
                 <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon dark class="mr-3 topbar-icon" v-bind="attrs" v-on="on">
+                    <v-btn icon dark class="mr-1 topbar-icon" v-bind="attrs" v-on="on">
                         <v-icon>mdi-menu</v-icon>
                     </v-btn>
                 </template>
