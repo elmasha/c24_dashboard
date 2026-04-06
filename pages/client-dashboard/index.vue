@@ -31,7 +31,7 @@
 
         <div class="d-flex align-center">
             <div class="d-flex">
-                    <v-btn icon dark class="topbar-icon mr-2">
+                    <v-btn icon dark class="topbar-icon mr-2" to="/client-dashboard/notification">
                 <v-icon>mdi-bell-outline</v-icon>
                 
                 {{ unreadCount > 0 ? unreadCount : '' }}
