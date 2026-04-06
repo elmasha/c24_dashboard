@@ -66,7 +66,7 @@
                 </v-alert>
 
                 <!-- Card view -->
-                <div class="campaign-grid" v-show="!grid">
+                <div class="campaign-grid" v-show="!grid"  style="max-height: 900px; overflow-y: auto">
                     <v-card v-for="campaign in overview.campaigns" :key="campaign.id" class="campaign-card" outlined>
                         <div v-if="campaign.image_url" class="campaign-cover-wrap" v-show="false">
                             <v-img
