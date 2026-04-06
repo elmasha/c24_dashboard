@@ -123,9 +123,9 @@
                     <div class="d-flex flex-wrap align-center">
                         <div class="welcome-copy">
                             <div class="welcome-kicker" style="margin-left: 12px;">Campaign Reporting</div>
-                            <div class="welcome-title">
+                            <!-- <div class="welcome-title">
                                 See how your campaigns are performing across impressions, scans, and conversions
-                            </div>
+                            </div> -->
                             <div class="welcome-subtitle">
                                 Track delivery trends, audience device breakdown, and campaign results in one place.
                             </div>
