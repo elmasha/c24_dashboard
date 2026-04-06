@@ -494,7 +494,7 @@
             <div
               class="campaign-grid"
               v-show="!grid"
-              style="max-height: 800px; overflow-y: auto"
+              style="max-height: 900px; overflow-y: auto"
             >
               <v-card
                 v-for="campaign in overview.campaigns"
