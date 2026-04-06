@@ -491,7 +491,11 @@
             </div>
 
             <!-- Card view -->
-            <div class="campaign-grid" v-show="!grid">
+            <div
+              class="campaign-grid"
+              v-show="!grid"
+              style="max-height: 800px; overflow-y: auto"
+            >
               <v-card
                 v-for="campaign in overview.campaigns"
                 :key="campaign.id"
