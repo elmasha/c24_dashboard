@@ -3,19 +3,19 @@
     <!-- Hero -->
     <section class="hero-section">
       <v-container>
-        <v-row align="center">
+        <v-row style="margin-top: 70px">
           <v-col cols="12" md="6">
             <div class="hero-content">
               <div class="d-flex">
-                <!-- <v-avatar size="58" class="m-3">
+                <v-avatar size="58" class="m-3">
                   <v-img :src="logo" contain />
-                </v-avatar> -->
+                </v-avatar>
               </div>
               <div class="hero-badge">
                 <div class="flex">
-                  <v-avatar size="58" class="m-3">
+                  <!-- <v-avatar size="58" class="m-3">
                     <v-img :src="logo" contain />
-                  </v-avatar>
+                  </v-avatar> -->
                 </div>
               </div>
               <br />
