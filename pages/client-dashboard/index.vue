@@ -539,7 +539,7 @@
 
                   <v-spacer />
 
-                  <div class="campaign-progress-wrap">
+                  <div class="campaign-progress-wrap" v-show="showQrEnabled">
                     <v-progress-circular
                       max="100"
                       width="5"

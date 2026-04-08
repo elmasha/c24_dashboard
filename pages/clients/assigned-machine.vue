@@ -22,10 +22,12 @@
                 <div class="hero-kicker" style="margin-left: 19px">
                   Location Performance
                 </div>
-                <div class="hero-title">Assigned & Top Performing Locations</div>
+                <div class="hero-title">
+                  Assigned & Top Performing Locations
+                </div>
                 <div class="hero-subtitle">
-                  View the locations delivering your campaigns, their performance,
-                  levels, and which placements are generating the
+                  View the locations delivering your campaigns, their
+                  performance, levels, and which placements are generating the
                   strongest results.
                 </div>
               </div>
