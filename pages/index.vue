@@ -6,9 +6,15 @@
         <v-row align="center">
           <v-col cols="12" md="6">
             <div class="hero-content">
-              <div class="hero-badge">
-                Charge24 Digital Advertising Platform
+              <div class="d-flex">
+                <v-avatar size="58" class="mr-3">
+                  <v-img :src="logo" contain />
+                </v-avatar>
+                <div class="hero-badge">
+                  Charge24 Digital Advertising Platform
+                </div>
               </div>
+              <br />
 
               <h1 class="hero-title">
                 Deliver Measurable Reach, Better Visibility, and Smarter
@@ -202,8 +208,14 @@
 </template>
 
 <script>
+import logo from "~/assets/logo.png";
 export default {
   name: "HomePage",
+  data() {
+    return {
+      logo,
+    };
+  },
 };
 </script>
 
