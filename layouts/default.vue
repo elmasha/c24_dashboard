@@ -56,7 +56,7 @@
           </div>
           <div class="footer-brand-text">
             <h5 class="footer-title">Charge24</h5>
-            <p class="footer-subtitle">•Recharge your brand•</p>
+            <p class="footer-subtitle">Recharge your brand</p>
           </div>
         </div>
 
