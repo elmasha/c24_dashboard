@@ -80,6 +80,18 @@
             </v-alert>
 
             <v-card class="panel-card pa-4" outlined>
+              <v-card-actions>
+                <v-btn
+                  small
+                  style="color: black"
+                  color="#73D843"
+                  :loading="markingAll"
+                  @click="markAllRead()"
+                >
+                  <v-icon>mdi-check-all</v-icon>
+                  Mark all as read
+                </v-btn>
+              </v-card-actions>
               <div class="panel-head mb-3">
                 <div>
                   <div class="panel-kicker"></div>
@@ -829,9 +841,8 @@ export default {
     await this.loadDashboard();
     await this.resolveClient();
 
-    if (this.clientId) {
-      await this.fetchNotifications();
-    }
+    await this.fetchNotifications();
+    console.log("config", this.$config.UUID);
   },
 
   beforeDestroy() {
@@ -933,18 +944,12 @@ export default {
 
     async fetchNotifications() {
       try {
-        if (!this.clientId) {
-          this.errorMessage = "Client not resolved";
-          return;
-        }
-
         this.loading = true;
         this.errorMessage = "";
 
         const { data } = await api.get("/api/notifications/get", {
           params: {
-            user_type: "Admin",
-            user_id: this.clientId,
+            user_type: "admin",
           },
         });
 
