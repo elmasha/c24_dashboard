@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -44,7 +44,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -63,7 +63,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -73,7 +73,7 @@
           </v-list>
 
           <div class="sidebar-footer">
-            <v-btn block outlined color="#C6FF00" class="logout-btn">
+            <v-btn block outlined color="#73D843" class="logout-btn">
               Logout
             </v-btn>
           </div>
@@ -84,7 +84,7 @@
       <main class="admin-main">
         <div class="page-topbar">
           <nuxt-link class="back-link" to="/machines">
-            <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+            <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
             Back to machines
           </nuxt-link>
         </div>
@@ -93,20 +93,31 @@
         <v-card class="hero-panel pa-6 mb-5" outlined>
           <div class="hero-copy">
             <div class="hero-kicker">Machine Setup</div>
-            <div class="hero-heading">
-              Add a new machine to the network
-            </div>
+            <div class="hero-heading">Add a new machine to the network</div>
             <div class="hero-subtext">
-              Create a machine profile with location details, playback settings, and current operational status.
+              Create a machine profile with location details, playback settings,
+              and current operational status.
             </div>
           </div>
         </v-card>
 
-        <v-alert v-if="successMessage" type="success" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="successMessage"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ successMessage }}
         </v-alert>
 
-        <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ errorMessage }}
         </v-alert>
 
@@ -228,7 +239,7 @@
 
             <div class="form-actions">
               <v-btn
-                color="#C6FF00"
+                color="#73D843"
                 class="black--text font-weight-bold mr-2"
                 type="submit"
                 :loading="loading"
@@ -236,9 +247,7 @@
                 {{ loading ? "Saving..." : "Add Machine" }}
               </v-btn>
 
-              <v-btn text @click="resetForm">
-                Clear
-              </v-btn>
+              <v-btn text @click="resetForm"> Clear </v-btn>
             </div>
           </v-form>
         </v-card>
@@ -259,28 +268,28 @@ export default {
       showBurger: false,
       windowSize: {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       },
       items_nav: [
         {
           title: "Dashboard",
           icon: "mdi-view-dashboard",
-          to: "admin/dashboard"
+          to: "admin/dashboard",
         },
         {
           title: "Campaign",
           icon: "mdi-bullhorn-outline",
-          to: "campaigns/all"
+          to: "campaigns/all",
         },
         {
           title: "Machines",
           icon: "mdi-cellphone-sound",
-          to: "machines"
+          to: "machines",
         },
         {
           title: "Clients",
           icon: "mdi-account-group-outline",
-          to: "clients"
+          to: "clients",
         },
         // {
         //   title: "Traffic Config",
@@ -297,8 +306,8 @@ export default {
         slot_duration: 10,
         slots_per_loop: 6,
         status: "offline",
-        status_mode: "auto"
-      }
+        status_mode: "auto",
+      },
     };
   },
 
@@ -314,7 +323,7 @@ export default {
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       };
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
@@ -350,18 +359,21 @@ export default {
         slot_duration: 10,
         slots_per_loop: 6,
         status: "offline",
-        status_mode: "auto"
+        status_mode: "auto",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .admin-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 22%
+    ),
     linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
   color: #fff;
 }
@@ -411,7 +423,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -470,7 +482,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -484,7 +496,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -509,13 +521,16 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .hero-panel {
   border-radius: 24px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.14) !important;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
@@ -526,7 +541,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;

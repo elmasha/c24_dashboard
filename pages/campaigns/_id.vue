@@ -3,31 +3,32 @@
     <!-- Top header -->
     <div class="detail-topbar">
       <nuxt-link class="back-link" to="/clients/campaign">
-        <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+        <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
         Back to campaigns
       </nuxt-link>
     </div>
 
-    <div v-if="loading" class="loading-state">
-      Loading campaign...
-    </div>
+    <div v-if="loading" class="loading-state">Loading campaign...</div>
 
     <div v-else-if="campaign">
       <!-- Hero -->
       <v-card class="hero-panel pa-6 mb-5" outlined>
         <div class="d-flex flex-wrap align-center">
           <div class="hero-copy">
-            <div class="hero-kicker" style="margin-left: 10px;">Campaign Report</div>
+            <div class="hero-kicker" style="margin-left: 10px">
+              Campaign Report
+            </div>
             <div class="hero-title">{{ campaign.campaign_name }}</div>
             <div class="hero-subtitle">
-              View campaign delivery, scans, device engagement, media preview, and assigned machine QR access points.
+              View campaign delivery, scans, device engagement, media preview,
+              and assigned machine QR access points.
             </div>
           </div>
 
           <v-spacer />
 
           <div class="hero-status-wrap mt-4 mt-md-0">
-            <v-chip outlined color="#C6FF00" class="status-chip">
+            <v-chip outlined color="#73D843" class="status-chip">
               {{ campaign.status }}
             </v-chip>
           </div>
@@ -48,7 +49,9 @@
 
         <div class="summary-card">
           <div class="summary-label">Total Impressions</div>
-          <div class="summary-value">{{ numeral(campaign.total_impressions).format("0,0") }}</div>
+          <div class="summary-value">
+            {{ numeral(campaign.total_impressions).format("0,0") }}
+          </div>
         </div>
 
         <div class="summary-card">
@@ -72,9 +75,14 @@
               icon
               small
               class="qr-download-btn"
-              @click="downloadQr(`campaign-qr-${campaign.id}`, `${campaign.campaign_name}-qr`)"
+              @click="
+                downloadQr(
+                  `campaign-qr-${campaign.id}`,
+                  `${campaign.campaign_name}-qr`
+                )
+              "
             >
-              <v-icon color="#C6FF00">mdi-download</v-icon>
+              <v-icon color="#73D843">mdi-download</v-icon>
             </v-btn>
           </div>
         </div>
@@ -91,11 +99,15 @@
               <div class="info-row">
                 <div class="info-box">
                   <span>Start Date</span>
-                  <strong>{{ moment(campaign.start_date).format("MMM Do YY") }}</strong>
+                  <strong>{{
+                    moment(campaign.start_date).format("MMM Do YY")
+                  }}</strong>
                 </div>
                 <div class="info-box">
                   <span>End Date</span>
-                  <strong>{{ moment(campaign.end_date).format("MMM Do YY") }}</strong>
+                  <strong>{{
+                    moment(campaign.end_date).format("MMM Do YY")
+                  }}</strong>
                 </div>
               </div>
 
@@ -224,7 +236,10 @@
                 <td>{{ machine.location_category }}</td>
                 <td>
                   <div class="machine-qr-box">
-                    <div :id="`machine-qr-${machine.machine_uid}`" class="qr-download-box">
+                    <div
+                      :id="`machine-qr-${machine.machine_uid}`"
+                      class="qr-download-box"
+                    >
                       <qr-code
                         :text="getUrl2(campaign.qr_token, machine.machine_uid)"
                         size="80"
@@ -236,16 +251,21 @@
                         icon
                         small
                         class="qr-download-btn"
-                        @click="downloadQr(`machine-qr-${machine.machine_uid}`, `${campaign.campaign_name}-${machine.machine_uid}-qr`)"
+                        @click="
+                          downloadQr(
+                            `machine-qr-${machine.machine_uid}`,
+                            `${campaign.campaign_name}-${machine.machine_uid}-qr`
+                          )
+                        "
                       >
-                        <v-icon color="#C6FF00">mdi-download</v-icon>
+                        <v-icon color="#73D843">mdi-download</v-icon>
                       </v-btn>
 
                       <a
                         :href="getUrl2(campaign.qr_token, machine.machine_uid)"
                         target="_blank"
                       >
-                        <v-icon color="#C6FF00">mdi-link-variant</v-icon>
+                        <v-icon color="#73D843">mdi-link-variant</v-icon>
                       </a>
                     </div>
                   </div>
@@ -274,7 +294,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="row in dailyMetrics.impressions" :key="'imp-' + row.date">
+                <tr
+                  v-for="row in dailyMetrics.impressions"
+                  :key="'imp-' + row.date"
+                >
                   <td>{{ moment(row.date).format("yyyy MMM DD") }}</td>
                   <td>{{ row.impressions }}</td>
                 </tr>
@@ -339,12 +362,12 @@ export default {
       deviceBreakdown: [],
       dailyMetrics: {
         impressions: [],
-        scans: []
+        scans: [],
       },
       dailyGraph: {
         impressions: [],
-        scans: []
-      }
+        scans: [],
+      },
     };
   },
 
@@ -354,11 +377,20 @@ export default {
 
   methods: {
     getUrl2(val, val2) {
-      return "https://adengine-production-f766.up.railway.app/scan/" + val + "?m=" + val2;
+      return (
+        "https://adengine-production-f766.up.railway.app/scan/" +
+        val +
+        "?m=" +
+        val2
+      );
     },
 
     getUrl(val) {
-      return "https://adengine-production-f766.up.railway.app/scan/" + val + "?m=MACH_003";
+      return (
+        "https://adengine-production-f766.up.railway.app/scan/" +
+        val +
+        "?m=MACH_003"
+      );
     },
 
     playPreview(refName) {
@@ -383,7 +415,7 @@ export default {
 
         const canvas = await html2canvas(target, {
           backgroundColor: "#ffffff",
-          scale: 3
+          scale: 3,
         });
 
         const image = canvas.toDataURL("image/png");
@@ -403,22 +435,23 @@ export default {
       try {
         const campaignId = this.$route.params.id;
 
-        const [summaryRes, machinesRes, dailyRes, deviceRes] = await Promise.all([
-          api.get(`/api/analytics/campaign-summary/${campaignId}`),
-          api.get(`/api/campaign-machines/${campaignId}/machines`),
-          api.get(`/api/analytics/campaign/${campaignId}/daily-metrics`),
-          api.get(`/api/analytics/campaign-device-breakdown/${campaignId}`)
-        ]);
+        const [summaryRes, machinesRes, dailyRes, deviceRes] =
+          await Promise.all([
+            api.get(`/api/analytics/campaign-summary/${campaignId}`),
+            api.get(`/api/campaign-machines/${campaignId}/machines`),
+            api.get(`/api/analytics/campaign/${campaignId}/daily-metrics`),
+            api.get(`/api/analytics/campaign-device-breakdown/${campaignId}`),
+          ]);
 
         this.campaign = summaryRes.data;
         this.assignedMachines = machinesRes.data || [];
         this.dailyMetrics = dailyRes.data || {
           impressions: [],
-          scans: []
+          scans: [],
         };
         this.dailyGraph = dailyRes.data || {
           impressions: [],
-          scans: []
+          scans: [],
         };
         this.deviceBreakdown = deviceRes.data || [];
       } catch (error) {
@@ -428,7 +461,7 @@ export default {
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
 
   computed: {
@@ -436,10 +469,10 @@ export default {
       return [
         {
           name: "Impressions",
-          data: (this.dailyGraph.impressions || []).map(row =>
+          data: (this.dailyGraph.impressions || []).map((row) =>
             Number(row.impressions || 0)
-          )
-        }
+          ),
+        },
       ];
     },
 
@@ -447,62 +480,60 @@ export default {
       return [
         {
           name: "Scans",
-          data: (this.dailyGraph.scans || []).map(row =>
+          data: (this.dailyGraph.scans || []).map((row) =>
             Number(row.scans || 0)
-          )
-        }
+          ),
+        },
       ];
     },
 
     devicePieSeries() {
-      return (this.deviceBreakdown || []).map(row =>
-        Number(row.scans || 0)
-      );
+      return (this.deviceBreakdown || []).map((row) => Number(row.scans || 0));
     },
 
     impressionsChartOptions() {
       return {
         chart: {
           toolbar: {
-            show: false
+            show: false,
           },
-          foreColor: "#c8c8c8"
+          foreColor: "#c8c8c8",
         },
         theme: {
-          mode: "dark"
+          mode: "dark",
         },
         stroke: {
           curve: "smooth",
-          width: 3
+          width: 3,
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         xaxis: {
-          categories: (this.dailyGraph.impressions || []).map(row =>
+          categories: (this.dailyGraph.impressions || []).map((row) =>
             this.moment(row.date).format("MMM Do YY")
           ),
           title: {
-            text: "Date"
-          }
+            text: "Date",
+          },
         },
         yaxis: {
           title: {
-            text: "Impressions"
+            text: "Impressions",
           },
           labels: {
-            formatter: value => Number(value || 0).toLocaleString()
-          }
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
         },
         tooltip: {
           theme: "dark",
           y: {
-            formatter: value => Number(value || 0).toLocaleString()
-          }
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
         },
         noData: {
-          text: "No impression data"
-        }
+          text: "No impression data",
+        },
       };
     },
 
@@ -510,72 +541,72 @@ export default {
       return {
         chart: {
           toolbar: {
-            show: false
+            show: false,
           },
-          foreColor: "#c8c8c8"
+          foreColor: "#c8c8c8",
         },
         theme: {
-          mode: "dark"
+          mode: "dark",
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         xaxis: {
-          categories: (this.dailyGraph.scans || []).map(row =>
+          categories: (this.dailyGraph.scans || []).map((row) =>
             this.moment(row.date).format("MMM Do YY")
           ),
           title: {
-            text: "Date"
-          }
+            text: "Date",
+          },
         },
         yaxis: {
           title: {
-            text: "Scans"
+            text: "Scans",
           },
           labels: {
-            formatter: value => Number(value || 0).toLocaleString()
-          }
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
         },
         tooltip: {
           theme: "dark",
           y: {
-            formatter: value => Number(value || 0).toLocaleString()
-          }
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
         },
         noData: {
-          text: "No scan data"
-        }
+          text: "No scan data",
+        },
       };
     },
 
     devicePieOptions() {
       return {
-        labels: (this.deviceBreakdown || []).map(row => row.device_name),
+        labels: (this.deviceBreakdown || []).map((row) => row.device_name),
         legend: {
           position: "bottom",
           labels: {
-            colors: "#d0d0d0"
-          }
+            colors: "#d0d0d0",
+          },
         },
         theme: {
-          mode: "dark"
+          mode: "dark",
         },
         dataLabels: {
           enabled: true,
-          formatter: val => `${val.toFixed(1)}%`
+          formatter: (val) => `${val.toFixed(1)}%`,
         },
         tooltip: {
           theme: "dark",
           y: {
-            formatter: value => Number(value || 0).toLocaleString()
-          }
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
         },
         noData: {
-          text: "No device data"
-        }
+          text: "No device data",
+        },
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -583,8 +614,11 @@ export default {
 .campaign-detail-page {
   min-height: 100vh;
   padding: 24px;
-  background:
-    radial-gradient(circle at top left, rgba(198, 255, 0, 0.06), transparent 22%),
+  background: radial-gradient(
+      circle at top left,
+      rgba(198, 255, 0, 0.06),
+      transparent 22%
+    ),
     linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
   color: #fff;
 }
@@ -602,7 +636,7 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .loading-state {
@@ -612,14 +646,17 @@ export default {
 
 .hero-panel {
   border-radius: 26px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
@@ -659,7 +696,12 @@ export default {
 }
 
 .summary-highlight {
-  background: linear-gradient(135deg, rgba(198, 255, 0, 0.13), #0d0d0d 55%, #090909);
+  background: linear-gradient(
+    135deg,
+    rgba(198, 255, 0, 0.13),
+    #0d0d0d 55%,
+    #090909
+  );
   border: 1px solid rgba(198, 255, 0, 0.12);
 }
 
@@ -762,7 +804,7 @@ export default {
 }
 
 .info-link-box a {
-  color: #c6ff00;
+  color: #73d843;
   text-decoration: none;
   word-break: break-all;
 }
@@ -825,7 +867,7 @@ export default {
 }
 
 .client-table ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;

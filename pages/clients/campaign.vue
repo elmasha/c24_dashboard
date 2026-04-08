@@ -4,7 +4,7 @@
       <!-- Top -->
       <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px">
         <nuxt-link class="back-link" to="/client-dashboard">
-          <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+          <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
           Back to dashboard
         </nuxt-link>
       </div>
@@ -20,7 +20,7 @@
                 <v-avatar
                   v-if="overview.client"
                   size="58"
-                  :color="overview.client.image_url ? 'transparent' : '#C6FF00'"
+                  :color="overview.client.image_url ? 'transparent' : '#73D843'"
                   class="hero-client-avatar mr-4"
                 >
                   <template v-if="overview.client.image_url">
@@ -56,15 +56,15 @@
               <div class="hero-actions mt-4 mt-md-0">
                 <v-chip
                   outlined
-                  color="#C6FF00"
+                  color="#73D843"
                   class="toggle-chip"
                   style="margin-right: 10px"
                 >
                   <v-btn icon small @click="grid = false">
-                    <v-icon color="#C6FF00">mdi-view-grid</v-icon>
+                    <v-icon color="#73D843">mdi-view-grid</v-icon>
                   </v-btn>
                   <v-btn icon small @click="grid = true">
-                    <v-icon color="#C6FF00"
+                    <v-icon color="#73D843"
                       >mdi-format-list-bulleted-square</v-icon
                     >
                   </v-btn>
@@ -114,7 +114,7 @@
                   <v-chip
                     outlined
                     small
-                    color="#C6FF00"
+                    color="#73D843"
                     class="status-chip"
                     style="margin-left: 6px"
                   >
@@ -123,7 +123,7 @@
 
                   <v-avatar
                     size="46"
-                    :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                    :color="campaign.image_url ? 'transparent' : '#73D843'"
                     class="campaign-avatar"
                   >
                     <template v-if="campaign.image_url">
@@ -151,7 +151,7 @@
                     max="100"
                     width="5"
                     size="78"
-                    color="#C6FF00"
+                    color="#73D843"
                     :value="campaign.conversion_rate"
                   >
                     <div class="progress-label">
@@ -211,7 +211,7 @@
                   :to="`/view/${campaign.id}`"
                   rounded
                   small
-                  color="#C6FF00"
+                  color="#73D843"
                   class="black--text font-weight-bold"
                 >
                   View campaign
@@ -252,7 +252,7 @@
                     <td>
                       <v-avatar
                         size="36"
-                        :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                        :color="campaign.image_url ? 'transparent' : '#73D843'"
                       >
                         <template v-if="campaign.image_url">
                           <v-img :src="campaign.image_url" cover />
@@ -303,7 +303,7 @@
                           {{ campaign.campaign_name.substring(0, 10) + "..." }}
                         </nuxt-link>
                         <v-btn icon :to="`/view/${campaign.id}`">
-                          <v-icon small color="#C6FF00">mdi-arrow-right</v-icon>
+                          <v-icon small color="#73D843">mdi-arrow-right</v-icon>
                         </v-btn>
                       </div>
                     </td>
@@ -459,7 +459,7 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .campaigns-content {
@@ -503,7 +503,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
@@ -673,7 +673,7 @@ export default {
 }
 
 .client-table ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -698,7 +698,7 @@ export default {
 
 .status-active {
   background: rgba(198, 255, 0, 0.12);
-  color: #c6ff00;
+  color: #73d843;
   border: 1px solid rgba(198, 255, 0, 0.18);
 }
 
@@ -710,7 +710,7 @@ export default {
 
 .campaign-link {
   text-decoration: none;
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .empty-state {

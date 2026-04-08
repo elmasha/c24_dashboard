@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -107,7 +107,7 @@
                 >
                   <div class="notification-row">
                     <div class="notification-icon-wrap">
-                      <v-avatar size="42" color="#C6FF00">
+                      <v-avatar size="42" color="#73D843">
                         <v-icon color="black">{{
                           getNotificationIcon(notification.type)
                         }}</v-icon>
@@ -125,7 +125,7 @@
                           outlined
                           :color="
                             Number(notification.is_read) === 0
-                              ? '#C6FF00'
+                              ? '#73D843'
                               : '#888888'
                           "
                         >
@@ -154,7 +154,7 @@
                         v-if="Number(notification.is_read) === 0"
                         x-small
                         text
-                        color="#C6FF00"
+                        color="#73D843"
                         :loading="readingId === notification.id"
                         @click="markRead(notification)"
                       >
@@ -213,7 +213,7 @@
           <div class="sidebar-profile" v-if="overview.client">
             <v-avatar
               size="52"
-              :color="overview.client.image_url ? 'transparent' : '#C6FF00'"
+              :color="overview.client.image_url ? 'transparent' : '#73D843'"
               class="sidebar-avatar client-logo-avatar"
             >
               <template v-if="overview.client.image_url">
@@ -247,7 +247,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -260,7 +260,7 @@
             <v-btn
               block
               outlined
-              color="#C6FF00"
+              color="#73D843"
               class="logout-btn"
               @click="logout"
             >
@@ -296,7 +296,7 @@
                 style="margin-right: 10px"
               >
                 <v-btn
-                  color="#C6FF00"
+                  color="#73D843"
                   class="black--text font-weight-bold mr-2"
                   to="/clients/campaign"
                 >
@@ -320,7 +320,7 @@
           <div class="metrics-grid text-center">
             <div class="metric-card metric-primary">
               <div class="metric-label">Impressions Today</div>
-              <div class="metric-value" style="color: #c6ff00">
+              <div class="metric-value" style="color: #73d843">
                 {{
                   formatNumber(
                     (overview.metrics && overview.metrics.impressions_today) ||
@@ -332,7 +332,7 @@
 
             <div class="metric-card metric-primary">
               <div class="metric-label">Interactions Today</div>
-              <div class="metric-value" style="color: #c6ff00">
+              <div class="metric-value" style="color: #73d843">
                 {{
                   numeral(
                     (overview.metrics &&
@@ -464,7 +464,7 @@
             </v-row>
           </div>
 
-          <v-btn color="#C6FF00" class="black--text" @click="exportToCSV">
+          <v-btn color="#73D843" class="black--text" @click="exportToCSV">
             Export CSV
           </v-btn>
 
@@ -477,12 +477,12 @@
               </div>
 
               <div class="view-toggle">
-                <v-chip outlined color="#C6FF00" class="toggle-chip">
+                <v-chip outlined color="#73D843" class="toggle-chip">
                   <v-btn icon small @click="grid = false">
-                    <v-icon color="#C6FF00">mdi-view-grid</v-icon>
+                    <v-icon color="#73D843">mdi-view-grid</v-icon>
                   </v-btn>
                   <v-btn icon small @click="grid = true">
-                    <v-icon color="#C6FF00"
+                    <v-icon color="#73D843"
                       >mdi-format-list-bulleted-square</v-icon
                     >
                   </v-btn>
@@ -519,7 +519,7 @@
                   <div class="campaign-avatar-wrap">
                     <v-avatar
                       size="48"
-                      :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+                      :color="campaign.image_url ? 'transparent' : '#73D843'"
                       class="campaign-image-avatar"
                     >
                       <template v-if="campaign.image_url">
@@ -544,7 +544,7 @@
                       max="100"
                       width="5"
                       size="78"
-                      color="#C6FF00"
+                      color="#73D843"
                       :value="campaign.conversion_rate"
                     >
                       <div class="progress-label">
@@ -602,7 +602,7 @@
                   <v-chip
                     outlined
                     small
-                    color="#C6FF00"
+                    color="#73D843"
                     style="margin-left: 10px"
                   >
                     {{ campaign.status }}
@@ -614,7 +614,7 @@
                     :to="`/campaign-view/${campaign.id}`"
                     rounded
                     small
-                    color="#C6FF00"
+                    color="#73D843"
                     class="black--text font-weight-bold"
                     style="margin-right: 10px"
                   >
@@ -655,7 +655,7 @@
                         <v-avatar
                           size="36"
                           :color="
-                            campaign.image_url ? 'transparent' : '#C6FF00'
+                            campaign.image_url ? 'transparent' : '#73D843'
                           "
                         >
                           <template v-if="campaign.image_url">
@@ -1295,7 +1295,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -1359,7 +1359,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .client-main {
@@ -1373,7 +1373,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -1406,7 +1406,7 @@ export default {
 }
 
 .welcome-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 25px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
@@ -1647,7 +1647,7 @@ export default {
 }
 
 .client-table ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -1664,7 +1664,7 @@ export default {
 
 .campaign-link {
   text-decoration: none;
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .menu-list {
@@ -1744,7 +1744,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -1792,7 +1792,7 @@ export default {
 }
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 .client-main {
   flex: 1;
@@ -1804,7 +1804,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -1819,7 +1819,7 @@ export default {
   border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 22px;
   margin-bottom: 10px;
 }
@@ -1835,8 +1835,8 @@ export default {
   line-height: 1.7;
 }
 .hero-btn-outline {
-  border-color: #c6ff00 !important;
-  color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 .dashboard-alert {
   border-radius: 14px;
@@ -1864,7 +1864,7 @@ export default {
   color: #fff;
 }
 .notification-count {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
 }
 .loading-block,
@@ -1914,7 +1914,7 @@ export default {
   font-size: 12px;
 }
 .notification-type {
-  color: #c6ff00;
+  color: #73d843;
 }
 .menu-list {
   background: #111111 !important;

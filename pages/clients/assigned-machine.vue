@@ -3,7 +3,7 @@
     <div class="machines-shell">
       <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px">
         <nuxt-link class="back-link" to="/client-dashboard">
-          <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+          <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
           Back to dashboard
         </nuxt-link>
       </div>
@@ -34,7 +34,7 @@
 
               <div class="hero-actions mt-4 mt-md-0" style="margin-right: 18px">
                 <v-btn
-                  color="#C6FF00"
+                  color="#73D843"
                   class="black--text font-weight-bold"
                   @click="loadDashboard"
                   :loading="loading"
@@ -214,7 +214,7 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .machines-content {
@@ -242,7 +242,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;

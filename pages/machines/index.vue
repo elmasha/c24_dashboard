@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -49,7 +49,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -68,7 +68,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -81,7 +81,7 @@
             <v-btn
               block
               outlined
-              color="#C6FF00"
+              color="#73D843"
               class="logout-btn"
               @click="logout"
             >
@@ -112,7 +112,7 @@
 
             <div class="hero-actions mt-4 mt-md-0">
               <nuxt-link to="/machines/create" class="text-decoration-none">
-                <v-btn class="mr-2 hero-btn-primary" color="#C6FF00" large>
+                <v-btn class="mr-2 hero-btn-primary" color="#73D843" large>
                   <span class="black--text font-weight-bold">Add Machine</span>
                 </v-btn>
               </nuxt-link>
@@ -173,7 +173,7 @@
                 @click:clear="clearSearch"
               />
               <v-btn
-                color="#C6FF00"
+                color="#73D843"
                 class="black--text font-weight-bold ml-2"
                 @click="searchMachines"
               >
@@ -227,7 +227,7 @@
                       :to="`/machines/${machine.id}`"
                       class="text-decoration-none"
                     >
-                      <v-btn x-small text color="#C6FF00" class="mr-1 mb-1">
+                      <v-btn x-small text color="#73D843" class="mr-1 mb-1">
                         Edit
                       </v-btn>
                     </nuxt-link>
@@ -543,7 +543,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -602,7 +602,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -616,7 +616,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -638,7 +638,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -664,8 +664,8 @@ export default {
 }
 
 .hero-btn-outline {
-  border-color: #c6ff00 !important;
-  color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 
 .dashboard-alert {
@@ -717,7 +717,7 @@ export default {
 }
 
 .table-dark ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -761,7 +761,7 @@ export default {
 
 .mode-auto {
   background: rgba(198, 255, 0, 0.12);
-  color: #c6ff00;
+  color: #73d843;
   border: 1px solid rgba(198, 255, 0, 0.18);
 }
 

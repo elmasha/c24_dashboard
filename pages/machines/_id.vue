@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -26,7 +26,7 @@
         </v-menu>
 
         <div>
-          <div class="page-badge" style="margin-top: 18px;">Admin Portal</div>
+          <div class="page-badge" style="margin-top: 18px">Admin Portal</div>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -62,7 +62,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -72,7 +72,7 @@
           </v-list>
 
           <div class="sidebar-footer">
-            <v-btn block outlined color="#C6FF00" class="logout-btn">
+            <v-btn block outlined color="#73D843" class="logout-btn">
               Logout
             </v-btn>
           </div>
@@ -83,7 +83,7 @@
       <main class="admin-main">
         <div class="page-topbar">
           <nuxt-link class="back-link" to="/machines">
-            <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+            <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
             Back to machines
           </nuxt-link>
         </div>
@@ -96,7 +96,8 @@
               Update machine details, location data and operating mode
             </div>
             <div class="hero-subtext">
-              Edit playback settings, visibility rate, location category and status information for this machine.
+              Edit playback settings, visibility rate, location category and
+              status information for this machine.
             </div>
           </div>
         </v-card>
@@ -109,7 +110,11 @@
               <div class="mt-2">
                 <span
                   class="status-pill"
-                  :class="form.status === 'online' ? 'status-online' : 'status-offline'"
+                  :class="
+                    form.status === 'online'
+                      ? 'status-online'
+                      : 'status-offline'
+                  "
                 >
                   {{ form.status }}
                 </span>
@@ -123,7 +128,9 @@
               <div class="mt-2">
                 <span
                   class="mode-pill"
-                  :class="form.status_mode === 'manual' ? 'mode-manual' : 'mode-auto'"
+                  :class="
+                    form.status_mode === 'manual' ? 'mode-manual' : 'mode-auto'
+                  "
                 >
                   {{ form.status_mode }}
                 </span>
@@ -141,11 +148,23 @@
           </v-col>
         </v-row>
 
-        <v-alert v-if="successMessage" type="success" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="successMessage"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ successMessage }}
         </v-alert>
 
-        <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ errorMessage }}
         </v-alert>
 
@@ -157,9 +176,7 @@
             </div>
           </div>
 
-          <div v-if="loading" class="loading-state">
-            Loading machine...
-          </div>
+          <div v-if="loading" class="loading-state">Loading machine...</div>
 
           <v-form v-else @submit.prevent="updateMachine">
             <v-row>
@@ -271,7 +288,7 @@
 
             <div class="form-actions">
               <v-btn
-                color="#C6FF00"
+                color="#73D843"
                 class="black--text font-weight-bold mr-2"
                 type="submit"
                 :loading="saving"
@@ -280,9 +297,7 @@
               </v-btn>
 
               <nuxt-link to="/machines" class="text-decoration-none">
-                <v-btn text>
-                  Back
-                </v-btn>
+                <v-btn text> Back </v-btn>
               </nuxt-link>
             </div>
           </v-form>
@@ -305,28 +320,28 @@ export default {
       showBurger: false,
       windowSize: {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       },
       items_nav: [
         {
           title: "Dashboard",
           icon: "mdi-view-dashboard",
-          to: "admin/dashboard"
+          to: "admin/dashboard",
         },
         {
           title: "Campaign",
           icon: "mdi-bullhorn-outline",
-          to: "campaigns/all"
+          to: "campaigns/all",
         },
         {
           title: "Machines",
           icon: "mdi-cellphone-sound",
-          to: "machines"
+          to: "machines",
         },
         {
           title: "Clients",
           icon: "mdi-account-group-outline",
-          to: "clients"
+          to: "clients",
         },
         // {
         //   title: "Traffic Config",
@@ -343,8 +358,8 @@ export default {
         slot_duration: 10,
         slots_per_loop: 6,
         status: "offline",
-        status_mode: "auto"
-      }
+        status_mode: "auto",
+      },
     };
   },
 
@@ -361,7 +376,7 @@ export default {
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       };
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
@@ -369,7 +384,9 @@ export default {
 
     async fetchMachine() {
       try {
-        const { data } = await api.get(`/api/machines/${this.$route.params.id}`);
+        const { data } = await api.get(
+          `/api/machines/${this.$route.params.id}`
+        );
         this.form = {
           machine_uid: data.machine_uid || "",
           machine_name: data.machine_name || "",
@@ -379,7 +396,7 @@ export default {
           slot_duration: Number(data.slot_duration || 10),
           slots_per_loop: Number(data.slots_per_loop || 6),
           status: data.status || "offline",
-          status_mode: data.status_mode || "auto"
+          status_mode: data.status_mode || "auto",
         };
       } catch (error) {
         console.error("fetchMachine error:", error);
@@ -409,16 +426,19 @@ export default {
       } finally {
         this.saving = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .admin-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 22%
+    ),
     linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
   color: #fff;
 }
@@ -468,7 +488,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -527,7 +547,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -541,7 +561,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -566,13 +586,16 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .hero-panel {
   border-radius: 24px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.14) !important;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
@@ -583,7 +606,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -694,7 +717,7 @@ export default {
 
 .mode-auto {
   background: rgba(198, 255, 0, 0.12);
-  color: #c6ff00;
+  color: #73d843;
   border: 1px solid rgba(198, 255, 0, 0.18);
 }
 

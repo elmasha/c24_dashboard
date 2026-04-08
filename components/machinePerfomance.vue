@@ -118,7 +118,7 @@ export default {
 
 <style scoped>
 .machine-table ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -162,7 +162,7 @@ export default {
 }
 
 .landing-link {
-  color: #c6ff00;
+  color: #73d843;
   text-decoration: none;
   font-size: 13px;
 }

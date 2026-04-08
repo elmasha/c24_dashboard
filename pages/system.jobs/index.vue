@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -50,7 +50,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -69,7 +69,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -79,7 +79,7 @@
           </v-list>
 
           <div class="sidebar-footer">
-            <v-btn block outlined color="#C6FF00" class="logout-btn">
+            <v-btn block outlined color="#73D843" class="logout-btn">
               Logout
             </v-btn>
           </div>
@@ -90,7 +90,7 @@
       <main class="admin-main">
         <div class="page-topbar">
           <nuxt-link class="back-link" to="/admin/dashboard">
-            <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+            <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
             Back to dashboard
           </nuxt-link>
         </div>
@@ -100,19 +100,33 @@
           <div class="hero-copy">
             <div class="hero-kicker">Automation Control</div>
             <div class="hero-heading">
-              Start and stop system jobs that power background platform operations
+              Start and stop system jobs that power background platform
+              operations
             </div>
             <div class="hero-subtext">
-              Monitor scheduled processes and control which jobs are currently active across the platform.
+              Monitor scheduled processes and control which jobs are currently
+              active across the platform.
             </div>
           </div>
         </v-card>
 
-        <v-alert v-if="message" type="success" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="message"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ message }}
         </v-alert>
 
-        <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ errorMessage }}
         </v-alert>
 
@@ -140,7 +154,9 @@
                 <td>
                   <span
                     class="status-pill"
-                    :class="job.is_enabled ? 'status-running' : 'status-stopped'"
+                    :class="
+                      job.is_enabled ? 'status-running' : 'status-stopped'
+                    "
                   >
                     {{ job.is_enabled ? "Running" : "Stopped" }}
                   </span>
@@ -194,35 +210,35 @@ export default {
       showBurger: false,
       windowSize: {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       },
       items_nav: [
         {
           title: "Dashboard",
           icon: "mdi-view-dashboard",
-          to: "admin/dashboard"
+          to: "admin/dashboard",
         },
         {
           title: "Campaign",
           icon: "mdi-bullhorn-outline",
-          to: "campaigns/all"
+          to: "campaigns/all",
         },
         {
           title: "Machines",
           icon: "mdi-cellphone-sound",
-          to: "machines"
+          to: "machines",
         },
         {
           title: "Clients",
           icon: "mdi-account-group-outline",
-          to: "clients"
+          to: "clients",
         },
         {
           title: "System Jobs",
           icon: "mdi-cog-refresh-outline",
-          to: "system-jobs"
-        }
-      ]
+          to: "system-jobs",
+        },
+      ],
     };
   },
 
@@ -239,7 +255,7 @@ export default {
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       };
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
@@ -258,10 +274,12 @@ export default {
     async toggleJob(job, enabled) {
       try {
         const { data } = await api.put(`/api/system-jobs/${job.job_name}`, {
-          is_enabled: enabled
+          is_enabled: enabled,
         });
 
-        this.message = `${data.job_name} ${enabled ? "started" : "stopped"} successfully`;
+        this.message = `${data.job_name} ${
+          enabled ? "started" : "stopped"
+        } successfully`;
         this.errorMessage = "";
         await this.fetchJobs();
       } catch (error) {
@@ -269,16 +287,19 @@ export default {
         this.errorMessage =
           error.response?.data?.message || "Failed to update job";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .admin-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 22%
+    ),
     linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
   color: #fff;
 }
@@ -328,7 +349,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -387,7 +408,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -401,7 +422,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -426,13 +447,16 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .hero-panel {
   border-radius: 24px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.14) !important;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
@@ -443,7 +467,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -496,7 +520,7 @@ export default {
 }
 
 .table-dark ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;

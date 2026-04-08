@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -111,7 +111,7 @@
                 >
                   <div class="notification-row">
                     <div class="notification-icon-wrap">
-                      <v-avatar size="42" color="#C6FF00">
+                      <v-avatar size="42" color="#73D843">
                         <v-icon color="black">{{
                           getNotificationIcon(notification.type)
                         }}</v-icon>
@@ -129,7 +129,7 @@
                           outlined
                           :color="
                             Number(notification.is_read) === 0
-                              ? '#C6FF00'
+                              ? '#73D843'
                               : '#888888'
                           "
                         >
@@ -158,7 +158,7 @@
                         v-if="Number(notification.is_read) === 0"
                         x-small
                         text
-                        color="#C6FF00"
+                        color="#73D843"
                         :loading="readingId === notification.id"
                         @click="markRead(notification)"
                       >
@@ -210,7 +210,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -231,7 +231,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -244,7 +244,7 @@
             <v-btn
               block
               outlined
-              color="#C6FF00"
+              color="#73D843"
               class="logout-btn"
               @click="logout()"
             >
@@ -283,7 +283,7 @@
                   style="margin-right: 20px"
                 >
                   <nuxt-link to="/campaigns/all" class="text-decoration-none">
-                    <v-btn class="mr-2 hero-btn-primary" color="#C6FF00" large>
+                    <v-btn class="mr-2 hero-btn-primary" color="#73D843" large>
                       <span class="black--text font-weight-bold"
                         >Campaigns</span
                       >
@@ -503,7 +503,7 @@
                 </div>
 
                 <nuxt-link to="/clients" class="text-decoration-none">
-                  <v-btn text color="#C6FF00">View All</v-btn>
+                  <v-btn text color="#73D843">View All</v-btn>
                 </nuxt-link>
               </div>
 
@@ -1009,7 +1009,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -1068,7 +1068,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -1082,7 +1082,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -1111,7 +1111,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -1137,8 +1137,8 @@ export default {
 }
 
 .hero-btn-outline {
-  border-color: #c6ff00 !important;
-  color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 
 .dashboard-alert {
@@ -1213,7 +1213,7 @@ export default {
 }
 
 .table-dark ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -1238,7 +1238,7 @@ export default {
 
 .status-active {
   background: rgba(198, 255, 0, 0.12);
-  color: #c6ff00;
+  color: #73d843;
   border: 1px solid rgba(198, 255, 0, 0.18);
 }
 
@@ -1317,7 +1317,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -1365,7 +1365,7 @@ export default {
 }
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 .client-main {
   flex: 1;
@@ -1377,7 +1377,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -1392,7 +1392,7 @@ export default {
   border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 22px;
   margin-bottom: 10px;
 }
@@ -1408,8 +1408,8 @@ export default {
   line-height: 1.7;
 }
 .hero-btn-outline {
-  border-color: #c6ff00 !important;
-  color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 .dashboard-alert {
   border-radius: 14px;
@@ -1437,7 +1437,7 @@ export default {
   color: #fff;
 }
 .notification-count {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
 }
 .loading-block,
@@ -1487,7 +1487,7 @@ export default {
   font-size: 12px;
 }
 .notification-type {
-  color: #c6ff00;
+  color: #73d843;
 }
 .menu-list {
   background: #111111 !important;

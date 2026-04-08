@@ -1,199 +1,250 @@
 <template>
-<v-container fluid class="admin-page pa-0">
+  <v-container fluid class="admin-page pa-0">
     <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
-        <div class="d-flex align-center">
-            <v-menu offset-y v-if="showBurger">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon dark class="mr-3 topbar-icon" v-bind="attrs" v-on="on">
-                        <v-icon>mdi-menu</v-icon>
-                    </v-btn>
-                </template>
-
-                <v-list dark class="menu-list">
-                    <v-list-item v-for="(item, index) in items_nav" :key="index" link @click="move(item.to)">
-                        <v-list-item-icon>
-                            <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-
-            <div>
-                <div class="page-badge" style="margin-top: 18px;">Admin Portal</div>
-            </div>
-        </div>
-
-        <v-spacer />
-
-        <div class="d-flex align-center">
-            <v-btn icon dark class="topbar-icon mr-2" @click="fetchNotifications" :loading="loading">
-                <v-icon>mdi-refresh</v-icon>
+      <div class="d-flex align-center">
+        <v-menu offset-y v-if="showBurger">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon dark class="mr-3 topbar-icon" v-bind="attrs" v-on="on">
+              <v-icon>mdi-menu</v-icon>
             </v-btn>
+          </template>
+
+          <v-list dark class="menu-list">
+            <v-list-item
+              v-for="(item, index) in items_nav"
+              :key="index"
+              link
+              @click="move(item.to)"
+            >
+              <v-list-item-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <div>
+          <div class="page-badge" style="margin-top: 18px">Admin Portal</div>
         </div>
+      </div>
+
+      <v-spacer />
+
+      <div class="d-flex align-center">
+        <v-btn
+          icon
+          dark
+          class="topbar-icon mr-2"
+          @click="fetchNotifications"
+          :loading="loading"
+        >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
+      </div>
     </v-app-bar>
 
     <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="admin-sidebar" v-show="!showBurger">
-            <div class="sidebar-card">
-                <div class="sidebar-brand">
-                    <div class="sidebar-brand-badge">Charge24</div>
-                    <div class="sidebar-brand-text">Admin Control</div>
-                </div>
+      <!-- Sidebar -->
+      <aside class="admin-sidebar" v-show="!showBurger">
+        <div class="sidebar-card">
+          <div class="sidebar-brand">
+            <div class="sidebar-brand-badge">Charge24</div>
+            <div class="sidebar-brand-text">Admin Control</div>
+          </div>
 
-                <div class="sidebar-profile">
-                    <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
-                        <span class="avatar-text">AD</span>
-                    </v-avatar>
+          <div class="sidebar-profile">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
+              <span class="avatar-text">AD</span>
+            </v-avatar>
 
-                    <div class="sidebar-user-name">Operations Team</div>
-                    <div class="sidebar-user-subtitle">
-                        Monitor alerts and activity across the system
-                    </div>
-                </div>
-
-                <v-list dark class="sidebar-list">
-                    <v-list-item v-for="item in items_nav" :key="item.title" link class="sidebar-item" @click="move(item.to)">
-                        <v-list-item-icon>
-                            <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-
-                <div class="sidebar-footer">
-                    <v-btn block outlined color="#C6FF00" class="logout-btn" @click="logout">
-                        Logout
-                    </v-btn>
-                </div>
+            <div class="sidebar-user-name">Operations Team</div>
+            <div class="sidebar-user-subtitle">
+              Monitor alerts and activity across the system
             </div>
-        </aside>
+          </div>
 
-        <!-- Main -->
-        <main class="admin-main">
-            <v-card class="hero-panel pa-6 mb-5" outlined>
-                <div class="d-flex flex-wrap align-center">
-                    <div class="hero-copy" style="margin-left: 10px;">
-                        <div class="hero-kicker">Notifications</div>
-                        <div class="hero-heading">
-                            Track important admin alerts and updates
-                        </div>
-                        <div class="hero-subtext">
-                            View campaign, machine, and system activity in one place.
-                        </div>
+          <v-list dark class="sidebar-list">
+            <v-list-item
+              v-for="item in items_nav"
+              :key="item.title"
+              link
+              class="sidebar-item"
+              @click="move(item.to)"
+            >
+              <v-list-item-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+
+          <div class="sidebar-footer">
+            <v-btn
+              block
+              outlined
+              color="#73D843"
+              class="logout-btn"
+              @click="logout"
+            >
+              Logout
+            </v-btn>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="admin-main">
+        <v-card class="hero-panel pa-6 mb-5" outlined>
+          <div class="d-flex flex-wrap align-center">
+            <div class="hero-copy" style="margin-left: 10px">
+              <div class="hero-kicker">Notifications</div>
+              <div class="hero-heading">
+                Track important admin alerts and updates
+              </div>
+              <div class="hero-subtext">
+                View campaign, machine, and system activity in one place.
+              </div>
+            </div>
+
+            <v-spacer />
+
+            <div class="hero-actions mt-4 mt-md-0">
+              <v-btn
+                class="mr-2 hero-btn-primary"
+                color="#73D843"
+                large
+                :loading="markingAll"
+                @click="markAllRead"
+              >
+                <span class="black--text font-weight-bold"
+                  >Mark all as read</span
+                >
+              </v-btn>
+
+              <v-btn
+                outlined
+                large
+                class="hero-btn-outline"
+                @click="fetchNotifications"
+                :loading="loading"
+              >
+                Refresh
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
+
+        <v-alert
+          v-if="successMessage"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
+          {{ successMessage }}
+        </v-alert>
+
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
+          {{ errorMessage }}
+        </v-alert>
+
+        <v-card class="panel-card pa-4" outlined>
+          <div class="panel-head mb-3">
+            <div>
+              <div class="panel-kicker">Admin Notifications</div>
+              <div class="panel-title">Recent Alerts</div>
+            </div>
+
+            <div class="notification-count">{{ unreadCount }} unread</div>
+          </div>
+
+          <div v-if="loading" class="loading-block">
+            Loading notifications...
+          </div>
+
+          <div v-else-if="!notifications.length" class="empty-state">
+            No notifications found.
+          </div>
+
+          <div v-else class="notifications-list">
+            <v-card
+              v-for="notification in notifications"
+              :key="notification.id"
+              class="notification-card mb-3"
+              outlined
+              :class="{ unread: Number(notification.is_read) === 0 }"
+            >
+              <div class="notification-row">
+                <div class="notification-icon-wrap">
+                  <v-avatar size="42" color="#73D843">
+                    <v-icon color="black">{{
+                      getNotificationIcon(notification.type)
+                    }}</v-icon>
+                  </v-avatar>
+                </div>
+
+                <div class="notification-content">
+                  <div class="notification-topline">
+                    <div class="notification-title">
+                      {{ notification.title }}
                     </div>
 
-                    <v-spacer />
-
-                    <div class="hero-actions mt-4 mt-md-0">
-                        <v-btn
-                            class="mr-2 hero-btn-primary"
-                            color="#C6FF00"
-                            large
-                            :loading="markingAll"
-                            @click="markAllRead"
-                        >
-                            <span class="black--text font-weight-bold">Mark all as read</span>
-                        </v-btn>
-
-                        <v-btn outlined large class="hero-btn-outline" @click="fetchNotifications" :loading="loading">
-                            Refresh
-                        </v-btn>
-                    </div>
-                </div>
-            </v-card>
-
-            <v-alert v-if="successMessage" type="success" dense outlined class="mb-4 dashboard-alert">
-                {{ successMessage }}
-            </v-alert>
-
-            <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
-                {{ errorMessage }}
-            </v-alert>
-
-            <v-card class="panel-card pa-4" outlined>
-                <div class="panel-head mb-3">
-                    <div>
-                        <div class="panel-kicker">Admin Notifications</div>
-                        <div class="panel-title">Recent Alerts</div>
-                    </div>
-
-                    <div class="notification-count">
-                        {{ unreadCount }} unread
-                    </div>
-                </div>
-
-                <div v-if="loading" class="loading-block">
-                    Loading notifications...
-                </div>
-
-                <div v-else-if="!notifications.length" class="empty-state">
-                    No notifications found.
-                </div>
-
-                <div v-else class="notifications-list">
-                    <v-card
-                        v-for="notification in notifications"
-                        :key="notification.id"
-                        class="notification-card mb-3"
-                        outlined
-                        :class="{ unread: Number(notification.is_read) === 0 }"
+                    <v-chip
+                      x-small
+                      outlined
+                      :color="
+                        Number(notification.is_read) === 0
+                          ? '#73D843'
+                          : '#888888'
+                      "
                     >
-                        <div class="notification-row">
-                            <div class="notification-icon-wrap">
-                                <v-avatar size="42" color="#C6FF00">
-                                    <v-icon color="black">{{ getNotificationIcon(notification.type) }}</v-icon>
-                                </v-avatar>
-                            </div>
+                      {{
+                        Number(notification.is_read) === 0 ? "Unread" : "Read"
+                      }}
+                    </v-chip>
+                  </div>
 
-                            <div class="notification-content">
-                                <div class="notification-topline">
-                                    <div class="notification-title">
-                                        {{ notification.title }}
-                                    </div>
+                  <div class="notification-message">
+                    {{ notification.message }}
+                  </div>
 
-                                    <v-chip
-                                        x-small
-                                        outlined
-                                        :color="Number(notification.is_read) === 0 ? '#C6FF00' : '#888888'"
-                                    >
-                                        {{ Number(notification.is_read) === 0 ? 'Unread' : 'Read' }}
-                                    </v-chip>
-                                </div>
-
-                                <div class="notification-message">
-                                    {{ notification.message }}
-                                </div>
-
-                                <div class="notification-meta">
-                                    <span>{{ formatDate(notification.created_at) }}</span>
-                                    <span class="notification-type">{{ notification.type }}</span>
-                                </div>
-                            </div>
-
-                            <div class="notification-actions">
-                                <v-btn
-                                    v-if="Number(notification.is_read) === 0"
-                                    x-small
-                                    text
-                                    color="#C6FF00"
-                                    :loading="readingId === notification.id"
-                                    @click="markRead(notification)"
-                                >
-                                    Mark read
-                                </v-btn>
-                            </div>
-                        </div>
-                    </v-card>
+                  <div class="notification-meta">
+                    <span>{{ formatDate(notification.created_at) }}</span>
+                    <span class="notification-type">{{
+                      notification.type
+                    }}</span>
+                  </div>
                 </div>
+
+                <div class="notification-actions">
+                  <v-btn
+                    v-if="Number(notification.is_read) === 0"
+                    x-small
+                    text
+                    color="#73D843"
+                    :loading="readingId === notification.id"
+                    @click="markRead(notification)"
+                  >
+                    Mark read
+                  </v-btn>
+                </div>
+              </div>
             </v-card>
-        </main>
+          </div>
+        </v-card>
+      </main>
     </div>
-</v-container>
+  </v-container>
 </template>
 
 <script>
@@ -201,393 +252,401 @@ import api from "@/services/api";
 import moment from "moment";
 
 export default {
-    middleware: "auth",
-    data() {
-        return {
-            moment,
-            loading: false,
-            markingAll: false,
-            readingId: null,
-            notifications: [],
-            successMessage: "",
-            errorMessage: "",
-            showBurger: false,
-            windowSize: {
-                x: null,
-                y: null
-            },
-            items_nav: [
-                {
-                    title: "Dashboard",
-                    icon: "mdi-view-dashboard",
-                    to: "admin/dashboard"
-                },
-                {
-                    title: "Campaign",
-                    icon: "mdi-bullhorn-outline",
-                    to: "campaigns/all"
-                },
-                {
-                    title: "Machines",
-                    icon: "mdi-cellphone-sound",
-                    to: "machines"
-                },
-                {
-                    title: "Clients",
-                    icon: "mdi-account-group-outline",
-                    to: "clients"
-                },
-                {
-                    title: "Notifications",
-                    icon: "mdi-bell-outline",
-                    to: "admin/notifications"
-                }
-            ]
-        };
+  middleware: "auth",
+  data() {
+    return {
+      moment,
+      loading: false,
+      markingAll: false,
+      readingId: null,
+      notifications: [],
+      successMessage: "",
+      errorMessage: "",
+      showBurger: false,
+      windowSize: {
+        x: null,
+        y: null,
+      },
+      items_nav: [
+        {
+          title: "Dashboard",
+          icon: "mdi-view-dashboard",
+          to: "admin/dashboard",
+        },
+        {
+          title: "Campaign",
+          icon: "mdi-bullhorn-outline",
+          to: "campaigns/all",
+        },
+        {
+          title: "Machines",
+          icon: "mdi-cellphone-sound",
+          to: "machines",
+        },
+        {
+          title: "Clients",
+          icon: "mdi-account-group-outline",
+          to: "clients",
+        },
+        {
+          title: "Notifications",
+          icon: "mdi-bell-outline",
+          to: "admin/notifications",
+        },
+      ],
+    };
+  },
+
+  computed: {
+    unreadCount() {
+      return (this.notifications || []).filter((n) => Number(n.is_read) === 0)
+        .length;
+    },
+  },
+
+  mounted() {
+    this.onResize();
+    this.fetchNotifications();
+  },
+
+  methods: {
+    logout() {
+      this.$fire.auth.signOut();
+      window.location.reload(true);
     },
 
-    computed: {
-        unreadCount() {
-            return (this.notifications || []).filter(n => Number(n.is_read) === 0).length;
-        }
+    move(val) {
+      this.$router.push(`/${val}`);
     },
 
-    mounted() {
-        this.onResize();
-        this.fetchNotifications();
+    onResize() {
+      this.windowSize = {
+        x: window.innerWidth,
+        y: window.innerHeight,
+      };
+      this.showBurger = this.windowSize.x < 950;
+      return this.windowSize;
     },
 
-    methods: {
-        logout() {
-            this.$fire.auth.signOut();
-            window.location.reload(true);
-        },
+    async fetchNotifications() {
+      try {
+        this.loading = true;
+        this.errorMessage = "";
 
-        move(val) {
-            this.$router.push(`/${val}`);
-        },
+        const { data } = await api.get("/api/notifications/get", {
+          params: {
+            user_type: "admin",
+            user_id: null,
+          },
+        });
 
-        onResize() {
-            this.windowSize = {
-                x: window.innerWidth,
-                y: window.innerHeight
-            };
-            this.showBurger = this.windowSize.x < 950;
-            return this.windowSize;
-        },
+        this.notifications = data || [];
+      } catch (error) {
+        console.error("fetchNotifications error:", error);
+        this.errorMessage = error.response.data.message;
+      } finally {
+        this.loading = false;
+      }
+    },
 
-        async fetchNotifications() {
-            try {
-                this.loading = true;
-                this.errorMessage = "";
+    async markRead(notification) {
+      try {
+        this.readingId = notification.id;
+        this.successMessage = "";
+        this.errorMessage = "";
 
-                const { data } = await api.get("/api/notifications/get", {
-                    params: {
-                        user_type: "admin",
-                        user_id:null
-                    }
-                });
+        await api.put(`/api/notifications/${notification.id}/read`);
 
-                this.notifications = data || [];
-            } catch (error) {
-                console.error("fetchNotifications error:", error);
-                this.errorMessage =
-                    error.response.data.message;
-            } finally {
-                this.loading = false;
-            }
-        },
+        notification.is_read = 1;
+        this.successMessage = "Notification marked as read";
+      } catch (error) {
+        console.error("markRead error:", error);
+        this.errorMessage =
+          error.response?.data?.message ||
+          "Failed to mark notification as read";
+      } finally {
+        this.readingId = null;
+      }
+    },
 
-        async markRead(notification) {
-            try {
-                this.readingId = notification.id;
-                this.successMessage = "";
-                this.errorMessage = "";
+    async markAllRead() {
+      try {
+        this.markingAll = true;
+        this.successMessage = "";
+        this.errorMessage = "";
 
-                await api.put(`/api/notifications/${notification.id}/read`);
+        await api.put("/api/notifications/read-all", {
+          user_type: "admin",
+        });
 
-                notification.is_read = 1;
-                this.successMessage = "Notification marked as read";
-            } catch (error) {
-                console.error("markRead error:", error);
-                this.errorMessage =
-                    error.response?.data?.message || "Failed to mark notification as read";
-            } finally {
-                this.readingId = null;
-            }
-        },
+        this.notifications = this.notifications.map((item) => ({
+          ...item,
+          is_read: 1,
+        }));
 
-        async markAllRead() {
-            try {
-                this.markingAll = true;
-                this.successMessage = "";
-                this.errorMessage = "";
+        this.successMessage = "All notifications marked as read";
+      } catch (error) {
+        console.error("markAllRead error:", error);
+        this.errorMessage =
+          error.response?.data?.message ||
+          "Failed to mark all notifications as read";
+      } finally {
+        this.markingAll = false;
+      }
+    },
 
-                await api.put("/api/notifications/read-all", {
-                    user_type: "admin"
-                });
+    formatDate(value) {
+      return value ? moment(value).format("MMM Do YYYY, h:mm A") : "-";
+    },
 
-                this.notifications = this.notifications.map(item => ({
-                    ...item,
-                    is_read: 1
-                }));
-
-                this.successMessage = "All notifications marked as read";
-            } catch (error) {
-                console.error("markAllRead error:", error);
-                this.errorMessage =
-                    error.response?.data?.message || "Failed to mark all notifications as read";
-            } finally {
-                this.markingAll = false;
-            }
-        },
-
-        formatDate(value) {
-            return value ? moment(value).format("MMM Do YYYY, h:mm A") : "-";
-        },
-
-        getNotificationIcon(type) {
-            if (type === "campaign_created") return "mdi-bullhorn";
-            if (type === "campaign_assigned") return "mdi-monitor-dashboard";
-            if (type === "campaign_status_changed") return "mdi-refresh-circle";
-            if (type === "machine_offline") return "mdi-alert-circle";
-            return "mdi-bell-outline";
-        }
-    }
+    getNotificationIcon(type) {
+      if (type === "campaign_created") return "mdi-bullhorn";
+      if (type === "campaign_assigned") return "mdi-monitor-dashboard";
+      if (type === "campaign_status_changed") return "mdi-refresh-circle";
+      if (type === "machine_offline") return "mdi-alert-circle";
+      return "mdi-bell-outline";
+    },
+  },
 };
 </script>
 
 <style scoped>
 .admin-page {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
-        linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
-    color: #fff;
+  min-height: 100vh;
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 22%
+    ),
+    linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+  color: #fff;
 }
 .admin-topbar {
-    background: transparent !important;
-    box-shadow: none !important;
-    border-bottom: 1px solid rgba(198, 255, 0, 0.08);
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(198, 255, 0, 0.08);
 }
 .topbar-icon {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(198, 255, 0, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(198, 255, 0, 0.08);
 }
 .menu-list {
-    background: #111111 !important;
-    border: 1px solid rgba(198, 255, 0, 0.1);
-    border-radius: 14px;
+  background: #111111 !important;
+  border: 1px solid rgba(198, 255, 0, 0.1);
+  border-radius: 14px;
 }
 .admin-layout {
-    display: flex;
-    min-height: calc(100vh - 72px);
+  display: flex;
+  min-height: calc(100vh - 72px);
 }
 .admin-sidebar {
-    width: 290px;
-    padding: 16px;
+  width: 290px;
+  padding: 16px;
 }
 .sidebar-card {
-    height: 100%;
-    border-radius: 24px;
-    background: linear-gradient(180deg, #101010, #070707);
-    border: 1px solid rgba(198, 255, 0, 0.12);
-    padding: 18px;
+  height: 100%;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #101010, #070707);
+  border: 1px solid rgba(198, 255, 0, 0.12);
+  padding: 18px;
 }
 .sidebar-brand {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 .sidebar-brand-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(198, 255, 0, 0.1);
-    border: 1px solid rgba(198, 255, 0, 0.22);
-    color: #c6ff00;
-    font-size: 12px;
-    margin-bottom: 10px;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(198, 255, 0, 0.1);
+  border: 1px solid rgba(198, 255, 0, 0.22);
+  color: #73d843;
+  font-size: 12px;
+  margin-bottom: 10px;
 }
 .sidebar-brand-text {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
 }
 .sidebar-profile {
-    padding: 18px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.03);
-    margin-bottom: 20px;
-    text-align: center;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 20px;
+  text-align: center;
 }
 .sidebar-avatar {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 .avatar-text {
-    color: #000;
-    font-weight: 800;
+  color: #000;
+  font-weight: 800;
 }
 .sidebar-user-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
 }
 .sidebar-user-subtitle {
-    color: #a8a8a8;
-    font-size: 13px;
-    margin-top: 4px;
+  color: #a8a8a8;
+  font-size: 13px;
+  margin-top: 4px;
 }
 .sidebar-list {
-    background: transparent !important;
+  background: transparent !important;
 }
 .sidebar-item {
-    border-radius: 12px;
-    margin-bottom: 6px;
+  border-radius: 12px;
+  margin-bottom: 6px;
 }
 .sidebar-item:hover {
-    background: rgba(198, 255, 0, 0.06);
+  background: rgba(198, 255, 0, 0.06);
 }
 .sidebar-footer {
-    margin-top: 24px;
+  margin-top: 24px;
 }
 .logout-btn {
-    border-color: rgba(198, 255, 0, 0.35) !important;
-    color: #c6ff00 !important;
+  border-color: rgba(198, 255, 0, 0.35) !important;
+  color: #73d843 !important;
 }
 .admin-main {
-    flex: 1;
-    padding: 20px;
+  flex: 1;
+  padding: 20px;
 }
 .page-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(198, 255, 0, 0.1);
-    border: 1px solid rgba(198, 255, 0, 0.2);
-    color: #c6ff00;
-    font-size: 12px;
-    margin-bottom: 8px;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(198, 255, 0, 0.1);
+  border: 1px solid rgba(198, 255, 0, 0.2);
+  color: #73d843;
+  font-size: 12px;
+  margin-bottom: 8px;
 }
 .hero-panel {
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
-        linear-gradient(135deg, #111111, #080808) !important;
-    border: 1px solid rgba(198, 255, 0, 0.14) !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  border-radius: 24px;
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
+    linear-gradient(135deg, #111111, #080808) !important;
+  border: 1px solid rgba(198, 255, 0, 0.14) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
 }
 .hero-copy {
-    max-width: 760px;
+  max-width: 760px;
 }
 .hero-kicker {
-    color: #c6ff00;
-    font-size: 13px;
-    margin-bottom: 10px;
+  color: #73d843;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 .hero-heading {
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1.2;
-    color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
 }
 .hero-subtext {
-    color: #bcbcbc;
-    margin-top: 12px;
-    line-height: 1.7;
+  color: #bcbcbc;
+  margin-top: 12px;
+  line-height: 1.7;
 }
 .hero-btn-outline {
-    border-color: #c6ff00 !important;
-    color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 .dashboard-alert {
-    border-radius: 14px;
+  border-radius: 14px;
 }
 .panel-card {
-    border-radius: 22px;
-    background: linear-gradient(180deg, #111111, #090909) !important;
-    border: 1px solid rgba(198, 255, 0, 0.1) !important;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #111111, #090909) !important;
+  border: 1px solid rgba(198, 255, 0, 0.1) !important;
 }
 .panel-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .panel-kicker {
-    color: #9ea59b;
-    font-size: 12px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
+  color: #9ea59b;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 .panel-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
 }
 .notification-count {
-    color: #c6ff00;
-    font-size: 13px;
+  color: #73d843;
+  font-size: 13px;
 }
 .loading-block,
 .empty-state {
-    color: #bdbdbd;
-    padding: 20px 0;
+  color: #bdbdbd;
+  padding: 20px 0;
 }
 .notification-card {
-    border-radius: 18px !important;
-    background: linear-gradient(180deg, #111111, #0b0b0b) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #111111, #0b0b0b) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 .notification-card.unread {
-    border: 1px solid rgba(198, 255, 0, 0.22) !important;
-    box-shadow: 0 0 0 1px rgba(198, 255, 0, 0.08);
+  border: 1px solid rgba(198, 255, 0, 0.22) !important;
+  box-shadow: 0 0 0 1px rgba(198, 255, 0, 0.08);
 }
 .notification-row {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
 }
 .notification-content {
-    flex: 1;
+  flex: 1;
 }
 .notification-topline {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
 }
 .notification-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
 }
 .notification-message {
-    color: #cfcfcf;
-    line-height: 1.6;
-    margin-bottom: 10px;
+  color: #cfcfcf;
+  line-height: 1.6;
+  margin-bottom: 10px;
 }
 .notification-meta {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    color: #8f8f8f;
-    font-size: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #8f8f8f;
+  font-size: 12px;
 }
 .notification-type {
-    color: #c6ff00;
+  color: #73d843;
 }
 @media (max-width: 960px) {
-    .admin-layout {
-        display: block;
-    }
-    .admin-main {
-        padding: 16px;
-    }
-    .hero-heading {
-        font-size: 22px;
-    }
-    .notification-row {
-        flex-direction: column;
-    }
+  .admin-layout {
+    display: block;
+  }
+  .admin-main {
+    padding: 16px;
+  }
+  .hero-heading {
+    font-size: 22px;
+  }
+  .notification-row {
+    flex-direction: column;
+  }
 }
 </style>

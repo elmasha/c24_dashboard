@@ -18,7 +18,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -27,7 +27,9 @@
 
         <div>
           <div class="page-badge">Admin Portal</div>
-          <h1 class="page-title" style="font-size: 1rem;">Traffic Configuration</h1>
+          <h1 class="page-title" style="font-size: 1rem">
+            Traffic Configuration
+          </h1>
         </div>
       </div>
 
@@ -44,7 +46,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
+            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -63,7 +65,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
+                <v-icon color="#73D843">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -73,7 +75,7 @@
           </v-list>
 
           <div class="sidebar-footer">
-            <v-btn block outlined color="#C6FF00" class="logout-btn">
+            <v-btn block outlined color="#73D843" class="logout-btn">
               Logout
             </v-btn>
           </div>
@@ -84,30 +86,46 @@
       <main class="admin-main">
         <div class="page-topbar">
           <nuxt-link class="back-link" to="/admin/dashboard">
-            <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+            <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
             Back to dashboard
           </nuxt-link>
         </div>
 
         <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
-          <div class="hero-copy" style="margin-left: 10px;">
-            <div class="hero-kicker" style="margin-left: 10px;">Delivery Engine Settings</div>
+          <div class="hero-copy" style="margin-left: 10px">
+            <div class="hero-kicker" style="margin-left: 10px">
+              Delivery Engine Settings
+            </div>
             <div class="hero-heading">
-              Configure category profiles, day weights, and time-based traffic behavior
+              Configure category profiles, day weights, and time-based traffic
+              behavior
             </div>
             <div class="hero-subtext">
-              Adjust how audience and delivery estimates behave across locations, days,
-              and hourly slots to improve campaign pacing and reporting quality.
+              Adjust how audience and delivery estimates behave across
+              locations, days, and hourly slots to improve campaign pacing and
+              reporting quality.
             </div>
           </div>
         </v-card>
 
-        <v-alert v-if="successMessage" type="success" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="successMessage"
+          type="success"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ successMessage }}
         </v-alert>
 
-        <v-alert v-if="errorMessage" type="error" dense outlined class="mb-4 dashboard-alert">
+        <v-alert
+          v-if="errorMessage"
+          type="error"
+          dense
+          outlined
+          class="mb-4 dashboard-alert"
+        >
           {{ errorMessage }}
         </v-alert>
 
@@ -146,7 +164,12 @@
                         />
                       </td>
                       <td>
-                        <v-btn small color="#C6FF00" class="black--text font-weight-bold" @click="updateCategory(row)">
+                        <v-btn
+                          small
+                          color="#73D843"
+                          class="black--text font-weight-bold"
+                          @click="updateCategory(row)"
+                        >
                           Update
                         </v-btn>
                       </td>
@@ -194,7 +217,12 @@
                         />
                       </td>
                       <td>
-                        <v-btn small color="#C6FF00" class="black--text font-weight-bold" @click="updateDayWeight(row)">
+                        <v-btn
+                          small
+                          color="#73D843"
+                          class="black--text font-weight-bold"
+                          @click="updateDayWeight(row)"
+                        >
                           Update
                         </v-btn>
                       </td>
@@ -220,7 +248,14 @@
               <label class="field-label">Select Category</label>
               <v-select
                 v-model="selectedCategory"
-                :items="['airport', 'mall', 'club', 'restaurant', 'shop', 'event']"
+                :items="[
+                  'airport',
+                  'mall',
+                  'club',
+                  'restaurant',
+                  'shop',
+                  'event',
+                ]"
                 label="Filter Category"
                 outlined
                 dense
@@ -239,7 +274,14 @@
               <v-col cols="12" md="3">
                 <v-select
                   v-model="timeForm.category"
-                  :items="['airport', 'mall', 'club', 'restaurant', 'shop', 'event']"
+                  :items="[
+                    'airport',
+                    'mall',
+                    'club',
+                    'restaurant',
+                    'shop',
+                    'event',
+                  ]"
                   label="Category"
                   outlined
                   dense
@@ -287,7 +329,11 @@
               </v-col>
             </v-row>
 
-            <v-btn color="#C6FF00" class="black--text font-weight-bold" @click="createTimeWeight">
+            <v-btn
+              color="#73D843"
+              class="black--text font-weight-bold"
+              @click="createTimeWeight"
+            >
               Add Time Weight
             </v-btn>
           </v-card>
@@ -309,7 +355,14 @@
                   <td>
                     <v-select
                       v-model="row.category"
-                      :items="['airport', 'mall', 'club', 'restaurant', 'shop', 'event']"
+                      :items="[
+                        'airport',
+                        'mall',
+                        'club',
+                        'restaurant',
+                        'shop',
+                        'event',
+                      ]"
                       dense
                       outlined
                       dark
@@ -353,10 +406,20 @@
                     />
                   </td>
                   <td class="actions">
-                    <v-btn small color="#C6FF00" class="black--text font-weight-bold" @click="updateTimeWeight(row)">
+                    <v-btn
+                      small
+                      color="#73D843"
+                      class="black--text font-weight-bold"
+                      @click="updateTimeWeight(row)"
+                    >
                       Update
                     </v-btn>
-                    <v-btn small color="#ff6b6b" text @click="deleteTimeWeight(row.id)">
+                    <v-btn
+                      small
+                      color="#ff6b6b"
+                      text
+                      @click="deleteTimeWeight(row.id)"
+                    >
                       Delete
                     </v-btn>
                   </td>
@@ -385,41 +448,41 @@ export default {
       showBurger: false,
       windowSize: {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       },
       items_nav: [
         {
           title: "Dashboard",
           icon: "mdi-view-dashboard",
-          to: "admin/dashboard"
+          to: "admin/dashboard",
         },
         {
           title: "Campaign",
           icon: "mdi-bullhorn-outline",
-          to: "campaigns/all"
+          to: "campaigns/all",
         },
         {
           title: "Machines",
           icon: "mdi-cellphone-sound",
-          to: "machines"
+          to: "machines",
         },
         {
           title: "Clients",
           icon: "mdi-account-group-outline",
-          to: "clients"
+          to: "clients",
         },
         {
           title: "Traffic Config",
           icon: "mdi-cogs",
-          to: "traffic-config"
-        }
+          to: "traffic-config",
+        },
       ],
       timeForm: {
         category: "mall",
         start_hour: 0,
         end_hour: 6,
-        weight: 1
-      }
+        weight: 1,
+      },
     };
   },
 
@@ -438,7 +501,7 @@ export default {
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
-        y: window.innerHeight
+        y: window.innerHeight,
       };
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
@@ -490,7 +553,7 @@ export default {
     async updateCategory(row) {
       try {
         await api.put(`/api/traffic-config/categories/${row.category}`, {
-          base_audience: row.base_audience
+          base_audience: row.base_audience,
         });
 
         this.successMessage = `Updated ${row.category} base audience`;
@@ -503,7 +566,7 @@ export default {
     async updateDayWeight(row) {
       try {
         await api.put(`/api/traffic-config/days/${row.day_number}`, {
-          weight: row.weight
+          weight: row.weight,
         });
 
         this.successMessage = `Updated ${this.dayName(row.day_number)} weight`;
@@ -524,7 +587,7 @@ export default {
           category: "mall",
           start_hour: 0,
           end_hour: 6,
-          weight: 1
+          weight: 1,
         };
 
         await this.fetchTimeWeightsByCategory();
@@ -539,7 +602,7 @@ export default {
           category: row.category,
           start_hour: row.start_hour,
           end_hour: row.end_hour,
-          weight: row.weight
+          weight: row.weight,
         });
 
         this.successMessage = "Time weight updated successfully";
@@ -573,7 +636,7 @@ export default {
         "Wednesday",
         "Thursday",
         "Friday",
-        "Saturday"
+        "Saturday",
       ];
       return names[dayNumber] || "-";
     },
@@ -582,16 +645,19 @@ export default {
       console.error(error);
       this.successMessage = "";
       this.errorMessage = error.response?.data?.message || fallback;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .admin-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 22%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 22%
+    ),
     linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
   color: #fff;
 }
@@ -641,7 +707,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -700,7 +766,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #c6ff00 !important;
+  color: #73d843 !important;
 }
 
 .admin-main {
@@ -714,7 +780,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -739,13 +805,16 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .hero-panel {
   border-radius: 24px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 255, 0, 0.08), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.08),
+      transparent 28%
+    ),
     linear-gradient(135deg, #111111, #080808) !important;
   border: 1px solid rgba(198, 255, 0, 0.14) !important;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
@@ -756,7 +825,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -841,7 +910,7 @@ export default {
 }
 
 .table-dark ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;

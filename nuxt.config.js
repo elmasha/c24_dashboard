@@ -107,7 +107,7 @@ export default {
         dark: {
           primary: colors.blue.darken2,
           accent: "#05F3DF",
-          green: "#C6FF00",
+          green: "#73D843",
           green2: "#00ff04",
           black:"#000",
           secondary: colors.amber.darken3,

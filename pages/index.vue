@@ -6,21 +6,30 @@
         <v-row align="center">
           <v-col cols="12" md="6">
             <div class="hero-content">
-              <div class="hero-badge">Charge24 Digital Advertising Platform</div>
+              <div class="hero-badge">
+                Charge24 Digital Advertising Platform
+              </div>
 
               <h1 class="hero-title">
-                Deliver Measurable Reach, Better Visibility, and Smarter Campaign Execution
+                Deliver Measurable Reach, Better Visibility, and Smarter
+                Campaign Execution
               </h1>
 
               <p class="hero-subtitle">
-                Charge24 helps brands and operators deliver verified impressions,
-                stronger audience visibility, machine-level performance tracking,
-                and clearer campaign reporting from one unified platform.
+                Charge24 helps brands and operators deliver verified
+                impressions, stronger audience visibility, machine-level
+                performance tracking, and clearer campaign reporting from one
+                unified platform.
               </p>
 
               <div class="hero-actions">
                 <nuxt-link to="/admin/dashboard">
-                  <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
+                  <v-btn
+                    color="#73D843"
+                    dark
+                    large
+                    class="mr-3 mb-2 black--text hero-btn-primary"
+                  >
                     Go to Admin Dashboard
                   </v-btn>
                 </nuxt-link>
@@ -69,13 +78,14 @@
     </section>
 
     <!-- Value -->
-    <section class="section-block text-center" >
+    <section class="section-block text-center">
       <v-container>
         <div class="section-head text-center">
           <h2>What the Platform Delivers</h2>
           <p>
-            Built to deliver stronger campaign accountability, better machine oversight,
-            clearer audience reporting, and real performance visibility for both operators and clients.
+            Built to deliver stronger campaign accountability, better machine
+            oversight, clearer audience reporting, and real performance
+            visibility for both operators and clients.
           </p>
         </div>
 
@@ -84,8 +94,9 @@
             <v-card outlined class="feature-card pa-5">
               <h3>Verified Campaign Delivery</h3>
               <p>
-                Ensure campaigns are active on the right machines, within the right time windows,
-                with measurable delivery through impressions, proof of play, and tracking.
+                Ensure campaigns are active on the right machines, within the
+                right time windows, with measurable delivery through
+                impressions, proof of play, and tracking.
               </p>
             </v-card>
           </v-col>
@@ -94,8 +105,9 @@
             <v-card outlined class="feature-card pa-5">
               <h3>Clear Operational Visibility</h3>
               <p>
-                Get a live view of machines, locations, assignments, and performance so teams can
-                quickly understand what is running, where it is running, and how it is performing.
+                Get a live view of machines, locations, assignments, and
+                performance so teams can quickly understand what is running,
+                where it is running, and how it is performing.
               </p>
             </v-card>
           </v-col>
@@ -104,8 +116,9 @@
             <v-card outlined class="feature-card pa-5">
               <h3>Actionable Performance Insights</h3>
               <p>
-                Turn delivery data into useful reporting through scans, device breakdown,
-                top-performing machines, daily trends, and campaign conversion visibility.
+                Turn delivery data into useful reporting through scans, device
+                breakdown, top-performing machines, daily trends, and campaign
+                conversion visibility.
               </p>
             </v-card>
           </v-col>
@@ -152,11 +165,17 @@
         <v-card class="cta-card pa-8 text-center" outlined>
           <h2 class="mb-3">Ready to deliver more value from every screen?</h2>
           <p class="mb-6">
-            Access campaign delivery, machine visibility, and performance insights from one platform built for measurable results.
+            Access campaign delivery, machine visibility, and performance
+            insights from one platform built for measurable results.
           </p>
 
           <nuxt-link to="/admin/dashboard">
-            <v-btn color="#C6FF00" dark large class="mr-3 mb-2 black--text hero-btn-primary">
+            <v-btn
+              color="#73D843"
+              dark
+              large
+              class="mr-3 mb-2 black--text hero-btn-primary"
+            >
               View Campaigns
             </v-btn>
           </nuxt-link>
@@ -174,7 +193,9 @@
     <footer class="footer-section">
       <v-container class="d-flex justify-space-between align-center flex-wrap">
         <div class="footer-brand">Charge24 Platform</div>
-        <div class="footer-copy">Built for measurable delivery and campaign visibility</div>
+        <div class="footer-copy">
+          Built for measurable delivery and campaign visibility
+        </div>
       </v-container>
     </footer>
   </v-container>
@@ -182,7 +203,7 @@
 
 <script>
 export default {
-  name: "HomePage"
+  name: "HomePage",
 };
 </script>
 
@@ -195,7 +216,11 @@ export default {
 
 .hero-section {
   padding: 80px 0 60px;
-  background: radial-gradient(circle at top right, rgba(198, 255, 0, 0.12), transparent 28%),
+  background: radial-gradient(
+      circle at top right,
+      rgba(198, 255, 0, 0.12),
+      transparent 28%
+    ),
     linear-gradient(135deg, #050505, #0b0b0b 50%, #101010);
 }
 
@@ -209,7 +234,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.3);
-  color: #c6ff00;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 18px;
 }
@@ -240,8 +265,8 @@ export default {
 }
 
 .hero-btn-outline {
-  border-color: #c6ff00 !important;
-  color: #c6ff00 !important;
+  border-color: #73d843 !important;
+  color: #73d843 !important;
 }
 
 .hero-card {
@@ -285,13 +310,17 @@ export default {
 
 .mock-metric strong {
   font-size: 22px;
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .mock-chart {
   height: 180px;
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(198, 255, 0, 0.22), rgba(198, 255, 0, 0.04));
+  background: linear-gradient(
+    180deg,
+    rgba(198, 255, 0, 0.22),
+    rgba(198, 255, 0, 0.04)
+  );
   border: 1px solid rgba(198, 255, 0, 0.14);
 }
 
@@ -334,7 +363,7 @@ export default {
 .feature-card h3,
 .module-card h4 {
   margin-bottom: 12px;
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .feature-card p,
@@ -358,7 +387,7 @@ export default {
 
 .footer-brand {
   font-weight: 700;
-  color: #c6ff00;
+  color: #73d843;
 }
 
 .footer-copy {

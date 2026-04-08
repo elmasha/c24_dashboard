@@ -3,7 +3,7 @@
     <!-- Top header -->
     <div class="detail-topbar" style="margin-top: 30px">
       <nuxt-link class="back-link" to="/clients/campaign">
-        <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
+        <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
         Back to campaigns
       </nuxt-link>
     </div>
@@ -17,7 +17,7 @@
           <div class="hero-copy-wrap d-flex align-center">
             <v-avatar
               size="64"
-              :color="campaign.image_url ? 'transparent' : '#C6FF00'"
+              :color="campaign.image_url ? 'transparent' : '#73D843'"
               class="hero-campaign-avatar mr-4"
             >
               <template v-if="campaign.image_url">
@@ -49,7 +49,7 @@
           <div class="hero-status-wrap mt-4 mt-md-0">
             <v-chip
               outlined
-              color="#C6FF00"
+              color="#73D843"
               class="status-chip"
               style="margin-right: 10px"
             >
@@ -116,7 +116,7 @@
                 )
               "
             >
-              <v-icon color="#C6FF00">mdi-download</v-icon>
+              <v-icon color="#73D843">mdi-download</v-icon>
             </v-btn>
           </div>
         </div>
@@ -346,14 +346,14 @@
                             (qr_token = machine.qr_token)
                         "
                       >
-                        <v-icon color="#C6FF00">mdi-eye</v-icon>
+                        <v-icon color="#73D843">mdi-eye</v-icon>
                       </v-btn>
 
                       <a
                         :href="getUrl2(campaign.qr_token, machine.machine_uid)"
                         target="_blank"
                       >
-                        <v-icon color="#C6FF00">mdi-link-variant</v-icon>
+                        <v-icon color="#73D843">mdi-link-variant</v-icon>
                       </a>
                     </div>
                   </div>
@@ -461,7 +461,7 @@
                 )
               "
             >
-              <v-icon color="#C6FF00">mdi-download</v-icon>
+              <v-icon color="#73D843">mdi-download</v-icon>
             </v-btn>
           </div>
         </div>
@@ -774,7 +774,7 @@ export default {
 }
 
 .back-link:hover {
-  color: #c6ff00;
+  color: #73D843;
 }
 
 .loading-state {
@@ -810,7 +810,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #c6ff00;
+  color: #73D843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
@@ -958,7 +958,7 @@ export default {
 }
 
 .info-link-box a {
-  color: #c6ff00;
+  color: #73D843;
   text-decoration: none;
   word-break: break-all;
 }
@@ -1042,7 +1042,7 @@ export default {
 }
 
 .client-table ::v-deep th {
-  color: #c6ff00 !important;
+  color: #73D843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
