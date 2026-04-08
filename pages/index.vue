@@ -7,11 +7,15 @@
           <v-col cols="12" md="6">
             <div class="hero-content">
               <div class="d-flex">
-                <v-avatar size="58" class="mr-3">
+                <!-- <v-avatar size="58" class="m-3">
                   <v-img :src="logo" contain />
-                </v-avatar>
-                <div class="hero-badge">
-                  Charge24 Digital Advertising Platform
+                </v-avatar> -->
+              </div>
+              <div class="hero-badge">
+                <div class="flex">
+                  <v-avatar size="58" class="m-3">
+                    <v-img :src="logo" contain />
+                  </v-avatar>
                 </div>
               </div>
               <br />
@@ -198,10 +202,8 @@
     <!-- Footer -->
     <footer class="footer-section">
       <v-container class="d-flex justify-space-between align-center flex-wrap">
-        <div class="footer-brand">Charge24 Platform</div>
-        <div class="footer-copy">
-          Built for measurable delivery and campaign visibility
-        </div>
+        <div class="footer-brand"></div>
+        <div class="footer-copy"></div>
       </v-container>
     </footer>
   </v-container>
@@ -227,7 +229,7 @@ export default {
 }
 
 .hero-section {
-  padding: 80px 0 60px;
+  padding: 60px 0 60px;
   background: radial-gradient(
       circle at top right,
       rgba(198, 255, 0, 0.12),
@@ -237,7 +239,7 @@ export default {
 }
 
 .hero-content {
-  max-width: 620px;
+  max-width: 600px;
 }
 
 .hero-badge {
