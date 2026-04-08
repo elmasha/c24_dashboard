@@ -371,7 +371,7 @@
       </div>
 
       <!-- Daily data tables -->
-      <v-row class="mt-4" v-show="campaign && campaign.show_qr">
+      <v-row class="mt-4">
         <v-col cols="12" md="6">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
@@ -400,7 +400,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
             <div class="panel-title mb-3">Daily Scans</div>
@@ -774,7 +774,7 @@ export default {
 }
 
 .back-link:hover {
-  color: #73D843;
+  color: #73d843;
 }
 
 .loading-state {
@@ -810,7 +810,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #73D843;
+  color: #73d843;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
@@ -958,7 +958,7 @@ export default {
 }
 
 .info-link-box a {
-  color: #73D843;
+  color: #73d843;
   text-decoration: none;
   word-break: break-all;
 }
@@ -1042,7 +1042,7 @@ export default {
 }
 
 .client-table ::v-deep th {
-  color: #73D843 !important;
+  color: #73d843 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;

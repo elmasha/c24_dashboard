@@ -279,7 +279,7 @@
           </div>
         </div>
 
-        <v-card class="table-card pa-2" outlined>
+        <v-card class="table-card pa-2" outlined max-width="200">
           <v-simple-table class="client-table">
             <thead>
               <tr>
@@ -371,7 +371,7 @@
       </div>
 
       <!-- Daily data tables -->
-      <v-row class="mt-4" v-show="campaign && campaign.show_qr">
+      <v-row class="mt-4">
         <v-col cols="12" md="6">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
@@ -400,7 +400,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
             <div class="panel-title mb-3">Daily Scans</div>

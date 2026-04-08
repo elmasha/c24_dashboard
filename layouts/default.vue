@@ -48,7 +48,7 @@
       <Nuxt />
     </v-main>
 
-    <v-footer app dark padless :absolute="!fixed" class="dashboard-footer">
+    <v-footer app dark padless fixed class="dashboard-footer">
       <div class="footer-inner">
         <div class="footer-left">
           <div class="footer-brand-badge">

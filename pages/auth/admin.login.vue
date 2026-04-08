@@ -79,6 +79,7 @@ export default {
         email: "",
         password: "",
       },
+      UIDI: "SktPIKvFTuganVRJnLAZeSzzTzL2",
     };
   },
 
@@ -88,12 +89,32 @@ export default {
       this.errorMessage = "";
 
       try {
-        await this.$fire.auth.signInWithEmailAndPassword(
-          this.form.email,
-          this.form.password
-        );
+        let that = this;
+        const mAuth = this.$fire.auth;
+        mAuth
+          .signInWithEmailAndPassword(this.form.email, this.form.password)
+          .catch(function (error) {
+            // that.snackbarText = error.message;
+            // that.snackbar = true;
+            console.error(error.message);
+          })
+          .then((user) => {
+            //we are signed in
 
-        this.$router.push("/admin/dashboard");
+            if (user && user.user && user.user.uid === that.UIDI) {
+              console.log("Admin user authenticated with UID:", user.user.uid);
+              that.$router.push("/admin/dashboard");
+            } else {
+              console.log(
+                "Non-admin user attempted to log in with UID:",
+                user ? user.user.uid : "No user"
+              );
+              that.errorMessage = "Unauthorized: You do not have admin access.";
+              this.$fire.auth.signOut();
+              this.$router.push("/auth/admin.login");
+              // window.location.reload(true);
+            }
+          });
       } catch (error) {
         console.error("loginAdmin error:", error);
         this.errorMessage = error.message || "Failed to sign in as admin";

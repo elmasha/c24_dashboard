@@ -22,6 +22,9 @@ export default {
     }
     ]
   },
+  publicRuntimeConfig: {
+    apiUrl: process.env.UUID
+  },
   /*
   ** Customize the progress-bar color
   */

@@ -1,7 +1,7 @@
 <template>
   <div class="campaign-detail-page">
     <!-- Top header -->
-    <div class="detail-topbar">
+    <div class="detail-topbar" style="margin-top: 30px">
       <nuxt-link class="back-link" to="/clients/campaign">
         <v-icon color="#73D843" left>mdi-arrow-left</v-icon>
         Back to campaigns
@@ -14,21 +14,45 @@
       <!-- Hero -->
       <v-card class="hero-panel pa-6 mb-5" outlined>
         <div class="d-flex flex-wrap align-center">
-          <div class="hero-copy">
-            <div class="hero-kicker" style="margin-left: 10px">
-              Campaign Report
-            </div>
-            <div class="hero-title">{{ campaign.campaign_name }}</div>
-            <div class="hero-subtitle">
-              View campaign delivery, scans, device engagement, media preview,
-              and assigned machine QR access points.
+          <div class="hero-copy-wrap d-flex align-center">
+            <v-avatar
+              size="64"
+              :color="campaign.image_url ? 'transparent' : '#73D843'"
+              class="hero-campaign-avatar mr-4"
+            >
+              <template v-if="campaign.image_url">
+                <v-img :src="campaign.image_url" cover />
+              </template>
+              <template v-else>
+                <span class="hero-campaign-avatar-text">
+                  {{
+                    (campaign.campaign_name || "").substring(0, 2).toUpperCase()
+                  }}
+                </span>
+              </template>
+            </v-avatar>
+
+            <div class="hero-copy">
+              <div class="hero-kicker" style="margin-left: 10px">
+                Campaign Report
+              </div>
+              <div class="hero-title">{{ campaign.campaign_name }}</div>
+              <div class="hero-subtitle">
+                View campaign delivery, scans, device engagement, media preview,
+                and assigned machine QR access points.
+              </div>
             </div>
           </div>
 
           <v-spacer />
 
           <div class="hero-status-wrap mt-4 mt-md-0">
-            <v-chip outlined color="#73D843" class="status-chip">
+            <v-chip
+              outlined
+              color="#73D843"
+              class="status-chip"
+              style="margin-right: 10px"
+            >
               {{ campaign.status }}
             </v-chip>
           </div>
@@ -55,16 +79,26 @@
         </div>
 
         <div class="summary-card">
+          <div class="summary-label">Total Interactions</div>
+          <div class="summary-value">
+            {{ numeral(campaign.total_impressions * 0.24).format("0,0") }}
+          </div>
+        </div>
+
+        <div class="summary-card" v-show="campaign && campaign.show_qr">
           <div class="summary-label">Total Scans</div>
           <div class="summary-value">{{ campaign.total_scans }}</div>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card" v-show="campaign && campaign.show_qr">
           <div class="summary-label">Conversion Rate</div>
           <div class="summary-value">{{ campaign.conversion_rate }}%</div>
         </div>
 
-        <div class="summary-card qr-summary-card">
+        <div
+          class="summary-card qr-summary-card"
+          v-show="campaign && campaign.show_qr"
+        >
           <div class="summary-label">Campaign QR</div>
           <div class="qr-wrap">
             <div :id="`campaign-qr-${campaign.id}`" class="qr-download-box">
@@ -88,7 +122,7 @@
         </div>
       </div>
 
-      <!-- Info + Media -->
+      <!-- Info + Chart -->
       <v-row class="mt-2">
         <v-col cols="12" md="4">
           <v-card class="panel-card pa-5" outlined>
@@ -121,7 +155,23 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="8">
+          <v-card class="panel-card pa-4" outlined>
+            <div class="panel-kicker">Trend</div>
+            <div class="panel-title">Daily Impressions</div>
+            <apexchart
+              type="line"
+              height="320"
+              :options="impressionsChartOptions"
+              :series="impressionsSeries"
+            />
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <!-- Charts / Media -->
+      <v-row class="mt-2">
+        <v-col cols="12" md="6">
           <v-card class="panel-card pa-5" outlined>
             <div class="panel-kicker">Creative Preview</div>
             <div class="panel-title">Campaign Media</div>
@@ -140,10 +190,24 @@
                 Your browser does not support the video tag.
               </video>
             </div>
+
+            <div
+              class="image-preview-container"
+              v-else-if="campaign && campaign.image_url"
+            >
+              <v-img
+                :src="campaign.image_url"
+                height="320"
+                class="campaign-image-preview"
+                contain
+              />
+            </div>
+
+            <div v-else class="empty-media-state">No media available</div>
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6">
           <v-card class="panel-card pa-5" outlined>
             <div class="panel-kicker">Playback Preview</div>
             <div class="panel-title">Media on Screen</div>
@@ -162,26 +226,24 @@
                 Your browser does not support the video tag.
               </video>
             </div>
-          </v-card>
-        </v-col>
-      </v-row>
 
-      <!-- Charts -->
-      <v-row class="mt-2">
-        <v-col cols="12" md="4">
-          <v-card class="panel-card pa-4" outlined>
-            <div class="panel-kicker">Trend</div>
-            <div class="panel-title">Daily Impressions</div>
-            <apexchart
-              type="line"
-              height="320"
-              :options="impressionsChartOptions"
-              :series="impressionsSeries"
-            />
+            <div
+              class="image-preview-container"
+              v-else-if="campaign && campaign.image_url"
+            >
+              <v-img
+                :src="campaign.image_url"
+                height="320"
+                class="campaign-image-preview"
+                contain
+              />
+            </div>
+
+            <div v-else class="empty-media-state">No media available</div>
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
           <v-card class="panel-card pa-4" outlined>
             <div class="panel-kicker">Trend</div>
             <div class="panel-title">Daily Scans</div>
@@ -194,7 +256,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6" v-show="campaign && campaign.show_qr">
           <v-card class="panel-card pa-4" outlined>
             <div class="panel-kicker">Breakdown</div>
             <div class="panel-title">Device Breakdown</div>
@@ -221,44 +283,70 @@
           <v-simple-table class="client-table">
             <thead>
               <tr>
+                <th>Location</th>
                 <th>Machine</th>
                 <th>UID</th>
-                <th>Location</th>
                 <th>Category</th>
-                <th>QR Code</th>
+                <th>Machine Media</th>
+
+                <th v-show="campaign && campaign.show_qr">QR Code</th>
               </tr>
             </thead>
+
             <tbody>
               <tr v-for="machine in assignedMachines" :key="machine.id">
+                <td>{{ machine.location_name }}</td>
                 <td>{{ machine.machine_name }}</td>
                 <td>{{ machine.machine_uid }}</td>
-                <td>{{ machine.location_name }}</td>
                 <td>{{ machine.location_category }}</td>
-                <td>
-                  <div class="machine-qr-box">
-                    <div
-                      :id="`machine-qr-${machine.machine_uid}`"
-                      class="qr-download-box"
-                    >
-                      <qr-code
-                        :text="getUrl2(campaign.qr_token, machine.machine_uid)"
-                        size="80"
-                      />
-                    </div>
 
+                <td>
+                  <div class="machine-media-preview">
+                    <template
+                      v-if="machine.media_url && isVideo(machine.media_url)"
+                    >
+                      <video
+                        height="100"
+                        muted
+                        width="200"
+                        playsinline
+                        controls
+                      >
+                        <source :src="machine.media_url" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </template>
+
+                    <!-- <template v-else-if="machine.media_url">
+                      <v-img
+                        :src="machine.media_url"
+                        width="90"
+                        height="60"
+                        class="machine-media-thumb"
+                        cover
+                      />
+                    </template> -->
+
+                    <template v-else>
+                      <div class="machine-media-empty">No media</div>
+                    </template>
+                  </div>
+                </td>
+
+                <td v-show="campaign && campaign.show_qr">
+                  <div class="machine-qr-box">
                     <div class="machine-qr-actions">
                       <v-btn
                         icon
                         small
                         class="qr-download-btn"
                         @click="
-                          downloadQr(
-                            `machine-qr-${machine.machine_uid}`,
-                            `${campaign.campaign_name}-${machine.machine_uid}-qr`
-                          )
+                          (qr_dialog = true),
+                            (machine_uid = machine.machine_uid),
+                            (qr_token = machine.qr_token)
                         "
                       >
-                        <v-icon color="#73D843">mdi-download</v-icon>
+                        <v-icon color="#73D843">mdi-eye</v-icon>
                       </v-btn>
 
                       <a
@@ -271,8 +359,11 @@
                   </div>
                 </td>
               </tr>
+
               <tr v-if="!assignedMachines.length">
-                <td colspan="5">No machines assigned</td>
+                <td :colspan="campaign && campaign.show_qr ? 7 : 6">
+                  No machines assigned
+                </td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -280,7 +371,7 @@
       </div>
 
       <!-- Daily data tables -->
-      <v-row class="mt-4">
+      <v-row class="mt-4" v-show="campaign && campaign.show_qr">
         <v-col cols="12" md="6">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
@@ -337,6 +428,45 @@
     </div>
 
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+    <v-dialog v-model="qr_dialog">
+      <v-card color="black" class="container" max-width="400">
+        <v-card-actions>
+          <v-spacer />
+          <v-btn icon color="red" @click="qr_dialog = false">
+            <v-icon red>mdi-close</v-icon>
+          </v-btn>
+          <v-spacer />
+        </v-card-actions>
+
+        <div class="machine-qr-box" v-if="campaign && campaign.qr_token">
+          <div :id="`machine-qr-${machine_uid}`" class="qr-download-box">
+            <qr-code
+              :text="getUrl2(campaign.qr_token, machine_uid)"
+              size="240"
+            />
+          </div>
+
+          {{ campaign.qr_token + "" + machine_uid }}
+
+          <div class="machine-qr-actions">
+            <v-btn
+              icon
+              small
+              class="qr-download-btn"
+              @click="
+                downloadQr(
+                  `machine-qr-${machine_uid}`,
+                  `${campaign.campaign_name}-${machine_uid}-qr`
+                )
+              "
+            >
+              <v-icon color="#73D843">mdi-download</v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -353,6 +483,9 @@ Vue.component("qr-code", VueQRCodeComponent);
 export default {
   data() {
     return {
+      qr_token: null,
+      machine_uid: null,
+      qr_dialog: false,
       numeral,
       moment,
       loading: true,
@@ -392,7 +525,10 @@ export default {
         "?m=MACH_003"
       );
     },
-
+    isVideo(url) {
+      if (!url) return false;
+      return /\.(mp4|webm|ogg|mov|m4v)$/i.test(url);
+    },
     playPreview(refName) {
       const video = this.$refs[refName];
       if (video) {
@@ -415,7 +551,7 @@ export default {
 
         const canvas = await html2canvas(target, {
           backgroundColor: "#ffffff",
-          scale: 3,
+          scale: 10,
         });
 
         const image = canvas.toDataURL("image/png");
@@ -423,6 +559,7 @@ export default {
         link.href = image;
         link.download = `${fileName}.png`;
         link.click();
+        this.qr_dialog = false;
       } catch (error) {
         console.error("downloadQr error:", error);
       }
@@ -454,6 +591,7 @@ export default {
           scans: [],
         };
         this.deviceBreakdown = deviceRes.data || [];
+        console.log(this.campaign);
       } catch (error) {
         console.error("fetchCampaignDetail error:", error);
         this.errorMessage =
@@ -655,6 +793,22 @@ export default {
   border: 1px solid rgba(198, 255, 0, 0.12) !important;
 }
 
+.hero-copy-wrap {
+  max-width: 760px;
+}
+
+.hero-campaign-avatar {
+  overflow: hidden;
+  border: 1px solid rgba(198, 255, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.hero-campaign-avatar-text {
+  color: #000;
+  font-weight: 800;
+  font-size: 18px;
+}
+
 .hero-kicker {
   color: #73d843;
   font-size: 13px;
@@ -829,6 +983,27 @@ export default {
   transform: scale(1.03);
 }
 
+.image-preview-container {
+  margin-top: 10px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+}
+
+.campaign-image-preview {
+  border-radius: 16px;
+  background: #000;
+}
+
+.empty-media-state {
+  margin-top: 10px;
+  padding: 24px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #b9b9b9;
+  text-align: center;
+}
+
 .section-block {
   margin-top: 28px;
 }
@@ -904,6 +1079,10 @@ export default {
 
   .info-row {
     flex-direction: column;
+  }
+
+  .hero-copy-wrap {
+    align-items: flex-start;
   }
 }
 </style>

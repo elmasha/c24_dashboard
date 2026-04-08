@@ -814,24 +814,13 @@ export default {
       ];
     },
 
-    scansSeries() {
-      return [
-        {
-          name: "Scans",
-          data: (this.dailyGraph.scans || []).map((row) =>
-            Number(row.scans || 0)
-          ),
-        },
-      ];
-    },
-
     impressionsChartOptions() {
       return {
         chart: {
           toolbar: {
             show: false,
           },
-          foreColor: "#bdbdbd",
+          foreColor: "#73D843",
         },
         theme: {
           mode: "dark",
@@ -870,7 +859,16 @@ export default {
         },
       };
     },
-
+    scansSeries() {
+      return [
+        {
+          name: "Scans",
+          data: (this.dailyGraph.scans || []).map((row) =>
+            Number(row.scans || 0)
+          ),
+        },
+      ];
+    },
     scansChartOptions() {
       return {
         chart: {

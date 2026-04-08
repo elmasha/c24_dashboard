@@ -35,10 +35,6 @@
       <v-spacer />
 
       <div class="d-flex align-center">
-        <v-btn icon dark class="topbar-icon mr-2">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-
         <div class="d-flex">
           <v-menu offset-y max-height="700">
             <template v-slot:activator="{ on, attrs }">
@@ -197,6 +193,15 @@
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
+        <v-btn
+          v-show="showBurger"
+          icon
+          dark
+          class="topbar-icon ml-1"
+          @click="logout"
+        >
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
       </div>
     </v-app-bar>
 
@@ -210,8 +215,9 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
-              <span class="avatar-text">AD</span>
+            <v-avatar size="70" color="#000" class="sidebar-avatar">
+              <!-- <span class="avatar-text">AD</span> -->
+              <v-img :src="logo" contain height="70" />
             </v-avatar>
 
             <div class="sidebar-user-name" style="margin-left: 20px">
@@ -313,7 +319,7 @@
 
         <!-- Metric cards -->
         <v-row class="text-center">
-          <v-col cols="12" sm="6" md="4" lg="2">
+          <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card metric-highlight" outlined>
               <div class="metric-label">Total Impressions</div>
               <div class="metric-number">
@@ -327,7 +333,21 @@
             </v-card>
           </v-col>
 
-          <v-col cols="12" sm="6" md="4" lg="2">
+          <v-col cols="6" sm="6" md="4" lg="2">
+            <v-card class="metric-card metric-highlight" outlined>
+              <div class="metric-label">Total Interactions</div>
+              <div class="metric-number">
+                {{ millify(metrics.total_impressions * 0.27) }}
+              </div>
+              <div>
+                <p style="color: gray; font-size: 0.8rem">
+                  {{ numeral(metrics.total_impressions * 0.27).format("0,0") }}
+                </p>
+              </div>
+            </v-card>
+          </v-col>
+
+          <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card metric-highlight" outlined>
               <div class="metric-label">Monthly Impressions</div>
               <div class="metric-number">
@@ -336,6 +356,20 @@
               <div>
                 <p style="color: gray; font-size: 0.8rem">
                   {{ numeral(metrics.impressions_month).format("0,0") }}
+                </p>
+              </div>
+            </v-card>
+          </v-col>
+
+          <v-col cols="6" sm="6" md="4" lg="2">
+            <v-card class="metric-card metric-highlight" outlined>
+              <div class="metric-label">Monthly Interactions</div>
+              <div class="metric-number">
+                {{ millify(metrics.impressions_month * 0.27) }}
+              </div>
+              <div>
+                <p style="color: gray; font-size: 0.8rem">
+                  {{ numeral(metrics.impressions_month * 0.27).format("0,0") }}
                 </p>
               </div>
             </v-card>
@@ -352,9 +386,9 @@
 
           <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card" outlined>
-              <div class="metric-label">Total Interactions</div>
+              <div class="metric-label">Daily Interactions</div>
               <div class="metric-number">
-                {{ numeral(metrics.impressions_today * 0.24).format("0,0") }}
+                {{ numeral(metrics.impressions_today * 0.2).format("0,0") }}
               </div>
             </v-card>
           </v-col>
@@ -377,7 +411,7 @@
             </v-card>
           </v-col>
 
-          <v-col cols="6" sm="6" md="4" lg="2">
+          <v-col cols="6" sm="6" md="4" lg="2" v-show="false">
             <v-card class="metric-card" outlined>
               <div class="metric-label">Conversion Rate</div>
               <div class="metric-number">
@@ -413,10 +447,16 @@
                 </div>
               </div>
 
-              <daily-impressions-chart
+              <apexchart
+                type="line"
+                height="320"
+                :options="impressionsChartOptions"
+                :series="impressionsSeries"
+              />
+              <!-- <daily-impressions-chart
                 title="Daily Impressions"
                 :rows="dailyImpressions"
-              />
+              /> -->
             </v-card>
           </v-col>
 
@@ -553,8 +593,10 @@ import moment from "moment";
 import DailyImpressionsChart from "../../components/charts/DailyImpressionsChart.vue";
 import { millify } from "millify";
 import numeral from "numeral";
+import logo from "@/assets/logo.png";
 
 export default {
+  name: "Dashboard",
   middleware: "auth",
   components: {
     DailyImpressionsChart,
@@ -562,6 +604,7 @@ export default {
 
   data() {
     return {
+      logo,
       numeral,
       millify,
       items_nav: [
@@ -596,6 +639,7 @@ export default {
         //     to: "admin/dashboard"
         // }
       ],
+      UIDl: "SktPIKvFTuganVRJnLAZeSzzTzL2",
       moment,
       loading: false,
       errorMessage: "",
@@ -722,11 +766,67 @@ export default {
         },
       };
     },
+    impressionsSeries() {
+      return [
+        {
+          name: "Impressions",
+          data: (this.dailyImpressions || []).map((row) =>
+            Number(row.impressions || 0)
+          ),
+        },
+      ];
+    },
+
+    impressionsChartOptions() {
+      return {
+        chart: {
+          toolbar: {
+            show: false,
+          },
+          foreColor: "#73D843",
+        },
+        theme: {
+          mode: "dark",
+        },
+        stroke: {
+          curve: "smooth",
+          width: 3,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        xaxis: {
+          categories: (this.dailyImpressions || []).map((row) =>
+            this.moment(row.date).format("MMM Do YY")
+          ),
+          title: {
+            text: "Date",
+          },
+        },
+        yaxis: {
+          title: {
+            text: "Impressions",
+          },
+          labels: {
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
+        },
+        tooltip: {
+          theme: "dark",
+          y: {
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
+        },
+        noData: {
+          text: "No impression data",
+        },
+      };
+    },
   },
 
   async mounted() {
     this.onResize();
-    this.loadDashboard();
+    await this.loadDashboard();
     await this.resolveClient();
 
     if (this.clientId) {
@@ -803,11 +903,17 @@ export default {
     async resolveClient() {
       try {
         const currentUser = this.$fire.auth.currentUser;
-        console.log("for user uid:", process.env.uid);
+        console.log("for user uid:", this.$config.UUID);
 
         if (!currentUser) {
-          this.$router.push("/auth/client.login");
-          return;
+          this.$router.push("/auth/admin.login");
+        } else if (currentUser.uid !== this.UIDl) {
+          console.log("Current user UID:", currentUser.uid);
+          this.$fire.auth.signOut();
+          this.$router.push("/auth/admin.login");
+          // this.$router.push("/auth/admin.login");
+        } else {
+          console.log("Admin user authenticated with UID:", currentUser.uid);
         }
 
         const { data } = await api.post("/api/client-dashboard/overview", {
@@ -851,10 +957,9 @@ export default {
         this.loading = false;
       }
     },
-    logout() {
+    async logout() {
       this.$fire.auth.signOut();
       this.$router.push("/auth/admin.login");
-      window.location.reload(true);
     },
     move(val) {
       this.$router.push(`/${val}`);
@@ -903,7 +1008,7 @@ export default {
         this.deviceBreakdown = devicesRes.data || [];
         this.topMachines = machinesRes.data || [];
         this.clients = clientsRes.data || [];
-        console.log("daily imp", this.metrics);
+        console.log("daily imp", this.dailyImpressions);
       } catch (error) {
         console.error("loadDashboard error:", error);
         this.errorMessage =
