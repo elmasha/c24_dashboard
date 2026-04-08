@@ -15,7 +15,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/logo.png' },
        {
       rel: 'stylesheet',
       href: 'https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css'

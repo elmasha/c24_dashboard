@@ -291,7 +291,6 @@
                     <th>Image</th>
                     <th>Client Name</th>
                     <th>Email</th>
-                    <th>Firebase UID</th>
                     <th>Qr code</th>
                     <th>Status</th>
                     <th>Created At</th>
@@ -323,7 +322,6 @@
                     </td>
                     <td>{{ client.client_name }}</td>
                     <td>{{ client.email || "-" }}</td>
-                    <td class="uid-cell">{{ client.firebase_uid || "-" }}</td>
                     <td>
                       <span
                         class="status-pill"

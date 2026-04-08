@@ -1,7 +1,6 @@
 <template>
   <v-container fluid class="machines-page pa-0">
     <div class="machines-shell">
-      <!-- Top -->
       <div class="page-topbar" style="margin-top: 30px; margin-bottom: 20px">
         <nuxt-link class="back-link" to="/client-dashboard">
           <v-icon color="#C6FF00" left>mdi-arrow-left</v-icon>
@@ -15,7 +14,6 @@
         </div>
 
         <div v-else>
-          <!-- Hero -->
           <v-card class="hero-panel pa-6 mb-5" outlined>
             <div class="d-flex flex-wrap align-center">
               <div class="hero-copy">
@@ -27,8 +25,8 @@
                 </div>
                 <div class="hero-subtitle">
                   View the locations delivering your campaigns, their
-                  performance, levels, and which placements are generating the
-                  strongest results.
+                  performance, levels, media, and which placements are
+                  generating the strongest results.
                 </div>
               </div>
 
@@ -57,7 +55,6 @@
             {{ errorMessage }}
           </v-alert>
 
-          <!-- Summary strip -->
           <div class="summary-strip mb-5">
             <div class="summary-card">
               <div class="summary-label">Locations</div>
@@ -81,7 +78,6 @@
             </div>
           </div>
 
-          <!-- Performance table/component -->
           <v-card class="table-card pa-4" outlined>
             <div class="panel-head mb-3">
               <div>

@@ -116,9 +116,9 @@
             <div class="hero-actions mt-4 mt-md-0">
               <nuxt-link to="/campaigns/create" class="text-decoration-none">
                 <v-btn class="mr-2 hero-btn-primary" color="#C6FF00" large>
-                  <span class="black--text font-weight-bold"
-                    >Create Campaign</span
-                  >
+                  <span class="black--text font-weight-bold">
+                    Create Campaign
+                  </span>
                 </v-btn>
               </nuxt-link>
 
@@ -366,10 +366,8 @@
                         <h4 style="color: black">
                           Drop image or Click to Upload
                         </h4>
-                        <v-icon color="black"
-                          >mdi-cloud-upload</v-icon
-                        ></dropzone
-                      >
+                        <v-icon color="black">mdi-cloud-upload</v-icon>
+                      </dropzone>
                     </div>
                   </div>
 
@@ -518,7 +516,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="assignDialog" max-width="950">
+    <v-dialog v-model="assignDialog" max-width="1200">
       <v-card class="dialog-card">
         <v-card-title class="d-flex align-center">
           <span class="text-h6">
@@ -538,7 +536,8 @@
         <v-card-subtitle v-if="selectedCampaign">
           Currently assigned:
           {{ formatNumber(selectedCampaign.machine_count || 0) }}<br />
-          Available online machines only.
+          Available online machines only. You can also add optional per-machine
+          overrides.
         </v-card-subtitle>
 
         <v-card-text>
@@ -556,7 +555,7 @@
             Loading machines...
           </div>
 
-          <div v-else style="max-height: 500px; overflow-y: auto">
+          <div v-else style="max-height: 560px; overflow-y: auto">
             <v-simple-table class="table-dark">
               <thead>
                 <tr>
@@ -566,6 +565,9 @@
                   <th>Location</th>
                   <th>Category</th>
                   <th>Status</th>
+                  <th>Override Media URL</th>
+                  <th>Override Image URL</th>
+                  <th>Override Landing URL</th>
                 </tr>
               </thead>
 
@@ -587,10 +589,40 @@
                   <td>
                     <b style="color: green">{{ machine.status }}</b>
                   </td>
+                  <td>
+                    <v-text-field
+                      v-model="machineOverrides[machine.id].media_url"
+                      dense
+                      outlined
+                      hide-details
+                      dark
+                      placeholder="Optional media URL"
+                    />
+                  </td>
+                  <td>
+                    <v-text-field
+                      v-model="machineOverrides[machine.id].image_url"
+                      dense
+                      outlined
+                      hide-details
+                      dark
+                      placeholder="Optional image URL"
+                    />
+                  </td>
+                  <td>
+                    <v-text-field
+                      v-model="machineOverrides[machine.id].landing_url"
+                      dense
+                      outlined
+                      hide-details
+                      dark
+                      placeholder="Optional landing URL"
+                    />
+                  </td>
                 </tr>
 
                 <tr v-if="!machines.length">
-                  <td colspan="6">No online machines found.</td>
+                  <td colspan="9">No online machines found.</td>
                 </tr>
               </tbody>
             </v-simple-table>
@@ -696,6 +728,8 @@ export default {
       machines: [],
       selectedMachineIds: [],
       originalMachineIds: [],
+      machineOverrides: {},
+      originalMachineOverrides: {},
     };
   },
 
@@ -914,6 +948,29 @@ export default {
       }
     },
 
+    initializeMachineOverrides(machineList, assignedRows = []) {
+      const overrides = {};
+      const originalOverrides = {};
+
+      machineList.forEach((machine) => {
+        const assigned = assignedRows.find(
+          (row) => Number(row.machine_id || row.id) === Number(machine.id)
+        );
+
+        const machineOverride = {
+          media_url: assigned?.override_media_url || "",
+          image_url: assigned?.override_image_url || "",
+          landing_url: assigned?.override_landing_url || "",
+        };
+
+        overrides[machine.id] = { ...machineOverride };
+        originalOverrides[machine.id] = { ...machineOverride };
+      });
+
+      this.machineOverrides = overrides;
+      this.originalMachineOverrides = originalOverrides;
+    },
+
     async openAssignDialog(campaign) {
       try {
         this.assignDialog = true;
@@ -923,6 +980,8 @@ export default {
         this.selectedCampaign = { ...campaign };
         this.selectedMachineIds = [];
         this.originalMachineIds = [];
+        this.machineOverrides = {};
+        this.originalMachineOverrides = {};
 
         const [machinesRes, assignedRes] = await Promise.all([
           api.get("/api/machines"),
@@ -934,12 +993,15 @@ export default {
           (machine) => String(machine.status).toLowerCase() === "online"
         );
 
-        const assignedMachineIds = (assignedRes.data || []).map((row) =>
+        const assignedRows = assignedRes.data || [];
+        const assignedMachineIds = assignedRows.map((row) =>
           Number(row.machine_id || row.id)
         );
 
         this.selectedMachineIds = [...assignedMachineIds];
         this.originalMachineIds = [...assignedMachineIds];
+
+        this.initializeMachineOverrides(this.machines, assignedRows);
       } catch (error) {
         console.error("openAssignDialog error:", error);
         this.assignErrorMessage =
@@ -948,6 +1010,7 @@ export default {
         this.assignLoading = false;
       }
     },
+
     closeAssignDialog() {
       this.assignDialog = false;
       this.assignLoading = false;
@@ -957,6 +1020,28 @@ export default {
       this.machines = [];
       this.selectedMachineIds = [];
       this.originalMachineIds = [];
+      this.machineOverrides = {};
+      this.originalMachineOverrides = {};
+    },
+
+    hasOverrideChanged(machineId) {
+      const current = this.machineOverrides[machineId] || {
+        media_url: "",
+        image_url: "",
+        landing_url: "",
+      };
+
+      const original = this.originalMachineOverrides[machineId] || {
+        media_url: "",
+        image_url: "",
+        landing_url: "",
+      };
+
+      return (
+        (current.media_url || "") !== (original.media_url || "") ||
+        (current.image_url || "") !== (original.image_url || "") ||
+        (current.landing_url || "") !== (original.landing_url || "")
+      );
     },
 
     async saveAssignments() {
@@ -971,11 +1056,34 @@ export default {
 
         const toAssign = currentIds.filter((id) => !originalIds.includes(id));
         const toRemove = originalIds.filter((id) => !currentIds.includes(id));
+        const stillAssigned = currentIds.filter((id) =>
+          originalIds.includes(id)
+        );
+        const toUpdate = stillAssigned.filter((id) =>
+          this.hasOverrideChanged(id)
+        );
 
         for (const machineId of toAssign) {
+          const override = this.machineOverrides[machineId] || {};
+
           await api.post("/api/campaign-machines/assign", {
             campaign_id: this.selectedCampaign.id,
             machine_id: machineId,
+            media_url: override.media_url || null,
+            image_url: override.image_url || null,
+            landing_url: override.landing_url || null,
+          });
+        }
+
+        for (const machineId of toUpdate) {
+          const override = this.machineOverrides[machineId] || {};
+
+          await api.post("/api/campaign-machines/assign", {
+            campaign_id: this.selectedCampaign.id,
+            machine_id: machineId,
+            media_url: override.media_url || null,
+            image_url: override.image_url || null,
+            landing_url: override.landing_url || null,
           });
         }
 
@@ -1250,6 +1358,7 @@ export default {
 .table-dark ::v-deep td {
   color: #d4d4d4 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  vertical-align: middle !important;
 }
 
 .table-dark ::v-deep tr:hover {
