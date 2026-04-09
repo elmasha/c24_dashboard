@@ -3,7 +3,7 @@
     <!-- Hero -->
     <section class="hero-section">
       <v-container>
-        <v-row style="margin-top: 40px">
+        <v-row style="margin-top: 10px">
           <v-col cols="12" md="6">
             <div class="hero-content">
               <div class="d-flex">
