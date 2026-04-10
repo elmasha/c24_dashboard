@@ -3,13 +3,11 @@
     <v-simple-table class="machine-table">
       <thead>
         <tr>
+          <th>Location</th>
           <th>Machine</th>
           <th>UID</th>
-          <th>Location</th>
+
           <th>Category</th>
-          <th>Campaign</th>
-          <th>Media</th>
-          <th>Landing URL</th>
           <th>Impressions</th>
           <th>Interactions</th>
         </tr>
@@ -17,58 +15,10 @@
 
       <tbody>
         <tr v-for="row in rows" :key="row.id || row.machine_id">
+          <td>{{ row.location_name || "-" }}</td>
           <td>{{ row.machine_name || "-" }}</td>
           <td>{{ row.machine_uid || "-" }}</td>
-          <td>{{ row.location_name || "-" }}</td>
           <td>{{ row.location_category || "-" }}</td>
-          <td>{{ row.campaign_name || "-" }}</td>
-
-          <td>
-            <div class="machine-media-preview">
-              <template v-if="row.image_url">
-                <v-img
-                  :src="row.image_url"
-                  width="90"
-                  height="60"
-                  class="machine-media-thumb"
-                  cover
-                />
-              </template>
-
-              <template v-else-if="row.media_url && isVideo(row.media_url)">
-                <video class="machine-video-thumb" muted playsinline controls>
-                  <source :src="row.media_url" />
-                  Your browser does not support the video tag.
-                </video>
-              </template>
-
-              <template v-else-if="row.media_url">
-                <v-img
-                  :src="row.media_url"
-                  width="90"
-                  height="60"
-                  class="machine-media-thumb"
-                  cover
-                />
-              </template>
-
-              <template v-else>
-                <div class="machine-media-empty">No media</div>
-              </template>
-            </div>
-          </td>
-
-          <td>
-            <a
-              v-if="row.landing_url"
-              :href="row.landing_url"
-              target="_blank"
-              class="landing-link"
-            >
-              Open link
-            </a>
-            <span v-else>-</span>
-          </td>
 
           <td>
             {{ formatNumber(row.total_impressions || row.impressions || 0) }}

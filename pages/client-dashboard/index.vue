@@ -89,6 +89,19 @@
                 <div class="notification-count">{{ unreadCount }} unread</div>
               </div>
 
+              <v-card-actions>
+                <v-btn
+                  small
+                  style="color: black"
+                  color="#73D843"
+                  :loading="markingAll"
+                  @click="markAllRead()"
+                >
+                  <v-icon>mdi-check-all</v-icon>
+                  Mark all as read
+                </v-btn>
+              </v-card-actions>
+
               <div v-if="loading" class="loading-block">
                 Loading notifications...
               </div>
@@ -323,8 +336,7 @@
               <div class="metric-value" style="color: #73d843">
                 {{
                   formatNumber(
-                    (overview.metrics && overview.metrics.impressions_today) ||
-                      0
+                    overview.metrics && overview.metrics.impressions_today
                   )
                 }}
               </div>
@@ -335,9 +347,10 @@
               <div class="metric-value" style="color: #73d843">
                 {{
                   numeral(
-                    (overview.metrics &&
-                      overview.metrics.impressions_today * 0.24) ||
-                      0
+                    Math.floor(
+                      overview.metrics &&
+                        overview.metrics.impressions_today * 0.24
+                    )
                   ).format("0,0")
                 }}
               </div>
@@ -360,9 +373,10 @@
               <div class="metric-value">
                 {{
                   millify(
-                    (overview.metrics &&
-                      overview.metrics.total_impressions * 0.24) ||
-                      0
+                    Math.floor(
+                      (overview.metrics && overview.metrics.total_impressions) *
+                        0.24
+                    )
                   )
                 }}
               </div>
@@ -1104,7 +1118,8 @@ export default {
 
         if (!currentUser) {
           this.errorMessage = "User not logged in";
-          /// this.$router.push("/auth/client.login");
+          console.log("User not logged in");
+          this.$router.push("/auth/client.login");
           this.loading = false;
           return;
         }

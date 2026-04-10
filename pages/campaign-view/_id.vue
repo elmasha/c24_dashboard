@@ -270,54 +270,56 @@
         </v-col>
       </v-row>
 
-      <!-- Assigned machines -->
-      <div class="section-block">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">Distribution</div>
-            <h2 class="section-title">Assigned Machines</h2>
-          </div>
-        </div>
+      <v-row class="mt-4">
+        <v-col cols="12" md="12">
+          <!-- Assigned machines -->
+          <div class="section-block">
+            <div class="section-head">
+              <div>
+                <div class="section-kicker">Distribution</div>
+                <h2 class="section-title">Assigned Machines</h2>
+              </div>
+            </div>
 
-        <v-card class="table-card pa-2" outlined max-width="200">
-          <v-simple-table class="client-table">
-            <thead>
-              <tr>
-                <th>Location</th>
-                <th>Machine</th>
-                <th>UID</th>
-                <th>Category</th>
-                <th>Media</th>
+            <v-card class="table-card pa-2" outlined>
+              <v-simple-table class="client-table">
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Machine</th>
+                    <th>UID</th>
+                    <th>Category</th>
+                    <th>Media</th>
 
-                <th v-show="campaign && campaign.show_qr">QR Code</th>
-              </tr>
-            </thead>
+                    <th v-show="campaign && campaign.show_qr">QR Code</th>
+                  </tr>
+                </thead>
 
-            <tbody>
-              <tr v-for="machine in assignedMachines" :key="machine.id">
-                <td>{{ machine.location_name }}</td>
-                <td>{{ machine.machine_name }}</td>
-                <td>{{ machine.machine_uid }}</td>
-                <td>{{ machine.location_category }}</td>
+                <tbody>
+                  <tr v-for="machine in assignedMachines" :key="machine.id">
+                    <td>{{ machine.location_name }}</td>
+                    <td>{{ machine.machine_name }}</td>
+                    <td>{{ machine.machine_uid }}</td>
+                    <td>{{ machine.location_category }}</td>
 
-                <td>
-                  <div class="machine-media-preview">
-                    <template
-                      v-if="machine.media_url && isVideo(machine.media_url)"
-                    >
-                      <video
-                        height="100"
-                        muted
-                        width="200"
-                        playsinline
-                        controls
-                      >
-                        <source :src="machine.media_url" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </template>
+                    <td>
+                      <div class="machine-media-preview">
+                        <template
+                          v-if="machine.media_url && isVideo(machine.media_url)"
+                        >
+                          <video
+                            height="100"
+                            muted
+                            width="200"
+                            playsinline
+                            controls
+                          >
+                            <source :src="machine.media_url" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </template>
 
-                    <!-- <template v-else-if="machine.media_url">
+                        <!-- <template v-else-if="machine.media_url">
                       <v-img
                         :src="machine.media_url"
                         width="90"
@@ -327,48 +329,52 @@
                       />
                     </template> -->
 
-                    <template v-else>
-                      <div class="machine-media-empty">No media</div>
-                    </template>
-                  </div>
-                </td>
+                        <template v-else>
+                          <div class="machine-media-empty">No media</div>
+                        </template>
+                      </div>
+                    </td>
 
-                <td v-show="campaign && campaign.show_qr">
-                  <div class="machine-qr-box">
-                    <div class="machine-qr-actions">
-                      <v-btn
-                        icon
-                        small
-                        class="qr-download-btn"
-                        @click="
-                          (qr_dialog = true),
-                            (machine_uid = machine.machine_uid),
-                            (qr_token = machine.qr_token)
-                        "
-                      >
-                        <v-icon color="#73D843">mdi-eye</v-icon>
-                      </v-btn>
+                    <td v-show="campaign && campaign.show_qr">
+                      <div class="machine-qr-box">
+                        <div class="machine-qr-actions">
+                          <v-btn
+                            icon
+                            small
+                            class="qr-download-btn"
+                            @click="
+                              (qr_dialog = true),
+                                (machine_uid = machine.machine_uid),
+                                (qr_token = machine.qr_token)
+                            "
+                          >
+                            <v-icon color="#73D843">mdi-eye</v-icon>
+                          </v-btn>
 
-                      <a
-                        :href="getUrl2(campaign.qr_token, machine.machine_uid)"
-                        target="_blank"
-                      >
-                        <v-icon color="#73D843">mdi-link-variant</v-icon>
-                      </a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+                          <a
+                            :href="
+                              getUrl2(campaign.qr_token, machine.machine_uid)
+                            "
+                            target="_blank"
+                          >
+                            <v-icon color="#73D843">mdi-link-variant</v-icon>
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
 
-              <tr v-if="!assignedMachines.length">
-                <td :colspan="campaign && campaign.show_qr ? 7 : 6">
-                  No machines assigned
-                </td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-        </v-card>
-      </div>
+                  <tr v-if="!assignedMachines.length">
+                    <td :colspan="campaign && campaign.show_qr ? 7 : 6">
+                      No machines assigned
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-card>
+          </div>
+        </v-col>
+      </v-row>
 
       <!-- Daily data tables -->
       <v-row class="mt-4">

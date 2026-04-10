@@ -80,6 +80,14 @@
             </v-alert>
 
             <v-card class="panel-card pa-4" outlined>
+              <div class="panel-head mb-3">
+                <div>
+                  <div class="panel-kicker"></div>
+                  <div class="panel-title">All Notifications</div>
+                </div>
+
+                <div class="notification-count">{{ unreadCount }} unread</div>
+              </div>
               <v-card-actions>
                 <v-btn
                   small
@@ -92,15 +100,6 @@
                   Mark all as read
                 </v-btn>
               </v-card-actions>
-              <div class="panel-head mb-3">
-                <div>
-                  <div class="panel-kicker"></div>
-                  <div class="panel-title">All Notifications</div>
-                </div>
-
-                <div class="notification-count">{{ unreadCount }} unread</div>
-              </div>
-
               <div v-if="loading" class="loading-block">
                 Loading notifications...
               </div>

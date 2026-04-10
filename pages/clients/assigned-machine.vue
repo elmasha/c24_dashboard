@@ -21,7 +21,7 @@
                   Location Performance
                 </div>
                 <div class="hero-title">
-                  Assigned & Top Performing Locations
+                  Assigned Machines per Location & Top Performing Locations
                 </div>
                 <div class="hero-subtitle">
                   View the locations delivering your campaigns, their
@@ -333,7 +333,7 @@ export default {
   }
 
   .hero-title {
-    font-size: 26px;
+    font-size: 20px;
   }
 
   .summary-strip {

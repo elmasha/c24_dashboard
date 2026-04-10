@@ -214,9 +214,8 @@
                 <v-text-field
                   v-model="form.start_date"
                   label="Start Date"
-                  type="datetime-local"
+                  type="date"
                   outlined
-                  dense
                   dark
                   required
                 />
@@ -226,9 +225,8 @@
                 <v-text-field
                   v-model="form.end_date"
                   label="End Date"
-                  type="datetime-local"
+                  type="date"
                   outlined
-                  dense
                   dark
                   required
                 />
@@ -269,6 +267,7 @@
 import api from "@/services/api";
 import Dropzone from "nuxt-dropzone";
 import "nuxt-dropzone/dropzone.css";
+import { v1 as uuidv1 } from "uuid";
 
 export default {
   components: {
@@ -325,6 +324,7 @@ export default {
         start_date: "",
         end_date: "",
         status: "active",
+        image_url: "",
       },
     };
   },
@@ -346,25 +346,23 @@ export default {
     },
     async afterComplete(upload2) {
       const storageRef = this.$fire.storage.ref();
-      var imageNameP = uuid.v1();
-      try {
-        //save image
-        let file = upload2;
-        var metadata = {
-          contentType: "image/png",
-        };
-        var imageRef = storageRef.child(`posts/${imageNameP}.png`);
-        await imageRef.put(file, metadata);
-        var downloadURLP = await imageRef.getDownloadURL();
+      const imageNameP = uuidv1();
 
-        this.imageUrl = downloadURLP;
+      try {
+        const file = upload2;
+        const metadata = {
+          contentType: file.type || "image/png",
+        };
+
+        const imageRef = storageRef.child(`clients/${imageNameP}.png`);
+        await imageRef.put(file, metadata);
+        const downloadURLP = await imageRef.getDownloadURL();
+
+        this.form.image_url = downloadURLP;
         console.log("image url", downloadURLP);
-        this.snackbar = true;
-        this.snackbarText = "Image Uploaded";
       } catch (error) {
-        this.snackbar2 = true;
-        this.snackbarText2 = error;
         console.log(error);
+        this.errorMessage = "Failed to upload image";
       }
     },
     move(val) {
@@ -405,11 +403,20 @@ export default {
         this.errorMessage = "";
 
         const payload = {
-          ...this.form,
+          client_id: Number(this.form.client_id),
+          client_name: this.form.client_name,
+          campaign_name: this.form.campaign_name,
+          media_url: this.form.media_url,
+          target_impressions: Number(this.form.target_impressions),
+          status: this.form.status,
+          show_qr: this.form.qr === "true" ? 1 : 0,
+          image_url: this.form.image_url,
+          landing_url: this.form.landing_url,
           start_date: this.formatDateTime(this.form.start_date),
           end_date: this.formatDateTime(this.form.end_date),
         };
 
+        console.log("payload", payload);
         const { data } = await api.post("/api/campaigns", payload);
 
         this.successMessage = `Campaign created successfully. QR Token: ${data.qr_token}`;
