@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="admin-page pa-0">
-    <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
       <div class="d-flex align-center">
         <v-menu offset-y v-if="showBurger">
@@ -18,7 +17,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#73D843">{{ item.icon }}</v-icon>
+                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
@@ -46,7 +45,6 @@
     </v-app-bar>
 
     <div class="admin-layout">
-      <!-- Sidebar -->
       <aside class="admin-sidebar" v-show="!showBurger">
         <div class="sidebar-card">
           <div class="sidebar-brand">
@@ -55,7 +53,7 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
+            <v-avatar size="54" color="#C6FF00" class="sidebar-avatar">
               <span class="avatar-text">AD</span>
             </v-avatar>
 
@@ -74,7 +72,7 @@
               @click="move(item.to)"
             >
               <v-list-item-icon>
-                <v-icon color="#73D843">{{ item.icon }}</v-icon>
+                <v-icon color="#C6FF00">{{ item.icon }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
@@ -87,7 +85,7 @@
             <v-btn
               block
               outlined
-              color="#73D843"
+              color="#C6FF00"
               class="logout-btn"
               @click="logout"
             >
@@ -97,9 +95,7 @@
         </div>
       </aside>
 
-      <!-- Main -->
       <main class="admin-main">
-        <!-- Hero -->
         <v-card class="hero-panel pa-6 mb-5" outlined>
           <div class="d-flex flex-wrap align-center">
             <div class="hero-copy" style="margin-left: 10px">
@@ -108,8 +104,8 @@
                 Create, manage and maintain client accounts across the platform
               </div>
               <div class="hero-subtext">
-                Control client onboarding, status, email records and Firebase
-                UID mapping from one place.
+                Control client onboarding, setup links, email records and
+                dashboard access from one place.
               </div>
             </div>
 
@@ -118,7 +114,7 @@
             <div class="hero-actions mt-4 mt-md-0">
               <v-btn
                 class="mr-2 hero-btn-primary"
-                color="#73D843"
+                color="#C6FF00"
                 large
                 @click="resetForm"
               >
@@ -159,7 +155,6 @@
         </v-alert>
 
         <v-row>
-          <!-- Form -->
           <v-col cols="12" lg="4">
             <v-card class="panel-card pa-4" outlined>
               <div class="panel-head mb-3">
@@ -187,8 +182,8 @@
 
                     <div v-else class="client-image-upload">
                       <dropzone
-                        id="foo"
-                        ref="el"
+                        id="client-dropzone"
+                        ref="clientDropzone"
                         style="
                           border-radius: 360px;
                           width: 140px;
@@ -206,7 +201,7 @@
                     <v-btn
                       x-small
                       text
-                      color="#73D843"
+                      color="#C6FF00"
                       @click="clearClientImage"
                     >
                       Remove image
@@ -226,14 +221,7 @@
                 <v-text-field
                   v-model="form.email"
                   label="Email"
-                  outlined
-                  dense
-                  dark
-                />
-
-                <v-text-field
-                  v-model="form.firebase_uid"
-                  label="Firebase UID"
+                  type="email"
                   outlined
                   dense
                   dark
@@ -250,9 +238,14 @@
                 />
 
                 <v-select
-                  v-model="form.qr"
-                  :items="['true', 'false']"
-                  label="Qr Code"
+                  v-model="form.show_qr"
+                  :items="[
+                    { text: 'Enabled', value: 1 },
+                    { text: 'Disabled', value: 0 },
+                  ]"
+                  item-text="text"
+                  item-value="value"
+                  label="QR Code"
                   outlined
                   dense
                   dark
@@ -260,7 +253,7 @@
 
                 <div class="d-flex">
                   <v-btn
-                    color="#73D843"
+                    color="#C6FF00"
                     class="black--text font-weight-bold mr-2"
                     type="submit"
                     :loading="saving"
@@ -274,7 +267,6 @@
             </v-card>
           </v-col>
 
-          <!-- Table -->
           <v-col cols="12" lg="8">
             <v-card class="panel-card pa-4" outlined>
               <div class="panel-head mb-3">
@@ -291,7 +283,8 @@
                     <th>Image</th>
                     <th>Client Name</th>
                     <th>Email</th>
-                    <th>Qr code</th>
+                    <th>Setup</th>
+                    <th>QR Code</th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th class="text-right">Actions</th>
@@ -304,7 +297,7 @@
                     <td>
                       <v-avatar
                         size="36"
-                        :color="client.image_url ? 'transparent' : '#73D843'"
+                        :color="client.image_url ? 'transparent' : '#C6FF00'"
                       >
                         <template v-if="client.image_url">
                           <v-img :src="client.image_url" cover />
@@ -326,17 +319,25 @@
                       <span
                         class="status-pill"
                         :class="
-                          String(client.show_qr) === 'true' ||
+                          client.firebase_uid
+                            ? 'status-active'
+                            : 'status-inactive'
+                        "
+                      >
+                        {{ client.firebase_uid ? "completed" : "pending" }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="status-pill"
+                        :class="
                           Number(client.show_qr) === 1
                             ? 'status-active'
                             : 'status-inactive'
                         "
                       >
                         {{
-                          String(client.show_qr) === "true" ||
-                          Number(client.show_qr) === 1
-                            ? "enabled"
-                            : "disabled"
+                          Number(client.show_qr) === 1 ? "enabled" : "disabled"
                         }}
                       </span>
                     </td>
@@ -358,11 +359,22 @@
                         <v-btn
                           x-small
                           text
-                          color="#73D843"
+                          color="#C6FF00"
                           class="mr-1 mb-1"
                           @click="editClient(client)"
                         >
                           Edit
+                        </v-btn>
+
+                        <v-btn
+                          x-small
+                          text
+                          color="#9be15d"
+                          class="mr-1 mb-1"
+                          :loading="resendingId === client.id"
+                          @click="resendSetupLink(client)"
+                        >
+                          Resend Link
                         </v-btn>
 
                         <v-btn
@@ -399,7 +411,6 @@ import "nuxt-dropzone/dropzone.css";
 import { v1 as uuidv1 } from "uuid";
 
 export default {
-  // middleware: "auth",
   components: {
     Dropzone,
   },
@@ -413,6 +424,7 @@ export default {
       loading: false,
       saving: false,
       deletingId: null,
+      resendingId: null,
       editingId: null,
       successMessage: "",
       errorMessage: "",
@@ -447,9 +459,8 @@ export default {
       form: {
         client_name: "",
         email: "",
-        firebase_uid: "",
         status: "active",
-        qr: "false",
+        show_qr: 0,
         image_url: "",
       },
     };
@@ -466,29 +477,27 @@ export default {
     },
 
     clearDropzone() {
-      if (this.$refs.el && this.$refs.el.dropzone) {
-        this.$refs.el.dropzone.removeAllFiles();
+      if (this.$refs.clientDropzone && this.$refs.clientDropzone.dropzone) {
+        this.$refs.clientDropzone.dropzone.removeAllFiles();
       }
     },
 
-    async afterComplete(upload2) {
+    async afterComplete(uploadedFile) {
       const storageRef = this.$fire.storage.ref();
-      const imageNameP = uuidv1();
+      const imageName = uuidv1();
 
       try {
-        const file = upload2;
         const metadata = {
-          contentType: file.type || "image/png",
+          contentType: uploadedFile.type || "image/png",
         };
 
-        const imageRef = storageRef.child(`clients/${imageNameP}.png`);
-        await imageRef.put(file, metadata);
-        const downloadURLP = await imageRef.getDownloadURL();
+        const imageRef = storageRef.child(`clients/${imageName}.png`);
+        await imageRef.put(uploadedFile, metadata);
+        const downloadURL = await imageRef.getDownloadURL();
 
-        this.form.image_url = downloadURLP;
-        console.log("image url", downloadURLP);
+        this.form.image_url = downloadURL;
       } catch (error) {
-        console.log(error);
+        console.error("afterComplete error:", error);
         this.errorMessage = "Failed to upload image";
       }
     },
@@ -525,7 +534,6 @@ export default {
 
         const { data } = await api.get("/api/clients");
         this.clients = data || [];
-        console.log("Fetched clients:", this.clients);
       } catch (error) {
         console.error("fetchClients error:", error);
         this.errorMessage =
@@ -541,18 +549,17 @@ export default {
         this.successMessage = "";
         this.errorMessage = "";
 
-        if (!this.form.client_name || !this.form.firebase_uid) {
-          this.errorMessage = "Client name and Firebase UID are required";
+        if (!this.form.client_name || !this.form.email) {
+          this.errorMessage = "Client name and email are required";
           return;
         }
 
         const payload = {
           client_name: this.form.client_name,
           email: this.form.email,
-          firebase_uid: this.form.firebase_uid,
           status: this.form.status,
-          show_qr: this.form.qr === "true" ? 1 : 0,
-          image_url: this.form.image_url,
+          show_qr: Number(this.form.show_qr),
+          image_url: this.form.image_url || null,
         };
 
         if (this.editingId) {
@@ -560,16 +567,13 @@ export default {
             `/api/clients/${this.editingId}`,
             payload
           );
-
           this.successMessage = data.client_name
             ? `${data.client_name} updated successfully`
             : "Client updated successfully";
         } else {
           const { data } = await api.post("/api/clients", payload);
-
-          this.successMessage = data.client_name
-            ? `${data.client_name} created successfully`
-            : "Client created successfully";
+          this.successMessage =
+            data.message || "Client created and setup email sent successfully";
         }
 
         this.resetForm();
@@ -590,18 +594,38 @@ export default {
       this.form = {
         client_name: client.client_name || "",
         email: client.email || "",
-        firebase_uid: client.firebase_uid || "",
         status: client.status || "active",
-        qr:
-          String(client.show_qr) === "true" || Number(client.show_qr) === 1
-            ? "true"
-            : "false",
+        show_qr: Number(client.show_qr || 0),
         image_url: client.image_url || "",
       };
+
+      this.$nextTick(() => {
+        this.clearDropzone();
+      });
+
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
+    },
+
+    async resendSetupLink(client) {
+      try {
+        this.resendingId = client.id;
+        this.successMessage = "";
+        this.errorMessage = "";
+
+        const { data } = await api.post(
+          `/api/clients/${client.id}/resend-setup-link`
+        );
+        this.successMessage = data.message || "Setup link sent successfully";
+      } catch (error) {
+        console.error("resendSetupLink error:", error);
+        this.errorMessage =
+          error.response?.data?.message || "Failed to resend setup link";
+      } finally {
+        this.resendingId = null;
+      }
     },
 
     async deleteClient(client) {
@@ -616,7 +640,6 @@ export default {
         this.errorMessage = "";
 
         const { data } = await api.delete(`/api/clients/${client.id}`);
-
         this.successMessage = data.message || "Client deleted successfully";
 
         if (this.editingId === client.id) {
@@ -638,9 +661,8 @@ export default {
       this.form = {
         client_name: "",
         email: "",
-        firebase_uid: "",
         status: "active",
-        qr: "false",
+        show_qr: 0,
         image_url: "",
       };
       this.errorMessage = "";
@@ -707,7 +729,7 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #73d843;
+  color: #c6ff00;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -766,7 +788,7 @@ export default {
 
 .logout-btn {
   border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #73d843 !important;
+  color: #c6ff00 !important;
 }
 
 .admin-main {
@@ -780,16 +802,9 @@ export default {
   border-radius: 999px;
   background: rgba(198, 255, 0, 0.1);
   border: 1px solid rgba(198, 255, 0, 0.2);
-  color: #73d843;
+  color: #c6ff00;
   font-size: 12px;
   margin-bottom: 8px;
-}
-
-.page-title {
-  font-size: 30px;
-  font-weight: 800;
-  color: #fff;
-  margin: 0;
 }
 
 .hero-panel {
@@ -809,7 +824,7 @@ export default {
 }
 
 .hero-kicker {
-  color: #73d843;
+  color: #c6ff00;
   font-size: 13px;
   margin-bottom: 10px;
   letter-spacing: 0.4px;
@@ -835,8 +850,8 @@ export default {
 }
 
 .hero-btn-outline {
-  border-color: #73d843 !important;
-  color: #73d843 !important;
+  border-color: #c6ff00 !important;
+  color: #c6ff00 !important;
 }
 
 .dashboard-alert {
@@ -871,7 +886,7 @@ export default {
 }
 
 .table-dark ::v-deep th {
-  color: #73d843 !important;
+  color: #c6ff00 !important;
   background: transparent !important;
   font-weight: 700;
   border-bottom: 1px solid rgba(198, 255, 0, 0.08) !important;
@@ -902,7 +917,7 @@ export default {
 
 .status-active {
   background: rgba(198, 255, 0, 0.12);
-  color: #73d843;
+  color: #c6ff00;
   border: 1px solid rgba(198, 255, 0, 0.18);
 }
 
@@ -912,9 +927,10 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.uid-cell {
-  max-width: 220px;
-  word-break: break-all;
+.table-avatar-text {
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .client-image-wrap {
@@ -938,12 +954,6 @@ export default {
   border-radius: 50%;
 }
 
-.table-avatar-text {
-  color: #000;
-  font-size: 11px;
-  font-weight: 800;
-}
-
 @media (max-width: 960px) {
   .admin-layout {
     display: block;
@@ -951,10 +961,6 @@ export default {
 
   .admin-main {
     padding: 16px;
-  }
-
-  .page-title {
-    font-size: 24px;
   }
 
   .hero-heading {

@@ -746,6 +746,8 @@ export default {
 
   data() {
     return {
+      readingId: null,
+      markingAll: false,
       millify,
       grid: false,
       numeral,

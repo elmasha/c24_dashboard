@@ -382,6 +382,7 @@ export default {
       try {
         const { data } = await api.get("/api/clients");
         this.clients = data || [];
+        console.log("clients", this.clients);
       } catch (error) {
         console.error("fetchClients error:", error);
         this.errorMessage =
@@ -394,6 +395,8 @@ export default {
         (c) => Number(c.id) === Number(this.form.client_id)
       );
       this.form.client_name = selected ? selected.client_name : "";
+      this.form.show_qr = selected ? selected.show_qr : "";
+      console.log("selected client", selected);
     },
 
     async createCampaign() {
