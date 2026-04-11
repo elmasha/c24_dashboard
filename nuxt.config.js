@@ -38,8 +38,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   
-  plugins: [{ src: "@/plugins/apexcharts.js", mode: "client" },{ src: "@/plugins/video.js", mode: "client" },{ src: "@/plugins/vue-core-video-player.js", mode: "client" }]
-,
+  plugins: [{ src: "@/plugins/apexcharts.js", mode: "client" }, { src: "@/plugins/video.js", mode: "client" },
+  { src: "@/plugins/vue-core-video-player.js", mode: "client" }],
 
   router: {
   middleware: ['auth']
