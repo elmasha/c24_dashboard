@@ -1,44 +1,75 @@
 export default function ({ app, route, redirect }) {
-  const user = app.$fire?.auth?.currentUser
+  return new Promise((resolve) => {
+    const path = route.path;
 
-  const protectedRoutes = [
-    '/admin/dashboard',
-    '/campaigns/all',
-    '/machines',
-    '/clients',
-    
-  ]
+    const adminEmails = [
+      "test@gmail.com",
+      "admin2@example.com",
+    ];
 
-  const protectedRoutes1 = [
-    '/client-dashboard',
-  ]
+    const isAdminProtected =
+      path.startsWith("/admin") ||
+      ["/campaigns/all", "/machines", "/clients"].includes(path);
 
-  const authRoutes = [
-     '/admin/dashboard',
-    '/campaigns/all',
-    '/machines',
-    '/clients',
-  ]
+    const isClientProtected =
+      path.startsWith("/clients") ||
+      ["/client-dashboard"].includes(path);
 
-  const authRoutes1 = [
-    '/client-dashboard',
-  ]
+    const isAdminAuthPage = ["/auth/admin.login"].includes(path);
 
-  //Not logged in & trying to access protected routes
-  // if (protectedRoutes.includes(route.path) && !user) {
-  //   return redirect('/auth/admin.login')
-  // }
+    const isClientAuthPage = [
+      "/auth/client.login",
+      "/client.set.password",
+    ].includes(path);
 
-  // if (protectedRoutes1.includes(route.path) && !user) {
-  //   return redirect('/auth/client.login')
-  // }
+    const unsubscribe = app.$fire.auth.onAuthStateChanged((user) => {
+      unsubscribe();
 
- // Logged in & trying to access auth pages
-  // if (authRoutes.includes(route.path) && user) {
-  //   return redirect('/auth/admin.login')
-  // }
-  // // Logged in & trying to access auth pages
-  // if (authRoutes1.includes(route.path) && user) {
-  //   return redirect('/auth/client.login')
-  // }
+      const isLoggedIn = !!user;
+      const userEmail = (user?.email || "").toLowerCase();
+      const isAdmin = isLoggedIn && adminEmails.includes(userEmail);
+
+      if (isAdminProtected && !isLoggedIn) {
+        redirect("/auth/admin.login");
+        return resolve();
+      }
+
+      if (isClientProtected && !isLoggedIn) {
+        redirect("/auth/client.login");
+        return resolve();
+      }
+
+      if (isAdminProtected && isLoggedIn && !isAdmin) {
+        redirect("/client-dashboard");
+        return resolve();
+      }
+
+      if (isClientProtected && isLoggedIn && isAdmin) {
+        redirect("/admin/dashboard");
+        return resolve();
+      }
+
+      if (isAdminAuthPage && isLoggedIn && isAdmin) {
+        redirect("/admin/dashboard");
+        return resolve();
+      }
+
+      if (isAdminAuthPage && isLoggedIn && !isAdmin) {
+        redirect("/client-dashboard");
+        return resolve();
+      }
+
+      if (isClientAuthPage && isLoggedIn && !isAdmin) {
+        redirect("/client-dashboard");
+        return resolve();
+      }
+
+      if (isClientAuthPage && isLoggedIn && isAdmin) {
+        redirect("/admin/dashboard");
+        return resolve();
+      }
+
+      resolve();
+    });
+  });
 }
