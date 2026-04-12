@@ -54,9 +54,13 @@
           <div class="footer-brand-badge">
             <img :src="logo" alt="" />
           </div>
-          <div class="footer-brand-text">
+          <div class="footer-brand-text" style="margin-top: 20px">
             <h5 class="footer-title">Charge24</h5>
-            <p class="footer-subtitle">Recharge your brand</p>
+            <p class="footer-subtitle">
+              Recharge your brand <br />
+              Charge24 v1.0.1
+            </p>
+            <!-- <p class="" style="font-size: 0.6rem"></p> -->
           </div>
         </div>
 
@@ -139,7 +143,7 @@ export default {
 .dashboard-footer {
   background: linear-gradient(90deg, #050505 0%, #0d0d0d 100%) !important;
   border-top: 1px solid rgba(198, 255, 0, 0.12);
-  min-height: 72px;
+  min-height: 62px;
   padding: 0 20px;
 }
 
@@ -160,10 +164,10 @@ export default {
 }
 
 .footer-brand-badge {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 12px;
-  background: rgba(198, 255, 0, 0.12);
+  /* background: rgba(198, 255, 0, 0.12); */
   border: 1px solid rgba(198, 255, 0, 0.2);
   color: #73d843;
   display: flex;
