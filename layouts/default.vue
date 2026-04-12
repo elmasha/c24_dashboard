@@ -58,7 +58,7 @@
             <h5 class="footer-title">Charge24</h5>
             <p class="footer-subtitle">
               Recharge your brand <br />
-              Charge24 v1.0.1
+              C24 v1.0.1
             </p>
             <!-- <p class="" style="font-size: 0.6rem"></p> -->
           </div>
