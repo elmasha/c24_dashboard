@@ -7,20 +7,33 @@ export default function ({ app, route, redirect }) {
       "admin2@example.com",
     ];
 
-    const isAdminProtected =
-      path.startsWith("/admin") ||
-      ["/campaigns/all", "/machines", "/clients"].includes(path);
+    const adminProtectedRoutes = [
+      "/admin/dashboard",
+      "/campaigns/all",
+      "/machines",
+      "/clients",
+    ];
 
-    const isClientProtected =
-      path.startsWith("/clients") ||
-      ["/client-dashboard"].includes(path);
+    const clientProtectedRoutes = [
+      "/client-dashboard",
+      "/clients/campaign",
+      "/clients/assigned-machine",
+      "/clients/notification",
+    ];
 
-    const isAdminAuthPage = ["/auth/admin.login"].includes(path);
+    const adminAuthPages = [
+      "/auth/admin.login",
+    ];
 
-    const isClientAuthPage = [
+    const clientAuthPages = [
       "/auth/client.login",
       "/client.set.password",
-    ].includes(path);
+    ];
+
+    const isAdminProtected = adminProtectedRoutes.includes(path);
+    const isClientProtected = clientProtectedRoutes.includes(path);
+    const isAdminAuthPage = adminAuthPages.includes(path);
+    const isClientAuthPage = clientAuthPages.includes(path);
 
     const unsubscribe = app.$fire.auth.onAuthStateChanged((user) => {
       unsubscribe();
