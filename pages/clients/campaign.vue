@@ -232,7 +232,6 @@
               <v-simple-table class="client-table">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Image</th>
                     <th>Campaign</th>
                     <th>Status</th>
@@ -248,7 +247,6 @@
 
                 <tbody>
                   <tr v-for="campaign in overview.campaigns" :key="campaign.id">
-                    <td>{{ campaign.id }}</td>
                     <td>
                       <v-avatar
                         size="36"

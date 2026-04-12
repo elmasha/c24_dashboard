@@ -12,8 +12,6 @@ export default function ({ app, route, redirect }) {
       "/campaigns/all",
       "/machines",
       "/clients",
-      "/traffic-config",
-      "/system.jobs",
     ];
 
     const clientProtectedRoutes = [
@@ -37,8 +35,8 @@ export default function ({ app, route, redirect }) {
     const isAdminAuthPage = adminAuthPages.includes(path);
     const isClientAuthPage = clientAuthPages.includes(path);
 
-    const unsubscribe = app.$fire.auth.onAuthStateChanged((user) => {
-      unsubscribe();
+    const unwatch = app.$fire.auth.onAuthStateChanged((user) => {
+      unwatch();
 
       const isLoggedIn = !!user;
       const userEmail = (user?.email || "").toLowerCase();

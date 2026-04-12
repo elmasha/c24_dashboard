@@ -86,7 +86,9 @@
                   <div class="panel-title">All Notifications</div>
                 </div>
 
-                <div class="notification-count">{{ unreadCount }} unread</div>
+                <div class="notification-count" style="margin-right: 18px">
+                  {{ unreadCount }} unread
+                </div>
               </div>
 
               <v-card-actions>
@@ -645,7 +647,6 @@
                 <v-simple-table class="client-table">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Image</th>
                       <th>Campaign</th>
                       <th>Status</th>
@@ -664,7 +665,6 @@
                       v-for="campaign in overview.campaigns"
                       :key="campaign.id"
                     >
-                      <td>{{ campaign.id }}</td>
                       <td>
                         <v-avatar
                           size="36"
@@ -769,7 +769,7 @@ export default {
         },
         {
           title: "Locations",
-          icon: "mdi-cellphone-sound",
+          icon: "mdi-cellphone-marker",
           to: "clients/assigned-machine",
         },
         {
@@ -1121,7 +1121,7 @@ export default {
         if (!currentUser) {
           this.errorMessage = "User not logged in";
           console.log("User not logged in");
-          this.$router.push("/auth/client.login");
+          // this.$router.push("/auth/client.login");
           this.loading = false;
           return;
         }

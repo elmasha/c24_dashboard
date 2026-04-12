@@ -39,7 +39,7 @@ export default {
   */
   
   plugins: [{ src: "@/plugins/apexcharts.js", mode: "client" }, { src: "@/plugins/video.js", mode: "client" },
-  { src: "@/plugins/vue-core-video-player.js", mode: "client" },{ src: "@/plugins/qr.js", mode: "client" }],
+  { src: "@/plugins/vue-core-video-player.js", mode: "client" },{ src: "@/plugins/qr.js", mode: "client" },{ src: "@/plugins/firebase-auth-persistence.js", mode: "client" }],
 
   router: {
   middleware: ['auth']
@@ -90,7 +90,7 @@ export default {
           auth: {
             persistence: "local", // default
             initialize: {
-                nAuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
+                AuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
                 subscribeManually: false,
             },
             ssr: false, // default
