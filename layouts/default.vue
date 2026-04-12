@@ -185,7 +185,7 @@ export default {
 .footer-title {
   margin: 0;
   color: #73d843;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -193,7 +193,7 @@ export default {
 .footer-subtitle {
   margin: 2px 0 0;
   color: #9e9e9e;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .footer-right {
@@ -203,7 +203,7 @@ export default {
 
 .footer-copy {
   color: #d0d0d0;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 @media (max-width: 600px) {
@@ -217,7 +217,7 @@ export default {
   }
 
   .footer-copy {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 </style>
