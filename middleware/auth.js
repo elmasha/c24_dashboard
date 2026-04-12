@@ -35,7 +35,7 @@ export default function ({ app, route, redirect }) {
       }
 
       if (isClientProtected && !isLoggedIn) {
-        redirect("/auth/admin.login");
+        redirect("/auth/client.login");
         return resolve();
       }
 
