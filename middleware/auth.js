@@ -12,6 +12,8 @@ export default function ({ app, route, redirect }) {
       "/campaigns/all",
       "/machines",
       "/clients",
+      "/traffic-config",
+      "/system.jobs",
     ];
 
     const clientProtectedRoutes = [

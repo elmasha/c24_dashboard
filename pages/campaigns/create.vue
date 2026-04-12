@@ -242,6 +242,20 @@
                   dark
                 />
               </v-col>
+
+              <v-col cols="12" md="4">
+                <v-select
+                  v-model="form.show_qr"
+                  :items="[
+                    { text: 'Yes', value: 1 },
+                    { text: 'No', value: 0 },
+                  ]"
+                  label="Show QR"
+                  outlined
+                  dense
+                  dark
+                />
+              </v-col>
             </v-row>
 
             <div class="form-actions">
@@ -325,6 +339,7 @@ export default {
         end_date: "",
         status: "active",
         image_url: "",
+        show_qr: 0,
       },
     };
   },

@@ -471,14 +471,10 @@
 </template>
 
 <script>
-import Vue from "vue";
 import api from "@/services/api";
 import moment from "moment";
 import numeral from "numeral";
 import html2canvas from "html2canvas";
-import VueQRCodeComponent from "vue-qrcode-component";
-
-Vue.component("qr-code", VueQRCodeComponent);
 
 export default {
   data() {

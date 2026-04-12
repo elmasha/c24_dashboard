@@ -23,43 +23,48 @@
             {{ errorMessage }}
           </v-alert>
 
-          <v-form @submit.prevent="loginClient">
-            <v-text-field
-              v-model="form.email"
-              label="Email"
-              type="email"
-              outlined
-              dense
-              dark
-              required
-            />
+          <div class="login-wrapper">
+            <!-- Glow Ring -->
+            <div class="ring"></div>
 
-            <v-text-field
-              v-model="form.password"
-              label="Password"
-              :type="showPassword ? 'text' : 'password'"
-              :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-              @click:append="showPassword = !showPassword"
-              outlined
-              dense
-              dark
-              required
-            />
+            <v-form @submit.prevent="loginClient">
+              <v-text-field
+                v-model="form.email"
+                label="Email"
+                type="email"
+                outlined
+                dense
+                dark
+                required
+              />
 
-            <v-btn
-              block
-              large
-              color="#73D843"
-              class="black--text font-weight-bold mt-2"
-              :loading="loading"
-              type="submit"
-            >
-              Sign In
-            </v-btn>
-          </v-form>
+              <v-text-field
+                v-model="form.password"
+                label="Password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="showPassword = !showPassword"
+                outlined
+                dense
+                dark
+                required
+              />
 
-          <div class="text-center mt-6">
-            <nuxt-link to="/" class="back-link"> Back to Home </nuxt-link>
+              <v-btn
+                block
+                large
+                color="#73D843"
+                class="black--text font-weight-bold mt-2"
+                :loading="loading"
+                type="submit"
+              >
+                Sign In
+              </v-btn>
+            </v-form>
+
+            <div class="text-center mt-6">
+              <nuxt-link to="/" class="back-link"> Back to Home </nuxt-link>
+            </div>
           </div>
         </v-card>
       </v-col>
