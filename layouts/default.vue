@@ -164,8 +164,8 @@ export default {
 }
 
 .footer-brand-badge {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   border-radius: 12px;
   /* background: rgba(198, 255, 0, 0.12); */
   border: 1px solid rgba(198, 255, 0, 0.2);
