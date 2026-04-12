@@ -44,10 +44,10 @@ export default function ({ app, route, redirect }) {
         return resolve();
       }
 
-      // if (isClientProtected && isLoggedIn && isAdmin) {
-      //   redirect("/admin/dashboard");
-      //   return resolve();
-      // }
+      if (isClientProtected && isLoggedIn && isAdmin) {
+        redirect("/admin/dashboard");
+        return resolve();
+      }
 
       if (isAdminAuthPage && isLoggedIn && isAdmin) {
         redirect("/admin/dashboard");
