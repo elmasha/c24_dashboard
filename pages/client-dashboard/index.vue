@@ -709,6 +709,7 @@ export default {
       selectedRange: "",
       chartRenderKey: 0,
       rangeOptions: [
+        { text: "All impressions", value: "" },
         { text: "Today", value: "week" },
         { text: "Last 7 Days", value: "7d" },
         { text: "Last 30 Days", value: "30d" },
@@ -1176,6 +1177,7 @@ export default {
     },
 
     async loadSummaryData() {
+      this.selectedRange = this.selectedRange || "";
       try {
         const currentUser = this.$fire.auth.currentUser;
         if (!currentUser) return;
