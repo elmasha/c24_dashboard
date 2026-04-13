@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="admin-page pa-0">
-    <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="admin-topbar px-4">
       <div class="d-flex align-center">
         <v-menu offset-y v-if="showBurger">
@@ -46,9 +45,8 @@
                 class="topbar-icon mr-2"
               >
                 <v-icon>mdi-bell-outline</v-icon>
-
                 {{ unreadCount > 0 ? unreadCount : "" }}
-                <!-- From Uiverse.io by risabbir -->
+
                 <div class="warp-loader" v-if="unreadCount > 0">
                   <div class="ring"></div>
                   <div class="ring"></div>
@@ -88,19 +86,21 @@
 
                 <div class="notification-count">{{ unreadCount }} unread</div>
               </div>
+
               <v-card-actions>
                 <v-btn
                   small
                   style="color: black"
                   color="#73D843"
                   :loading="markingAll"
-                  @click="markAllRead()"
+                  @click="markAllRead"
                 >
                   <v-icon>mdi-check-all</v-icon>
                   Mark all as read
                 </v-btn>
               </v-card-actions>
-              <div v-if="loading" class="loading-block">
+
+              <div v-if="notificationsLoading" class="loading-block">
                 Loading notifications...
               </div>
 
@@ -176,24 +176,8 @@
                 </v-card>
               </div>
             </v-card>
-
-            <!-- <v-list dark class="menu-list">
-              <v-list-item
-                v-for="(notification, index) in notifications"
-                :key="index"
-                link
-              >
-                <v-list-item-title>{{
-                  notification.message
-                }}</v-list-item-title>
-              </v-list-item>
-            </v-list> -->
           </v-menu>
         </div>
-
-        <!-- <v-btn icon dark class="topbar-icon mr-2">
-          <v-icon>mdi-filter-variant</v-icon>
-        </v-btn> -->
 
         <v-btn
           icon
@@ -204,6 +188,7 @@
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
+
         <v-btn
           v-show="showBurger"
           icon
@@ -217,7 +202,6 @@
     </v-app-bar>
 
     <div class="admin-layout">
-      <!-- Sidebar -->
       <aside class="admin-sidebar" v-show="!showBurger">
         <div class="sidebar-card">
           <div class="sidebar-brand">
@@ -227,7 +211,6 @@
 
           <div class="sidebar-profile">
             <v-avatar size="70" color="#000" class="sidebar-avatar">
-              <!-- <span class="avatar-text">AD</span> -->
               <v-img :src="logo" contain height="70" />
             </v-avatar>
 
@@ -263,7 +246,7 @@
               outlined
               color="#73D843"
               class="logout-btn"
-              @click="logout()"
+              @click="logout"
             >
               Logout
             </v-btn>
@@ -271,9 +254,7 @@
         </div>
       </aside>
 
-      <!-- Main -->
       <main class="admin-main" v-resize="onResize">
-        <!-- Hero -->
         <v-row class="mb-5">
           <v-col cols="12">
             <v-card class="hero-panel pa-6" outlined>
@@ -328,7 +309,6 @@
           {{ errorMessage }}
         </v-alert>
 
-        <!-- Metric cards -->
         <v-row class="text-center">
           <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card metric-highlight" outlined>
@@ -358,9 +338,9 @@
             </v-card>
           </v-col>
 
-          <v-col cols="6" sm="6" md="4" lg="2">
+          <!-- <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card metric-highlight" outlined>
-              <div class="metric-label">Monthly Impressions</div>
+              <div class="metric-label">{{ rangeText }} Impressions</div>
               <div class="metric-number">
                 {{ millify(metrics.impressions_month) }}
               </div>
@@ -370,11 +350,11 @@
                 </p>
               </div>
             </v-card>
-          </v-col>
+          </v-col> -->
 
-          <v-col cols="6" sm="6" md="4" lg="2">
+          <!-- <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card metric-highlight" outlined>
-              <div class="metric-label">Monthly Interactions</div>
+              <div class="metric-label">{{ rangeText }} Interactions</div>
               <div class="metric-number">
                 {{ millify(metrics.impressions_month * 0.27) }}
               </div>
@@ -384,7 +364,7 @@
                 </p>
               </div>
             </v-card>
-          </v-col>
+          </v-col> -->
 
           <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card" outlined>
@@ -415,7 +395,7 @@
 
           <v-col cols="6" sm="6" md="4" lg="2">
             <v-card class="metric-card" outlined>
-              <div class="metric-label">Scans This Month</div>
+              <div class="metric-label">{{ rangeText }} Scans</div>
               <div class="metric-number">
                 {{ formatNumber(metrics.scans_month) }}
               </div>
@@ -446,28 +426,40 @@
           </v-col>
         </v-row>
 
-        <!-- Charts row 1 -->
+        <v-row>
+          <v-col cols="12" sm="6" md="4" lg="3">
+            <v-select
+              v-model="selectedRange"
+              :items="rangeOptions"
+              item-text="text"
+              item-value="value"
+              label="Analytics Range"
+              outlined
+              dense
+              dark
+              @change="onRangeChange"
+            />
+          </v-col>
+        </v-row>
+
         <v-row>
           <v-col cols="12" lg="8" md="8">
             <v-card class="panel-card pa-4 mb-4" outlined light>
               <div class="panel-head">
                 <div>
                   <div class="panel-title" style="margin-bottom: 18px">
-                    Daily Impressions
+                    {{ rangeText }} Impressions
                   </div>
                 </div>
               </div>
 
               <apexchart
+                :key="'admin-impressions-' + chartRenderKey"
                 type="line"
                 height="320"
                 :options="impressionsChartOptions"
                 :series="impressionsSeries"
               />
-              <!-- <daily-impressions-chart
-                title="Daily Impressions"
-                :rows="dailyImpressions"
-              /> -->
             </v-card>
           </v-col>
 
@@ -489,18 +481,18 @@
           </v-col>
         </v-row>
 
-        <!-- Charts row 2 -->
         <v-row>
           <v-col cols="12" lg="8" md="8">
             <v-card class="panel-card pa-4" outlined>
               <div class="panel-head">
                 <div>
                   <div class="panel-kicker"></div>
-                  <div class="panel-title">Daily Scans</div>
+                  <div class="panel-title">{{ rangeText }} Scans</div>
                 </div>
               </div>
 
               <apexchart
+                :key="'admin-scans-' + chartRenderKey"
                 type="bar"
                 height="320"
                 :options="scansChartOptions"
@@ -543,7 +535,6 @@
           </v-col>
         </v-row>
 
-        <!-- Clients preview -->
         <v-row class="mt-4">
           <v-col cols="12">
             <v-card class="panel-card pa-4" outlined>
@@ -601,7 +592,6 @@
 <script>
 import api from "@/services/api";
 import moment from "moment";
-import DailyImpressionsChart from "../../components/charts/DailyImpressionsChart.vue";
 import { millify } from "millify";
 import numeral from "numeral";
 import logo from "@/assets/logo.png";
@@ -609,9 +599,6 @@ import logo from "@/assets/logo.png";
 export default {
   name: "Dashboard",
   middleware: "auth",
-  components: {
-    DailyImpressionsChart,
-  },
 
   data() {
     return {
@@ -644,16 +631,22 @@ export default {
           icon: "mdi-bell-outline",
           to: "admin/notification",
         },
-        // {
-        //     title: "Traffic Config",
-        //     icon: "mdi-cogs",
-        //     to: "admin/dashboard"
-        // }
       ],
       UIDl: "SktPIKvFTuganVRJnLAZeSzzTzL2",
       moment,
       loading: false,
+      notificationsLoading: false,
       errorMessage: "",
+      successMessage: "",
+      selectedRange: "",
+      chartRenderKey: 0,
+      rangeOptions: [
+        { text: "All Time", value: "" },
+        { text: "This Week", value: "week" },
+        { text: "Last 7 Days", value: "7d" },
+        { text: "Last 30 Days", value: "30d" },
+        { text: "This Month", value: "month" },
+      ],
       metrics: {
         impressions_today: 0,
         scans_today: 0,
@@ -662,6 +655,8 @@ export default {
         conversion_rate: 0,
         total_impressions: 0,
       },
+      allDailyImpressions: [],
+      allDailyScans: [],
       dailyImpressions: [],
       dailyScans: [],
       deviceBreakdown: [],
@@ -676,8 +671,8 @@ export default {
       notifications: [],
       readingId: null,
       markingAll: false,
-      successMessage: "",
-      errorMessage: "",
+      clientId: null,
+      clientName: "",
     };
   },
 
@@ -686,6 +681,7 @@ export default {
       return (this.notifications || []).filter((n) => Number(n.is_read) === 0)
         .length;
     },
+
     totalClients() {
       return (this.clients || []).length;
     },
@@ -693,6 +689,14 @@ export default {
     activeClients() {
       return (this.clients || []).filter((client) => client.status === "active")
         .length;
+    },
+
+    rangeText() {
+      if (!this.selectedRange) return "General";
+      const found = this.rangeOptions.find(
+        (item) => item.value === this.selectedRange
+      );
+      return found ? found.text : "General";
     },
 
     scansSeries() {
@@ -719,11 +723,13 @@ export default {
           enabled: false,
         },
         xaxis: {
-          categories: (this.dailyScans || []).map((row) =>
-            moment(row.date).format("MMM Do YY")
-          ),
+          categories: (this.dailyScans || []).map((row) => row.label || "-"),
           title: {
             text: "Date",
+          },
+          labels: {
+            rotate: -45,
+            hideOverlappingLabels: true,
           },
         },
         yaxis: {
@@ -736,6 +742,12 @@ export default {
         },
         tooltip: {
           theme: "dark",
+          x: {
+            formatter: (_value, { dataPointIndex }) => {
+              const row = this.dailyScans[dataPointIndex];
+              return row?.label || "-";
+            },
+          },
           y: {
             formatter: (value) => Number(value || 0).toLocaleString(),
           },
@@ -777,6 +789,7 @@ export default {
         },
       };
     },
+
     impressionsSeries() {
       return [
         {
@@ -807,11 +820,15 @@ export default {
           enabled: false,
         },
         xaxis: {
-          categories: (this.dailyImpressions || []).map((row) =>
-            this.moment(row.date).format("MMM Do YY")
+          categories: (this.dailyImpressions || []).map(
+            (row) => row.label || "-"
           ),
           title: {
             text: "Date",
+          },
+          labels: {
+            rotate: -45,
+            hideOverlappingLabels: true,
           },
         },
         yaxis: {
@@ -824,6 +841,12 @@ export default {
         },
         tooltip: {
           theme: "dark",
+          x: {
+            formatter: (_value, { dataPointIndex }) => {
+              const row = this.dailyImpressions[dataPointIndex];
+              return row?.label || "-";
+            },
+          },
           y: {
             formatter: (value) => Number(value || 0).toLocaleString(),
           },
@@ -839,9 +862,7 @@ export default {
     this.onResize();
     await this.loadDashboard();
     await this.resolveClient();
-
     await this.fetchNotifications();
-    console.log("config", this.$config.UUID);
   },
 
   beforeDestroy() {
@@ -854,6 +875,138 @@ export default {
   },
 
   methods: {
+    normalizeLabel(rawLabel) {
+      if (!rawLabel) return null;
+
+      const parsed = this.moment(
+        rawLabel,
+        [
+          "YYYY-MM-DD",
+          "YYYY-M-D",
+          "YYYY-MM",
+          "YYYY-[W]WW",
+          "MMM DD",
+          "MMM D",
+          "MMM Do YY",
+          "MMM Do YYYY",
+        ],
+        true
+      );
+
+      if (parsed.isValid()) {
+        return parsed.format("YYYY-MM-DD");
+      }
+
+      const fallback = this.moment(rawLabel);
+      return fallback.isValid() ? fallback.format("YYYY-MM-DD") : null;
+    },
+
+    formatLabelForChart(rawLabel) {
+      if (!rawLabel) return "-";
+
+      const parsed = this.moment(
+        rawLabel,
+        ["YYYY-MM-DD", "YYYY-M-D", "YYYY-MM", "YYYY-[W]WW"],
+        true
+      );
+
+      if (parsed.isValid()) {
+        return parsed.format("MMM DD");
+      }
+
+      return rawLabel;
+    },
+
+    groupRowsByLabel(rows = [], valueKey = "impressions") {
+      const grouped = {};
+
+      rows.forEach((row) => {
+        const rawLabel = row.label;
+        if (!rawLabel) return;
+
+        const normalizedKey = this.normalizeLabel(rawLabel) || rawLabel;
+
+        if (!grouped[normalizedKey]) {
+          grouped[normalizedKey] = {
+            sort_key: normalizedKey,
+            label: this.formatLabelForChart(normalizedKey),
+            [valueKey]: 0,
+          };
+        }
+
+        grouped[normalizedKey][valueKey] += Number(row[valueKey] || 0);
+      });
+
+      return Object.values(grouped).sort((a, b) => {
+        if (a.sort_key < b.sort_key) return -1;
+        if (a.sort_key > b.sort_key) return 1;
+        return 0;
+      });
+    },
+
+    applyGraphFilter() {
+      const today = this.moment().startOf("day");
+      let startDate = null;
+
+      if (this.selectedRange === "7d") {
+        startDate = today.clone().subtract(6, "days");
+      } else if (this.selectedRange === "30d") {
+        startDate = today.clone().subtract(29, "days");
+      } else if (this.selectedRange === "week") {
+        startDate = today.clone().startOf("isoWeek");
+      } else if (this.selectedRange === "month") {
+        startDate = today.clone().startOf("month");
+      }
+
+      const filterRows = (rows = [], valueKey = "impressions") => {
+        const filtered = rows.filter((row) => {
+          const normalized = this.normalizeLabel(row.label);
+          if (!normalized) return false;
+
+          const rowMoment = this.moment(normalized);
+          return !startDate || rowMoment.isSameOrAfter(startDate, "day");
+        });
+
+        return this.groupRowsByLabel(filtered, valueKey);
+      };
+
+      this.dailyImpressions = filterRows(
+        this.allDailyImpressions,
+        "impressions"
+      );
+      this.dailyScans = filterRows(this.allDailyScans, "scans");
+    },
+
+    async loadSummaryData() {
+      try {
+        const [metricsRes, devicesRes, machinesRes] = await Promise.all([
+          api.get("/api/analytics/global-metrics", {
+            params: { range: this.selectedRange },
+          }),
+          api.get("/api/analytics/device-breakdown", {
+            params: { range: this.selectedRange },
+          }),
+          api.get("/api/analytics/top-machines", {
+            params: { range: this.selectedRange },
+          }),
+        ]);
+
+        this.metrics = metricsRes.data || this.metrics;
+        this.deviceBreakdown = devicesRes.data || [];
+        this.topMachines = machinesRes.data || [];
+      } catch (error) {
+        console.error("loadSummaryData error:", error);
+        this.errorMessage =
+          error.response?.data?.message || "Failed to update admin dashboard";
+      }
+    },
+
+    onRangeChange() {
+      this.applyGraphFilter();
+      this.chartRenderKey += 1;
+      this.loadSummaryData();
+    },
+
     async markRead(notification) {
       try {
         this.readingId = notification.id;
@@ -910,32 +1063,23 @@ export default {
       if (type === "campaign_status_changed") return "mdi-refresh-circle";
       return "mdi-bell-outline";
     },
+
     async resolveClient() {
       try {
         const currentUser = this.$fire.auth.currentUser;
-        console.log("for user uid:", this.$config.UUID);
 
         if (!currentUser) {
           this.$router.push("/auth/admin.login");
-        } else if (currentUser.uid !== this.UIDl) {
-          console.log("Current user UID:", currentUser.uid);
+          return;
+        }
+
+        if (currentUser.uid !== this.UIDl) {
           this.$fire.auth.signOut();
           this.$router.push("/auth/admin.login");
-          // this.$router.push("/auth/admin.login");
-        } else {
-          console.log("Admin user authenticated with UID:", currentUser.uid);
+          return;
         }
 
-        const { data } = await api.post("/api/client-dashboard/overview", {
-          uid: currentUser.uid,
-        });
-
-        if (data && data.client) {
-          this.clientId = data.client.id;
-          this.clientName = data.client.client_name || "Client";
-        }
-
-        console.log("Resolved client:", this.clientId, this.clientName);
+        console.log("Admin user authenticated with UID:", currentUser.uid);
       } catch (error) {
         console.error("resolveClient error:", error);
       }
@@ -943,7 +1087,7 @@ export default {
 
     async fetchNotifications() {
       try {
-        this.loading = true;
+        this.notificationsLoading = true;
         this.errorMessage = "";
 
         const { data } = await api.get("/api/notifications/get", {
@@ -958,13 +1102,15 @@ export default {
         this.errorMessage =
           error.response?.data?.message || "Failed to load notifications";
       } finally {
-        this.loading = false;
+        this.notificationsLoading = false;
       }
     },
+
     async logout() {
       this.$fire.auth.signOut();
       this.$router.push("/auth/admin.login");
     },
+
     move(val) {
       this.$router.push(`/${val}`);
     },
@@ -991,11 +1137,17 @@ export default {
           machinesRes,
           clientsRes,
         ] = await Promise.all([
-          api.get("/api/analytics/global-metrics"),
+          api.get("/api/analytics/global-metrics", {
+            params: { range: this.selectedRange },
+          }),
           api.get("/api/analytics/daily-impressions-graph"),
           api.get("/api/analytics/daily-scans-graph"),
-          api.get("/api/analytics/device-breakdown"),
-          api.get("/api/analytics/top-machines"),
+          api.get("/api/analytics/device-breakdown", {
+            params: { range: this.selectedRange },
+          }),
+          api.get("/api/analytics/top-machines", {
+            params: { range: this.selectedRange },
+          }),
           api.get("/api/clients"),
         ]);
 
@@ -1005,18 +1157,21 @@ export default {
           impressions_month: 0,
           scans_month: 0,
           conversion_rate: 0,
+          total_impressions: 0,
         };
 
-        this.dailyImpressions = impressionsRes.data || [];
-        this.dailyScans = scansRes.data || [];
+        this.allDailyImpressions = impressionsRes.data || [];
+        this.allDailyScans = scansRes.data || [];
+        this.applyGraphFilter();
+        this.chartRenderKey += 1;
+
         this.deviceBreakdown = devicesRes.data || [];
         this.topMachines = machinesRes.data || [];
         this.clients = clientsRes.data || [];
-        console.log("daily imp", this.dailyImpressions);
       } catch (error) {
         console.error("loadDashboard error:", error);
         this.errorMessage =
-          error.respons.data.message || "Failed to load admin dashboard";
+          error.response?.data?.message || "Failed to load admin dashboard";
       } finally {
         this.loading = false;
       }
@@ -1361,6 +1516,70 @@ export default {
   text-decoration: none;
 }
 
+.loading-block,
+.empty-state {
+  color: #bdbdbd;
+  padding: 20px 0;
+}
+
+.notification-count {
+  color: #73d843;
+  font-size: 13px;
+}
+
+.notification-card {
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #111111, #0b0b0b) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.notification-card.unread {
+  border: 1px solid rgba(198, 255, 0, 0.22) !important;
+}
+
+.notification-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.notification-message {
+  color: #cfcfcf;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.notification-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #8f8f8f;
+  font-size: 12px;
+}
+
+.notification-type {
+  color: #73d843;
+}
+
 @media (max-width: 960px) {
   .admin-layout {
     display: block;
@@ -1381,238 +1600,7 @@ export default {
   .metric-number {
     font-size: 24px;
   }
-}
 
-.client-page {
-  min-height: 100vh;
-  background: radial-gradient(
-      circle at top left,
-      rgba(198, 255, 0, 0.06),
-      transparent 22%
-    ),
-    linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
-  color: #fff;
-}
-.client-topbar {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.topbar-icon {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(198, 255, 0, 0.08);
-}
-.client-layout {
-  display: flex;
-  min-height: calc(100vh - 72px);
-}
-.client-sidebar {
-  width: 290px;
-  padding: 16px;
-}
-.sidebar-card {
-  height: 100%;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #101010, #070707);
-  border: 1px solid rgba(198, 255, 0, 0.12);
-  padding: 18px;
-}
-.sidebar-brand {
-  margin-bottom: 24px;
-}
-.sidebar-brand-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(198, 255, 0, 0.1);
-  border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #73d843;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-.sidebar-brand-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-}
-.sidebar-profile {
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  margin-bottom: 20px;
-  text-align: center;
-}
-.sidebar-avatar {
-  margin-bottom: 12px;
-}
-.avatar-text {
-  color: #000;
-  font-weight: 800;
-}
-.sidebar-user-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-.sidebar-user-subtitle {
-  color: #a8a8a8;
-  font-size: 13px;
-  margin-top: 4px;
-}
-.sidebar-list {
-  background: transparent !important;
-}
-.sidebar-item {
-  border-radius: 12px;
-  margin-bottom: 6px;
-}
-.sidebar-item:hover {
-  background: rgba(198, 255, 0, 0.06);
-}
-.sidebar-footer {
-  margin-top: 24px;
-}
-.logout-btn {
-  border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #73d843 !important;
-}
-.client-main {
-  flex: 1;
-  padding: 20px;
-}
-.page-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(198, 255, 0, 0.1);
-  border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #73d843;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-.hero-panel {
-  border-radius: 24px;
-  background: radial-gradient(
-      circle at top right,
-      rgba(198, 255, 0, 0.08),
-      transparent 28%
-    ),
-    linear-gradient(135deg, #111111, #080808) !important;
-  border: 1px solid rgba(198, 255, 0, 0.12) !important;
-}
-.hero-kicker {
-  color: #73d843;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-.hero-heading {
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #fff;
-}
-.hero-subtext {
-  color: #bcbcbc;
-  margin-top: 12px;
-  line-height: 1.7;
-}
-.hero-btn-outline {
-  border-color: #73d843 !important;
-  color: #73d843 !important;
-}
-.dashboard-alert {
-  border-radius: 14px;
-}
-.panel-card {
-  border-radius: 22px;
-  background: linear-gradient(180deg, #111111, #090909) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.panel-kicker {
-  color: #9ea59b;
-  font-size: 12px;
-  text-transform: uppercase;
-  margin-left: 25px;
-  margin-bottom: 4px;
-}
-.panel-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-}
-.notification-count {
-  color: #73d843;
-  font-size: 13px;
-}
-.loading-block,
-.empty-state {
-  color: #bdbdbd;
-  padding: 20px 0;
-}
-.notification-card {
-  border-radius: 18px !important;
-  background: linear-gradient(180deg, #111111, #0b0b0b) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-.notification-card.unread {
-  border: 1px solid rgba(198, 255, 0, 0.22) !important;
-}
-.notification-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 16px;
-}
-.notification-content {
-  flex: 1;
-}
-.notification-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.notification-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-.notification-message {
-  color: #cfcfcf;
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
-.notification-meta {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  color: #8f8f8f;
-  font-size: 12px;
-}
-.notification-type {
-  color: #73d843;
-}
-.menu-list {
-  background: #111111 !important;
-  border: 1px solid rgba(198, 255, 0, 0.1);
-  border-radius: 14px;
-}
-@media (max-width: 950px) {
-  .client-layout {
-    display: block;
-  }
-  .client-main {
-    padding: 16px;
-  }
-  .hero-heading {
-    font-size: 22px;
-  }
   .notification-row {
     flex-direction: column;
   }
