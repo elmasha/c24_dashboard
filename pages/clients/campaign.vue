@@ -237,7 +237,7 @@
                     <th>Status</th>
                     <th>Impressions</th>
                     <th>Interactions</th>
-                    <th>QR Scans</th>
+                    <th v-show="c">QR Scans</th>
                     <th>Conversion</th>
                     <th>Start</th>
                     <th>End</th>

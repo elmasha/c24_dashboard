@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="client-page pa-0">
-    <!-- Top bar -->
     <v-app-bar flat color="transparent" height="72" class="client-topbar px-4">
       <div class="d-flex align-center">
         <v-menu offset-y v-if="showBurger">
@@ -46,9 +45,8 @@
                 class="topbar-icon mr-2"
               >
                 <v-icon>mdi-bell-outline</v-icon>
-
                 {{ unreadCount > 0 ? unreadCount : "" }}
-                <!-- From Uiverse.io by risabbir -->
+
                 <div class="warp-loader" v-if="unreadCount > 0">
                   <div class="ring"></div>
                   <div class="ring"></div>
@@ -97,14 +95,14 @@
                   style="color: black"
                   color="#73D843"
                   :loading="markingAll"
-                  @click="markAllRead()"
+                  @click="markAllRead"
                 >
                   <v-icon>mdi-check-all</v-icon>
                   Mark all as read
                 </v-btn>
               </v-card-actions>
 
-              <div v-if="loading" class="loading-block">
+              <div v-if="notificationsLoading" class="loading-block">
                 Loading notifications...
               </div>
 
@@ -180,18 +178,6 @@
                 </v-card>
               </div>
             </v-card>
-
-            <!-- <v-list dark class="menu-list">
-              <v-list-item
-                v-for="(notification, index) in notifications"
-                :key="index"
-                link
-              >
-                <v-list-item-title>{{
-                  notification.message
-                }}</v-list-item-title>
-              </v-list-item>
-            </v-list> -->
           </v-menu>
         </div>
 
@@ -204,6 +190,7 @@
         >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
+
         <v-btn
           v-show="showBurger"
           icon
@@ -217,7 +204,6 @@
     </v-app-bar>
 
     <div class="client-layout">
-      <!-- Side navigation -->
       <aside class="client-sidebar" v-show="!showBurger">
         <div class="sidebar-card">
           <div class="sidebar-brand">
@@ -285,27 +271,24 @@
         </div>
       </aside>
 
-      <!-- Main dashboard -->
       <main class="client-main" v-resize="onResize">
         <div v-if="loading" class="loading-state">Loading dashboard...</div>
 
         <div v-else>
-          <!-- Welcome banner -->
           <v-card class="welcome-banner pa-6 mb-5" outlined>
             <div class="d-flex flex-wrap align-center">
               <div class="welcome-copy">
                 <div class="welcome-kicker" style="margin-left: 12px">
                   Campaign Reporting
                 </div>
-                <!-- <div class="welcome-title">
-                                See how your campaigns are performing across impressions, scans, and conversions
-                            </div> -->
                 <div class="welcome-subtitle">
                   See how your campaigns are performing across impressions,
                   scans, and conversions
                 </div>
               </div>
+
               <v-spacer />
+
               <div
                 class="welcome-actions mt-4 mt-md-0"
                 style="margin-right: 10px"
@@ -331,16 +314,11 @@
             {{ errorMessage }}
           </v-alert>
 
-          <!-- Metrics -->
           <div class="metrics-grid text-center">
             <div class="metric-card metric-primary">
               <div class="metric-label">Impressions Today</div>
               <div class="metric-value" style="color: #73d843">
-                {{
-                  formatNumber(
-                    overview.metrics && overview.metrics.impressions_today
-                  )
-                }}
+                {{ formatNumber(overview.metrics.impressions_today) }}
               </div>
             </div>
 
@@ -349,10 +327,7 @@
               <div class="metric-value" style="color: #73d843">
                 {{
                   numeral(
-                    Math.floor(
-                      overview.metrics &&
-                        overview.metrics.impressions_today * 0.24
-                    )
+                    Math.floor((overview.metrics.impressions_today || 0) * 0.24)
                   ).format("0,0")
                 }}
               </div>
@@ -361,12 +336,7 @@
             <div class="metric-card metric-primary">
               <div class="metric-label">Total Impressions</div>
               <div class="metric-value">
-                {{
-                  millify(
-                    (overview.metrics && overview.metrics.total_impressions) ||
-                      0
-                  )
-                }}
+                {{ millify(overview.metrics.total_impressions || 0) }}
               </div>
             </div>
 
@@ -375,10 +345,7 @@
               <div class="metric-value">
                 {{
                   millify(
-                    Math.floor(
-                      (overview.metrics && overview.metrics.total_impressions) *
-                        0.24
-                    )
+                    Math.floor((overview.metrics.total_impressions || 0) * 0.24)
                   )
                 }}
               </div>
@@ -387,45 +354,25 @@
             <div class="metric-card" v-show="showQrEnabled">
               <div class="metric-label">Total Scans</div>
               <div class="metric-value">
-                {{
-                  formatNumber(
-                    (overview.metrics && overview.metrics.total_scans) || 0
-                  )
-                }}
+                {{ formatNumber(overview.metrics.total_scans || 0) }}
               </div>
             </div>
 
             <div class="metric-card" v-show="showQrEnabled">
               <div class="metric-label">Conversion Rate</div>
               <div class="metric-value">
-                {{
-                  (overview.metrics &&
-                    overview.metrics.overall_conversion_rate) ||
-                  0
-                }}%
+                {{ overview.metrics.overall_conversion_rate || 0 }}%
               </div>
             </div>
 
             <div class="metric-card">
               <div class="metric-label">Active Campaigns</div>
               <div class="metric-value">
-                {{
-                  (overview.metrics && overview.metrics.active_campaigns) || 0
-                }}
-              </div>
-            </div>
-
-            <div class="metric-card" v-show="false">
-              <div class="metric-label">Total Campaigns</div>
-              <div class="metric-value">
-                {{
-                  (overview.metrics && overview.metrics.total_campaigns) || 0
-                }}
+                {{ overview.metrics.active_campaigns || 0 }}
               </div>
             </div>
           </div>
 
-          <!-- Charts -->
           <div class="section-block">
             <div class="section-head">
               <div>
@@ -435,15 +382,30 @@
             </div>
 
             <v-row>
+              <v-col cols="12" sm="6" md="4" lg="3">
+                <v-select
+                  v-model="selectedRange"
+                  :items="rangeOptions"
+                  item-text="text"
+                  item-value="value"
+                  label="Filter date Range"
+                  outlined
+                  dense
+                  dark
+                  @change="onRangeChange"
+                />
+              </v-col>
+
               <v-col cols="12" lg="12" md="12">
                 <v-card class="panel-card pa-4" outlined color="black">
                   <div class="panel-title-wrap">
                     <div class="panel-kicker"></div>
-                    <div class="panel-title">Daily Impressions</div>
+                    <div class="panel-title">{{ rangeText }} Impressions</div>
                   </div>
                   <apexchart
+                    :key="'impressions-' + chartRenderKey"
                     type="line"
-                    height="320"
+                    height="500"
                     :options="impressionsChartOptions"
                     :series="impressionsSeries"
                   />
@@ -454,9 +416,10 @@
                 <v-card class="panel-card pa-4" outlined color="black">
                   <div class="panel-title-wrap">
                     <div class="panel-kicker"></div>
-                    <div class="panel-title">Daily QR Scans</div>
+                    <div class="panel-title">{{ rangeText }} QR Scans</div>
                   </div>
                   <apexchart
+                    :key="'scans-' + chartRenderKey"
                     type="bar"
                     height="320"
                     :options="scansChartOptions"
@@ -484,7 +447,6 @@
             Export CSV
           </v-btn>
 
-          <!-- Campaign section -->
           <div class="section-block">
             <div class="section-head">
               <div>
@@ -506,7 +468,6 @@
               </div>
             </div>
 
-            <!-- Card view -->
             <div
               class="campaign-grid"
               v-show="!grid"
@@ -518,19 +479,6 @@
                 class="campaign-card"
                 outlined
               >
-                <div
-                  v-if="campaign.image_url"
-                  class="campaign-image-wrap"
-                  v-show="false"
-                >
-                  <v-img
-                    :src="campaign.image_url"
-                    height="170"
-                    cover
-                    class="campaign-image"
-                  />
-                </div>
-
                 <div class="campaign-card-top">
                   <div class="campaign-avatar-wrap">
                     <v-avatar
@@ -641,7 +589,6 @@
               </v-card>
             </div>
 
-            <!-- Table view -->
             <div v-show="grid">
               <v-card class="table-card pa-2" outlined>
                 <v-simple-table class="client-table">
@@ -710,7 +657,10 @@
                           class="campaign-link"
                         >
                           View
-                          {{ campaign.campaign_name.substring(0, 10) + "..." }}
+                          {{
+                            (campaign.campaign_name || "").substring(0, 10) +
+                            "..."
+                          }}
                         </nuxt-link>
                       </td>
                     </tr>
@@ -751,11 +701,19 @@ export default {
       millify,
       grid: false,
       numeral,
-      drawer: false,
       moment,
       loading: true,
+      notificationsLoading: false,
       errorMessage: "",
       successMessage: "",
+      selectedRange: "",
+      chartRenderKey: 0,
+      rangeOptions: [
+        { text: "Last 7 Days", value: "7d" },
+        { text: "Last 30 Days", value: "30d" },
+        { text: "This Week", value: "week" },
+        { text: "This Month", value: "month" },
+      ],
       items_nav: [
         {
           title: "Dashboard",
@@ -787,20 +745,24 @@ export default {
           active_campaigns: 0,
           total_campaigns: 0,
           impressions_today: 0,
+          range: "7d",
         },
         campaigns: [],
       },
-      deviceBreakdown: [],
+      allDailyGraph: {
+        impressions: [],
+        scans: [],
+      },
       dailyGraph: {
         impressions: [],
         scans: [],
       },
+      deviceBreakdown: [],
       showBurger: false,
-      windowSize: {
-        x: null,
-        y: null,
-      },
+      windowSize: { x: null, y: null },
       notifications: [],
+      clientId: null,
+      clientName: "",
     };
   },
 
@@ -809,6 +771,7 @@ export default {
       return (this.notifications || []).filter((n) => Number(n.is_read) === 0)
         .length;
     },
+
     showQrEnabled() {
       if (!this.overview.client) return false;
       return (
@@ -817,6 +780,13 @@ export default {
         Number(this.overview.client.qr) === 1 ||
         Number(this.overview.client.show_qr) === 1
       );
+    },
+
+    rangeText() {
+      const found = this.rangeOptions.find(
+        (item) => item.value === this.selectedRange
+      );
+      return found ? found.text : "Daily";
     },
 
     impressionsSeries() {
@@ -830,51 +800,6 @@ export default {
       ];
     },
 
-    impressionsChartOptions() {
-      return {
-        chart: {
-          toolbar: {
-            show: false,
-          },
-          foreColor: "#73D843",
-        },
-        theme: {
-          mode: "dark",
-        },
-        stroke: {
-          curve: "smooth",
-          width: 3,
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        xaxis: {
-          categories: (this.dailyGraph.impressions || []).map((row) =>
-            this.moment(row.date).format("MMM Do YY")
-          ),
-          title: {
-            text: "Date",
-          },
-        },
-        yaxis: {
-          title: {
-            text: "Impressions",
-          },
-          labels: {
-            formatter: (value) => Number(value || 0).toLocaleString(),
-          },
-        },
-        tooltip: {
-          theme: "dark",
-          y: {
-            formatter: (value) => Number(value || 0).toLocaleString(),
-          },
-        },
-        noData: {
-          text: "No impression data",
-        },
-      };
-    },
     scansSeries() {
       return [
         {
@@ -885,45 +810,88 @@ export default {
         },
       ];
     },
-    scansChartOptions() {
+
+    impressionsChartOptions() {
       return {
         chart: {
-          toolbar: {
-            show: false,
-          },
-          foreColor: "#bdbdbd",
+          toolbar: { show: false },
+          foreColor: "#73D843",
         },
-        theme: {
-          mode: "dark",
+        theme: { mode: "dark" },
+        stroke: {
+          curve: "smooth",
+          width: 3,
         },
-        dataLabels: {
-          enabled: false,
-        },
+        dataLabels: { enabled: false },
         xaxis: {
-          categories: (this.dailyGraph.scans || []).map((row) =>
-            moment(row.date).format("MMM Do YY")
+          categories: (this.dailyGraph.impressions || []).map(
+            (row) => row.label || "-"
           ),
-          title: {
-            text: "Date",
+          title: { text: "Date" },
+          labels: {
+            rotate: -45,
+            hideOverlappingLabels: true,
           },
         },
         yaxis: {
-          title: {
-            text: "Scans",
-          },
+          title: { text: "Impressions" },
           labels: {
             formatter: (value) => Number(value || 0).toLocaleString(),
           },
         },
         tooltip: {
           theme: "dark",
+          x: {
+            formatter: (_value, { dataPointIndex }) => {
+              const row = this.dailyGraph.impressions[dataPointIndex];
+              return row?.label || "-";
+            },
+          },
           y: {
             formatter: (value) => Number(value || 0).toLocaleString(),
           },
         },
-        noData: {
-          text: "No scan data",
+        noData: { text: "No impression data" },
+      };
+    },
+
+    scansChartOptions() {
+      return {
+        chart: {
+          toolbar: { show: false },
+          foreColor: "#bdbdbd",
         },
+        theme: { mode: "dark" },
+        dataLabels: { enabled: false },
+        xaxis: {
+          categories: (this.dailyGraph.scans || []).map(
+            (row) => row.label || "-"
+          ),
+          title: { text: "Date" },
+          labels: {
+            rotate: -45,
+            hideOverlappingLabels: true,
+          },
+        },
+        yaxis: {
+          title: { text: "Scans" },
+          labels: {
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
+        },
+        tooltip: {
+          theme: "dark",
+          x: {
+            formatter: (_value, { dataPointIndex }) => {
+              const row = this.dailyGraph.scans[dataPointIndex];
+              return row?.label || "-";
+            },
+          },
+          y: {
+            formatter: (value) => Number(value || 0).toLocaleString(),
+          },
+        },
+        noData: { text: "No scan data" },
       };
     },
   },
@@ -946,7 +914,6 @@ export default {
         this.errorMessage = "";
 
         await api.put(`/api/notifications/${notification.id}/read`);
-
         notification.is_read = 1;
         this.successMessage = "Notification marked as read";
       } catch (error) {
@@ -996,10 +963,10 @@ export default {
       if (type === "campaign_status_changed") return "mdi-refresh-circle";
       return "mdi-bell-outline";
     },
+
     async resolveClient() {
       try {
         const currentUser = this.$fire.auth.currentUser;
-
         if (!currentUser) {
           this.$router.push("/auth/client.login");
           return;
@@ -1007,14 +974,13 @@ export default {
 
         const { data } = await api.post("/api/client-dashboard/overview", {
           uid: currentUser.uid,
+          range: this.selectedRange,
         });
 
         if (data && data.client) {
           this.clientId = data.client.id;
           this.clientName = data.client.client_name || "Client";
         }
-
-        console.log("Resolved client:", this.clientId, this.clientName);
       } catch (error) {
         console.error("resolveClient error:", error);
       }
@@ -1027,8 +993,7 @@ export default {
           return;
         }
 
-        this.loading = true;
-        this.errorMessage = "";
+        this.notificationsLoading = true;
 
         const { data } = await api.get("/api/notifications/get", {
           params: {
@@ -1043,12 +1008,12 @@ export default {
         this.errorMessage =
           error.response?.data?.message || "Failed to load notifications";
       } finally {
-        this.loading = false;
+        this.notificationsLoading = false;
       }
     },
+
     exportToCSV() {
       const rows = this.overview.campaigns || [];
-
       if (!rows.length) return;
 
       const headers = [
@@ -1069,7 +1034,7 @@ export default {
             `"${row.campaign_name || ""}"`,
             `"${row.status || ""}"`,
             row.total_impressions || 0,
-            Math.floor(row.total_impressions * 0.24) || 0,
+            Math.floor((row.total_impressions || 0) * 0.24) || 0,
             row.total_scans || 0,
             row.conversion_rate || 0,
             `"${moment(row.start_date).format("MMM Do YY") || ""}"`,
@@ -1086,7 +1051,10 @@ export default {
 
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "client-campaign-report.csv");
+      link.setAttribute(
+        "download",
+        `client-campaign-report-${this.selectedRange}.csv`
+      );
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1106,9 +1074,138 @@ export default {
         x: window.innerWidth,
         y: window.innerHeight,
       };
-
       this.showBurger = this.windowSize.x < 950;
       return this.windowSize;
+    },
+
+    normalizeLabel(rawLabel) {
+      if (!rawLabel) return null;
+
+      const formats = [
+        "YYYY-MM-DD",
+        "YYYY-M-D",
+        "MMM DD",
+        "MMM D",
+        "MMM Do YY",
+        "MMM Do YYYY",
+        "YYYY-MM",
+        "YYYY-[W]WW",
+      ];
+
+      const parsed = moment(rawLabel, formats, true);
+      if (parsed.isValid()) {
+        return parsed.format("YYYY-MM-DD");
+      }
+
+      const fallback = moment(rawLabel);
+      return fallback.isValid() ? fallback.format("YYYY-MM-DD") : null;
+    },
+
+    formatLabelForChart(rawLabel) {
+      if (!rawLabel) return "-";
+
+      const parsed = moment(
+        rawLabel,
+        ["YYYY-MM-DD", "YYYY-M-D", "YYYY-MM", "YYYY-[W]WW"],
+        true
+      );
+
+      if (parsed.isValid()) {
+        return parsed.format("MMM DD");
+      }
+
+      return rawLabel;
+    },
+
+    groupRowsByLabel(rows = [], valueKey = "impressions") {
+      const grouped = {};
+
+      rows.forEach((row) => {
+        const rawLabel = row.label;
+        if (!rawLabel) return;
+
+        const normalizedKey = this.normalizeLabel(rawLabel) || rawLabel;
+
+        if (!grouped[normalizedKey]) {
+          grouped[normalizedKey] = {
+            sort_key: normalizedKey,
+            label: this.formatLabelForChart(normalizedKey),
+            [valueKey]: 0,
+          };
+        }
+
+        grouped[normalizedKey][valueKey] += Number(row[valueKey] || 0);
+      });
+
+      return Object.values(grouped).sort((a, b) => {
+        if (a.sort_key < b.sort_key) return -1;
+        if (a.sort_key > b.sort_key) return 1;
+        return 0;
+      });
+    },
+
+    applyGraphFilter() {
+      const today = moment().startOf("day");
+      let startDate = null;
+
+      if (this.selectedRange === "7d") {
+        startDate = today.clone().subtract(6, "days");
+      } else if (this.selectedRange === "30d") {
+        startDate = today.clone().subtract(29, "days");
+      } else if (this.selectedRange === "week") {
+        startDate = today.clone().startOf("isoWeek");
+      } else if (this.selectedRange === "month") {
+        startDate = today.clone().startOf("month");
+      }
+
+      const filterRows = (rows = [], valueKey = "impressions") => {
+        const filtered = rows.filter((row) => {
+          const normalized = this.normalizeLabel(row.label);
+          if (!normalized) return false;
+          const rowMoment = moment(normalized);
+          return !startDate || rowMoment.isSameOrAfter(startDate, "day");
+        });
+
+        return this.groupRowsByLabel(filtered, valueKey);
+      };
+
+      this.dailyGraph = {
+        impressions: filterRows(this.allDailyGraph.impressions, "impressions"),
+        scans: filterRows(this.allDailyGraph.scans, "scans"),
+      };
+    },
+
+    async loadSummaryData() {
+      try {
+        const currentUser = this.$fire.auth.currentUser;
+        if (!currentUser) return;
+
+        const uid = currentUser.uid;
+
+        const [overviewRes, deviceRes] = await Promise.all([
+          api.post("/api/client-dashboard/overview", {
+            uid,
+            range: this.selectedRange,
+          }),
+          api.post("/api/client-dashboard/device-breakdown", {
+            uid,
+            range: this.selectedRange,
+          }),
+        ]);
+
+        this.overview = overviewRes.data || this.overview;
+        this.deviceBreakdown = deviceRes.data || [];
+      } catch (error) {
+        console.error("loadSummaryData error:", error);
+        this.errorMessage =
+          error.response?.data?.message || "Failed to update dashboard";
+      }
+    },
+
+    onRangeChange() {
+      this.applyGraphFilter();
+      this.chartRenderKey += 1;
+      this.loadSummaryData();
     },
 
     async loadDashboard() {
@@ -1117,11 +1214,8 @@ export default {
 
       try {
         const currentUser = this.$fire.auth.currentUser;
-
         if (!currentUser) {
           this.errorMessage = "User not logged in";
-          console.log("User not logged in");
-          // this.$router.push("/auth/client.login");
           this.loading = false;
           return;
         }
@@ -1129,9 +1223,17 @@ export default {
         const uid = currentUser.uid;
 
         const [overviewRes, dailyGraphRes, deviceRes] = await Promise.all([
-          api.post("/api/client-dashboard/overview", { uid }),
-          api.post("/api/client-dashboard/daily-graph", { uid }),
-          api.post("/api/client-dashboard/device-breakdown", { uid }),
+          api.post("/api/client-dashboard/overview", {
+            uid,
+            range: this.selectedRange,
+          }),
+          api.post("/api/client-dashboard/daily-graph", {
+            uid,
+          }),
+          api.post("/api/client-dashboard/device-breakdown", {
+            uid,
+            range: this.selectedRange,
+          }),
         ]);
 
         this.overview = overviewRes.data || {
@@ -1143,21 +1245,19 @@ export default {
             active_campaigns: 0,
             total_campaigns: 0,
             impressions_today: 0,
+            range: this.selectedRange,
           },
           campaigns: [],
         };
 
-        this.dailyGraph = dailyGraphRes.data || {
+        this.allDailyGraph = dailyGraphRes.data || {
           impressions: [],
           scans: [],
         };
 
+        this.applyGraphFilter();
+        this.chartRenderKey += 1;
         this.deviceBreakdown = deviceRes.data || [];
-        console.log("Loaded dashboard data:", {
-          overview: this.overview,
-          dailyGraph: this.dailyGraph,
-          deviceBreakdown: this.deviceBreakdown,
-        });
       } catch (error) {
         console.error("loadDashboard error:", error);
         this.errorMessage =
@@ -1175,7 +1275,6 @@ export default {
 </script>
 
 <style scoped>
-/* From Uiverse.io by risabbir */
 .warp-loader {
   border-radius: 70px;
   position: relative;
@@ -1205,15 +1304,12 @@ export default {
 .ring:nth-child(1) {
   animation-delay: 0s;
 }
-
 .ring:nth-child(2) {
   animation-delay: 0.4s;
 }
-
 .ring:nth-child(3) {
   animation-delay: 0.8s;
 }
-
 .ring:nth-child(4) {
   animation-delay: 1.2s;
 }
@@ -1223,12 +1319,10 @@ export default {
     transform: translate(-50%, -50%) scale(0.3);
     opacity: 1;
   }
-
   70% {
     transform: translate(-50%, -50%) scale(1.1);
     opacity: 0.15;
   }
-
   100% {
     transform: translate(-50%, -50%) scale(1.4);
     opacity: 0;
@@ -1240,7 +1334,6 @@ export default {
   top: 50%;
   left: 50%;
   width: 4px;
-  /* Reduced size for the core glow */
   height: 4px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
@@ -1254,7 +1347,6 @@ export default {
   100% {
     transform: translate(-50%, -50%) scale(1);
   }
-
   50% {
     transform: translate(-50%, -50%) scale(1.2);
   }
@@ -1393,13 +1485,6 @@ export default {
   margin-bottom: 8px;
 }
 
-.page-title {
-  font-size: 28px;
-  font-weight: 800;
-  margin: 0;
-  color: #fff;
-}
-
 .loading-state {
   padding: 30px 0;
   color: #b8b8b8;
@@ -1425,13 +1510,6 @@ export default {
   font-size: 25px;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
-}
-
-.welcome-title {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #fff;
 }
 
 .welcome-subtitle {
@@ -1561,14 +1639,6 @@ export default {
   overflow: hidden;
 }
 
-.campaign-image-wrap {
-  margin: -18px -18px 16px -18px;
-}
-
-.campaign-image {
-  border-radius: 22px 22px 0 0;
-}
-
 .campaign-card-top {
   display: flex;
   align-items: center;
@@ -1693,6 +1763,70 @@ export default {
   margin-top: 20px;
 }
 
+.notification-count {
+  color: #73d843;
+  font-size: 13px;
+}
+
+.loading-block,
+.empty-state {
+  color: #bdbdbd;
+  padding: 20px 0;
+}
+
+.notification-card {
+  border-radius: 18px !important;
+  background: linear-gradient(180deg, #111111, #0b0b0b) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.notification-card.unread {
+  border: 1px solid rgba(198, 255, 0, 0.22) !important;
+}
+
+.notification-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.notification-message {
+  color: #cfcfcf;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.notification-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #8f8f8f;
+  font-size: 12px;
+}
+
+.notification-type {
+  color: #73d843;
+}
+
 @media (max-width: 1200px) {
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1708,244 +1842,10 @@ export default {
     padding: 16px;
   }
 
-  .welcome-title {
-    font-size: 24px;
-  }
-
   .metrics-grid {
     grid-template-columns: 1fr;
   }
-}
-.client-page {
-  min-height: 100vh;
-  background: radial-gradient(
-      circle at top left,
-      rgba(198, 255, 0, 0.06),
-      transparent 22%
-    ),
-    linear-gradient(180deg, #020202 0%, #0b0b0b 100%);
-  color: #fff;
-}
-.client-topbar {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.topbar-icon {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(198, 255, 0, 0.08);
-}
-.client-layout {
-  display: flex;
-  min-height: calc(100vh - 72px);
-}
-.client-sidebar {
-  width: 290px;
-  padding: 16px;
-}
-.sidebar-card {
-  height: 100%;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #101010, #070707);
-  border: 1px solid rgba(198, 255, 0, 0.12);
-  padding: 18px;
-}
-.sidebar-brand {
-  margin-bottom: 24px;
-}
-.sidebar-brand-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(198, 255, 0, 0.1);
-  border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #73d843;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-.sidebar-brand-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-}
-.sidebar-profile {
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  margin-bottom: 20px;
-  text-align: center;
-}
-.sidebar-avatar {
-  margin-bottom: 12px;
-}
-.avatar-text {
-  color: #000;
-  font-weight: 800;
-}
-.sidebar-user-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-.sidebar-user-subtitle {
-  color: #a8a8a8;
-  font-size: 13px;
-  margin-top: 4px;
-}
-.sidebar-list {
-  background: transparent !important;
-}
-.sidebar-item {
-  border-radius: 12px;
-  margin-bottom: 6px;
-}
-.sidebar-item:hover {
-  background: rgba(198, 255, 0, 0.06);
-}
-.sidebar-footer {
-  margin-top: 24px;
-}
-.logout-btn {
-  border-color: rgba(198, 255, 0, 0.35) !important;
-  color: #73d843 !important;
-}
-.client-main {
-  flex: 1;
-  padding: 20px;
-}
-.page-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(198, 255, 0, 0.1);
-  border: 1px solid rgba(198, 255, 0, 0.22);
-  color: #73d843;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-.hero-panel {
-  border-radius: 24px;
-  background: radial-gradient(
-      circle at top right,
-      rgba(198, 255, 0, 0.08),
-      transparent 28%
-    ),
-    linear-gradient(135deg, #111111, #080808) !important;
-  border: 1px solid rgba(198, 255, 0, 0.12) !important;
-}
-.hero-kicker {
-  color: #73d843;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-.hero-heading {
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #fff;
-}
-.hero-subtext {
-  color: #bcbcbc;
-  margin-top: 12px;
-  line-height: 1.7;
-}
-.hero-btn-outline {
-  border-color: #73d843 !important;
-  color: #73d843 !important;
-}
-.dashboard-alert {
-  border-radius: 14px;
-}
-.panel-card {
-  border-radius: 22px;
-  background: linear-gradient(180deg, #111111, #090909) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.panel-kicker {
-  color: #9ea59b;
-  font-size: 12px;
-  text-transform: uppercase;
-  margin-left: 25px;
-  margin-bottom: 4px;
-}
-.panel-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-}
-.notification-count {
-  color: #73d843;
-  font-size: 13px;
-}
-.loading-block,
-.empty-state {
-  color: #bdbdbd;
-  padding: 20px 0;
-}
-.notification-card {
-  border-radius: 18px !important;
-  background: linear-gradient(180deg, #111111, #0b0b0b) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-.notification-card.unread {
-  border: 1px solid rgba(198, 255, 0, 0.22) !important;
-}
-.notification-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 16px;
-}
-.notification-content {
-  flex: 1;
-}
-.notification-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.notification-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-.notification-message {
-  color: #cfcfcf;
-  line-height: 1.6;
-  margin-bottom: 10px;
-}
-.notification-meta {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  color: #8f8f8f;
-  font-size: 12px;
-}
-.notification-type {
-  color: #73d843;
-}
-.menu-list {
-  background: #111111 !important;
-  border: 1px solid rgba(198, 255, 0, 0.1);
-  border-radius: 14px;
-}
-@media (max-width: 950px) {
-  .client-layout {
-    display: block;
-  }
-  .client-main {
-    padding: 16px;
-  }
-  .hero-heading {
-    font-size: 22px;
-  }
+
   .notification-row {
     flex-direction: column;
   }
