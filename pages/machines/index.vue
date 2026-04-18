@@ -369,6 +369,7 @@ export default {
         const { data } = await api.get("/api/machines");
         this.machines = data || [];
         this.searchActive = false;
+        console.log("machines", this.machines);
       } catch (error) {
         console.error("fetchMachines error:", error);
         this.errorMessage =
@@ -382,25 +383,33 @@ export default {
 
         if (!this.searchQuery || !this.searchQuery.trim()) {
           await this.fetchMachines();
+          this.searchActive = false;
           return;
         }
 
         const { data } = await api.get("/api/machines/search", {
           params: {
-            q: this.searchQuery.trim(),
+            query: this.searchQuery.trim(),
           },
         });
 
-        this.machines = data || [];
-        console.log(data);
+        console.log("🔍 result:", data);
+
+        this.machines = Array.isArray(data) ? data : [];
+
+        if (this.machines.length === 0) {
+          this.errorMessage = "Machine not found";
+        }
+
         this.searchActive = true;
       } catch (error) {
-        console.error("searchMachines error:", error);
+        console.error("❌ searchMachines error:", error);
+
+        this.machines = [];
         this.errorMessage =
-          error.response.data.message || "Failed to search machines";
+          error?.response?.data?.message || "Failed to search machines";
       }
     },
-
     async clearSearch() {
       this.searchQuery = "";
       await this.fetchMachines();

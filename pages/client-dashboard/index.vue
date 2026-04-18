@@ -599,8 +599,8 @@
                       <th>Status</th>
                       <th>Impressions</th>
                       <th>Interactions</th>
-                      <th>QR Scans</th>
-                      <th>Conversion</th>
+                      <th v-show="showQrEnabled">QR Scans</th>
+                      <th v-show="showQrEnabled">Conversion</th>
                       <th>Start</th>
                       <th>End</th>
                       <th>View</th>
@@ -643,8 +643,12 @@
                           )
                         }}
                       </td>
-                      <td>{{ formatNumber(campaign.total_scans) }}</td>
-                      <td>{{ campaign.conversion_rate }}%</td>
+                      <td v-show="showQrEnabled">
+                        {{ formatNumber(campaign.total_scans) }}
+                      </td>
+                      <td v-show="showQrEnabled">
+                        {{ campaign.conversion_rate }}%
+                      </td>
                       <td>
                         {{ moment(campaign.start_date).format("MMM Do YY") }}
                       </td>
@@ -710,7 +714,7 @@ export default {
       chartRenderKey: 0,
       rangeOptions: [
         { text: "General impressions", value: "" },
-        { text: "Today's impressions", value: "week" },
+        { text: "This week", value: "week" },
         { text: "Last 7 Days", value: "7d" },
         { text: "Last 30 Days", value: "30d" },
         { text: "This Month", value: "month" },

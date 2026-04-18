@@ -169,6 +169,7 @@ export default {
         ]);
 
         this.machinePerformance = machinePerfRes.data || [];
+        console.log("machinePerformance", this.machinePerformance);
       } catch (error) {
         console.error("loadDashboard error:", error);
         this.errorMessage =

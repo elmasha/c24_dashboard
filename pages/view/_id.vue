@@ -587,7 +587,7 @@ export default {
           scans: [],
         };
         this.deviceBreakdown = deviceRes.data || [];
-        console.log(this.campaign);
+        console.log("assignedMachines", this.assignedMachines);
       } catch (error) {
         console.error("fetchCampaignDetail error:", error);
         this.errorMessage =

@@ -642,7 +642,7 @@ export default {
       chartRenderKey: 0,
       rangeOptions: [
         { text: "General impressions", value: "" },
-        { text: "Today's impressions", value: "week" },
+        { text: "This Week", value: "week" },
         { text: "Last 7 Days", value: "7d" },
         { text: "Last 30 Days", value: "30d" },
         { text: "This Month", value: "month" },

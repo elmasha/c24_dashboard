@@ -237,8 +237,12 @@
                     <th>Status</th>
                     <th>Impressions</th>
                     <th>Interactions</th>
-                    <th v-show="c">QR Scans</th>
-                    <th>Conversion</th>
+                    <th v-show="overview.client && overview.client.qr">
+                      QR Scans
+                    </th>
+                    <th v-show="overview.client && overview.client.qr">
+                      Conversion
+                    </th>
                     <th>Start</th>
                     <th>End</th>
                     <th>View Campaign</th>
@@ -285,8 +289,12 @@
                         numeral(campaign.total_impressions * 0.24).format("0,0")
                       }}
                     </td>
-                    <td>{{ formatNumber(campaign.total_scans) }}</td>
-                    <td>{{ campaign.conversion_rate }}%</td>
+                    <td v-show="overview.client && overview.client.qr">
+                      {{ formatNumber(campaign.total_scans) }}
+                    </td>
+                    <td v-show="overview.client && overview.client.qr">
+                      {{ campaign.conversion_rate }}%
+                    </td>
                     <td>
                       {{ moment(campaign.start_date).format("MMM Do YY") }}
                     </td>
