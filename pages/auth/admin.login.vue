@@ -79,7 +79,7 @@ export default {
         email: "",
         password: "",
       },
-      UIDI: "SktPIKvFTuganVRJnLAZeSzzTzL2",
+      UIDI: "u3yZF0pfsddbeEyBybnTG0WuHBg1",
     };
   },
 

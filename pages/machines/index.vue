@@ -407,7 +407,7 @@ export default {
 
         this.machines = [];
         this.errorMessage =
-          error?.response?.data?.message || "Failed to search machines";
+          error.response.data.message || "Failed to search machines";
       }
     },
     async clearSearch() {

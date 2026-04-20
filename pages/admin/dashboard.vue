@@ -632,7 +632,7 @@ export default {
           to: "admin/notification",
         },
       ],
-      UIDl: "SktPIKvFTuganVRJnLAZeSzzTzL2",
+      UIDl: "u3yZF0pfsddbeEyBybnTG0WuHBg1",
       moment,
       loading: false,
       notificationsLoading: false,

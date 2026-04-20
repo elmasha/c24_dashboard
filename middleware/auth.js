@@ -4,7 +4,7 @@ export default function ({ app, route, redirect }) {
 
     const adminEmails = [
       "test@gmail.com",
-      "admin2@example.com",
+      "info@charge24.africa",
     ];
 
     const adminProtectedRoutes = [
