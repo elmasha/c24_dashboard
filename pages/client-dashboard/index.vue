@@ -1067,6 +1067,7 @@ export default {
 
     logout() {
       this.$fire.auth.signOut();
+      window.location.reload();
       this.$router.push("/auth/client.login");
     },
 
