@@ -918,11 +918,11 @@ export default {
   methods: {
     async fetchCurrentUser() {
     const currentUser = this.$fire.auth.currentUser;
-    
     if (!currentUser) {
-      console.log("No user logged in");
-      return null;
-    }
+          this.$router.push("/auth/client.login");
+          return;
+        }
+   
 
     try {
       const { data } = await api.post("/api/users/by-uid", {
