@@ -705,6 +705,7 @@ export default {
       millify,
       grid: false,
       numeral,
+      user:null,
       moment,
       loading: true,
       notificationsLoading: false,
@@ -767,6 +768,7 @@ export default {
       windowSize: { x: null, y: null },
       notifications: [],
       clientId: null,
+      clientUid:null,
       clientName: "",
     };
   },
@@ -903,15 +905,53 @@ export default {
 
   async mounted() {
     this.onResize();
+    await this.fetchCurrentUser();
+    // await this.fetchUser();
     await this.loadDashboard();
-    await this.resolveClient();
+    // await this.resolveClient();
 
-    if (this.clientId) {
-      await this.fetchNotifications();
-    }
+    // if (this.clientId) {
+    //   await this.fetchNotifications();
+    // }
   },
 
   methods: {
+    async fetchCurrentUser() {
+    const currentUser = this.$fire.auth.currentUser;
+    
+    if (!currentUser) {
+      console.log("No user logged in");
+      return null;
+    }
+
+    try {
+      const { data } = await api.post("/api/users/by-uid", {
+        uid: currentUser.uid,
+      });
+     console.log("user ",data);
+     this.clientUid = data.client_uid;
+      return data;
+      
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      return null;
+    }
+  },
+     // ─── Users ───
+    async fetchUser() {
+      try {
+      
+        const { data } = await api.get("/api/users/users", {
+          params: {
+            id: this.$fire.auth.currentUser.uid,
+          },
+        });
+
+        this.user = data[0];
+        
+      } catch (error) { this.errorMessage = error.response?.data?.message || "Failed to load users"; }
+      finally { this.loading = false; }
+    },
     async markRead(notification) {
       try {
         this.readingId = notification.id;
@@ -978,7 +1018,7 @@ export default {
         }
 
         const { data } = await api.post("/api/client-dashboard/overview", {
-          uid: currentUser.uid,
+          uid: this.clientUid,
           range: this.selectedRange,
         });
 
@@ -1187,7 +1227,8 @@ export default {
         const currentUser = this.$fire.auth.currentUser;
         if (!currentUser) return;
 
-        const uid = currentUser.uid;
+        const uid = this.clientUid ? this.clientUid : currentUser.uid;
+        // const uid = this.clientUid;
 
         const [overviewRes, deviceRes] = await Promise.all([
           api.post("/api/client-dashboard/overview", {
@@ -1227,7 +1268,7 @@ export default {
           return;
         }
 
-        const uid = currentUser.uid;
+        const uid = this.clientUid ? this.clientUid : currentUser.uid;
 
         const [overviewRes, dailyGraphRes, deviceRes] = await Promise.all([
           api.post("/api/client-dashboard/overview", {

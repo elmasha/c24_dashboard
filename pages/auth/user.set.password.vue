@@ -121,9 +121,7 @@ export default {
 
                 const normalizedEmail = String(this.form.email).trim().toLowerCase();
 
-                const {
-                    data: checkData
-                } = await api.post("/api/clients/check-email", {
+                const {data: checkData} = await api.post("/api/users/check-email", {
                     email: normalizedEmail,
                 });
 
@@ -144,8 +142,8 @@ export default {
                         this.form.password
                     );
 
-                await api.post("/api/clients/link-firebase", {
-                    email: normalizedEmail,
+                await api.post("/api/users/update-uid", {
+                    email: userCredential.user.email,
                     firebase_uid: userCredential.user.uid,
                 });
 

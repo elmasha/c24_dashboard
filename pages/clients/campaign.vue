@@ -338,6 +338,7 @@ import numeral from "numeral";
 export default {
   data() {
     return {
+      user:null,
       grid: false,
       numeral,
       moment,
@@ -374,15 +375,54 @@ export default {
         x: null,
         y: null,
       },
+      clientUid:null,
     };
   },
 
   async mounted() {
     await this.onResize();
+    await this.fetchCurrentUser();
+    await this.fetchUser();
     await this.loadDashboard();
   },
 
   methods: {
+    // ─── Users ───
+    async fetchCurrentUser() {
+    const currentUser = this.$fire.auth.currentUser;
+    
+    if (!currentUser) {
+      console.log("No user logged in");
+      return null;
+    }
+
+    try {
+      const { data } = await api.post("/api/users/by-uid", {
+        uid: currentUser.uid,
+      });
+     console.log("user ",data);
+     this.clientUid = data.client_uid;
+      return data;
+      
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      return null;
+    }
+  },
+    async fetchUser() {
+      try {
+      
+        const { data } = await api.get("/api/users/users", {
+          params: {
+            id: this.$fire.auth.currentUser.uid,
+          },
+        });
+
+        this.user = data[0];
+        console.log(data);
+      } catch (error) { this.errorMessage = error.response?.data?.message || "Failed to load users"; }
+      finally { this.loading = false; }
+    },
     onResize() {
       this.windowSize = {
         x: window.innerWidth,
@@ -407,7 +447,7 @@ export default {
           return;
         }
 
-        const uid = currentUser.uid;
+        const uid = this.clientUid;
 
         const [overviewRes] = await Promise.all([
           api.post("/api/client-dashboard/overview", {

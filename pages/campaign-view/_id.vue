@@ -377,7 +377,7 @@
       </v-row>
 
       <!-- Daily data tables -->
-      <v-row class="mt-4">
+      <!-- <v-row class="mt-4">
         <v-col cols="12" md="6">
           <v-card class="table-card pa-3" outlined>
             <div class="panel-kicker">History</div>
@@ -393,7 +393,7 @@
               <tbody>
                 <tr
                   v-for="row in dailyMetrics.impressions"
-                  :key="'imp-' + row.date"
+                 
                 >
                   <td>{{ moment(row.date).format("yyyy MMM DD") }}</td>
                   <td>{{ row.impressions }}</td>
@@ -420,7 +420,7 @@
               </thead>
               <tbody>
                 <tr v-for="row in dailyMetrics.scans" :key="'scan-' + row.date">
-                  <td>{{ moment(row.date).format("yyyy MMM DD") }}</td>
+                  <td>{{ row.date }}</td>
                   <td>{{ row.scans }}</td>
                 </tr>
                 <tr v-if="!dailyMetrics.scans.length">
@@ -430,7 +430,7 @@
             </v-simple-table>
           </v-card>
         </v-col>
-      </v-row>
+      </v-row> -->
     </div>
 
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>

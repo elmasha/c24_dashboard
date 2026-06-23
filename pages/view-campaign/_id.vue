@@ -588,7 +588,7 @@ export default {
           scans: [],
         };
         this.deviceBreakdown = deviceRes.data || [];
-        console.log(this.campaign);
+        console.log(this.campaign , dailyRes.data);   
       } catch (error) {
         console.error("fetchCampaignDetail error:", error);
         this.errorMessage =
