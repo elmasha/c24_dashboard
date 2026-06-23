@@ -382,8 +382,10 @@ export default {
   async mounted() {
     await this.onResize();
     await this.fetchCurrentUser();
-    await this.fetchUser();
+   if(this.clientUid !=null){
     await this.loadDashboard();
+  }
+    
   },
 
   methods: {

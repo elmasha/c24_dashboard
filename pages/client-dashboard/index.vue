@@ -908,7 +908,7 @@ export default {
     await this.fetchCurrentUser();
     // await this.fetchUser();
     await this.loadDashboard();
-    // await this.resolveClient();
+    /// await this.resolveClient();
 
     // if (this.clientId) {
     //   await this.fetchNotifications();
