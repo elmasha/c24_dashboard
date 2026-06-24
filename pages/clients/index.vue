@@ -38,8 +38,8 @@
             <div class="sidebar-brand-text">Admin Control</div>
           </div>
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
-              <span class="avatar-text">AD</span>
+            <v-avatar size="70" color="#000" class="sidebar-avatar">
+              <v-img :src="logo" contain height="70" />
             </v-avatar>
             <div class="sidebar-user-name">Operations Team</div>
             <div class="sidebar-user-subtitle">Manage clients, users and delivery</div>
@@ -73,7 +73,7 @@
         <v-tabs v-model="activeTab" dark background-color="transparent" color="#73D843" slider-color="#73D843" class="mb-4">
           <v-tab>Clients</v-tab>
           <v-tab>Users</v-tab>
-          <v-tab>User-Client Links</v-tab>
+          <!-- <v-tab>User-Client Links</v-tab> -->
         </v-tabs>
 
         <v-tabs-items v-model="activeTab" style="background: transparent;">
@@ -353,11 +353,13 @@ import api from "@/services/api";
 import Dropzone from "nuxt-dropzone";
 import "nuxt-dropzone/dropzone.css";
 import { v1 as uuidv1 } from "uuid";
+import logo from "@/assets/logo.png";
 
 export default {
   components: { Dropzone },
   data() {
     return {
+      logo,
       activeTab: 0,
       options: { url: "http://httpbin.org/anything", maxFiles: 1, acceptedFiles: "image/*" },
       loading: false,
@@ -634,6 +636,11 @@ export default {
     },
     resetAssignmentForm() {
       this.assignmentForm = { user_id: null, client_id: null, role: "viewer" };
+    },
+    async logout() {
+      this.$fire.auth.signOut();
+      window.location.reload();
+      this.$router.push("/auth/admin.login");
     },
   },
 };

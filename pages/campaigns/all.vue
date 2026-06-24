@@ -53,8 +53,8 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
-              <span class="avatar-text">AD</span>
+            <v-avatar size="70" color="#000" class="sidebar-avatar">
+              <v-img :src="logo" contain height="70" />
             </v-avatar>
 
             <div class="sidebar-user-name">Operations Team</div>
@@ -652,6 +652,7 @@ import numeral from "numeral";
 import Dropzone from "nuxt-dropzone";
 import "nuxt-dropzone/dropzone.css";
 import { v1 as uuidv1 } from "uuid";
+import logo from "@/assets/logo.png";
 
 export default {
   middleware: "auth",
@@ -660,6 +661,7 @@ export default {
   },
   data() {
     return {
+      logo,
       numeral,
       loading: false,
       deletingId: null,
@@ -740,9 +742,10 @@ export default {
   },
 
   methods: {
-    logout() {
+    async logout() {
       this.$fire.auth.signOut();
-      window.location.reload(true);
+      window.location.reload();
+      this.$router.push("/auth/admin.login");
     },
 
     move(val) {
