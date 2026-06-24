@@ -55,8 +55,8 @@
           </div>
 
           <div class="sidebar-profile">
-            <v-avatar size="54" color="#73D843" class="sidebar-avatar">
-              <span class="avatar-text">AD</span>
+            <v-avatar size="70" color="#000" class="sidebar-avatar">
+              <v-img :src="logo" contain height="70" />
             </v-avatar>
 
             <div class="sidebar-user-name">Operations Team</div>
@@ -250,11 +250,13 @@
 <script>
 import api from "@/services/api";
 import moment from "moment";
+import logo from "@/assets/logo.png";
 
 export default {
   middleware: "auth",
   data() {
     return {
+      logo,
       moment,
       loading: false,
       markingAll: false,
