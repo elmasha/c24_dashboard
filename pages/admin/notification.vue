@@ -312,10 +312,12 @@ export default {
   },
 
   methods: {
-    logout() {
+   async logout() {
       this.$fire.auth.signOut();
-      window.location.reload(true);
+      window.location.reload();
+      this.$router.push("/auth/admin.login");
     },
+
 
     move(val) {
       this.$router.push(`/${val}`);
