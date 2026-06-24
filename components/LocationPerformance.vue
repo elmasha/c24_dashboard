@@ -7,6 +7,7 @@
           <th>Category</th>
           <th class="text-right">Machines</th>
           <th class="text-right">Impressions</th>
+           <th class="text-right">Interactions</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,11 @@
           <td class="text-right metric-value">
             {{ formatNumber(row.total_impressions) }}
           </td>
+          <td class="text-right metric-value">
+            {{ formatNumber(
+              Math.floor((row.total_impressions) * 0.24)
+            ) }}
+          </td>
         </tr>
         <tr v-if="!rows.length">
           <td colspan="4" class="text-center empty-state">
@@ -42,12 +48,18 @@
 </template>
 
 <script>
+import numerical from 'numeral';
 export default {
   props: {
     rows: {
       type: Array,
       default: () => [],
     },
+  },
+  data() {
+    return {
+      numerical,
+    };
   },
   methods: {
     formatNumber(value) {

@@ -7,6 +7,7 @@
           <th>Location</th>
           <th>Category</th>
           <th class="text-right">Impressions</th>
+          <th class="text-right">Interactions</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -33,6 +34,11 @@
           </td>
           <td class="text-right metric-value">
             {{ formatNumber(row.total_impressions) }}
+          </td>
+          <td class="text-right metric-value">
+            {{ formatNumber(
+              Math.floor((row.total_impressions) * 0.24)
+            ) }}
           </td>
           <td>
             <v-chip
